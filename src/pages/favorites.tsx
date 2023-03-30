@@ -1,10 +1,12 @@
 import { Grid, useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
+import Head from 'next/head'
 import { Tab } from '../types/tabs'
 import useTabs from '../hooks/useTabs'
 import TabPanel from '../components/TabPanel'
 import SearchPanel from '../components/SearchPanel'
 import { tabTypes } from '../constants'
+import useGridProps from '../hooks/useGridProps'
 
 export default function Favorites() {
   const [searchType, setSearchType] = useState<string>('All')
@@ -19,6 +21,16 @@ export default function Favorites() {
 
   const toast = useToast()
 
+  const gridProps = useGridProps()
+
+  const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
+    selectedTab.url,
+  )
+  const data =
+    searchType === 'All'
+      ? favorites
+      : favorites.filter((el) => el.type === tabTypes[searchType])
+
   useEffect(() => {
     const favoritesFetched = JSON.parse(localStorage.getItem('favoriteTabs'))
     if (favoritesFetched) {
@@ -29,13 +41,6 @@ export default function Favorites() {
   useEffect(() => {
     localStorage.setItem('favoriteTabs', JSON.stringify(favorites))
   }, [favorites])
-
-  const data =  searchType === 'All' ? favorites : favorites.filter(el => el.type === tabTypes[searchType])
-
-
-  const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
-    selectedTab.url,
-  )
 
   const handleClickFavorite = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
@@ -61,16 +66,11 @@ export default function Favorites() {
   }
 
   return (
-      <Grid
-        templateAreas={`
-                  "nav header"
-                  "nav main"
-                  "nav footer"`}
-        gridTemplateRows={'80px 1fr 60px'}
-        gridTemplateColumns={'1fr 2fr'}
-        h="calc(100vh - 4rem)"
-        gap="1"
-      >
+    <>
+      <Head>
+        <title>Ultimate Tab - Favorites</title>
+      </Head>
+      <Grid {...gridProps}>
         <SearchPanel
           handleChangeType={setSearchType}
           type={searchType}
@@ -90,5 +90,6 @@ export default function Favorites() {
           handleClickFavorite={handleClickFavorite}
         />
       </Grid>
+    </>
   )
 }

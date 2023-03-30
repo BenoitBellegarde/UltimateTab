@@ -6,6 +6,8 @@ import useTabsList from '../hooks/useTabsList'
 import useTabs from '../hooks/useTabs'
 import TabPanel from '../components/TabPanel'
 import SearchPanel from '../components/SearchPanel'
+import Head from 'next/head'
+import useGridProps from '../hooks/useGridProps'
 
 export default function Home() {
   const [searchValue, setSearchValue] = useState<string>('')
@@ -21,7 +23,17 @@ export default function Home() {
   })
 
   const toast = useToast()
+  
+  const gridProps = useGridProps()
 
+  const { isLoading, isError, data } = useTabsList(
+    debounedSearchValue,
+    searchType,
+  )
+
+  const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
+    selectedTab.url,
+  )
   useEffect(() => {
     const favoritesFetched = JSON.parse(localStorage.getItem('favoriteTabs'))
     if (favoritesFetched) {
@@ -33,15 +45,7 @@ export default function Home() {
     localStorage.setItem('favoriteTabs', JSON.stringify(favorites))
   }, [favorites])
 
-  const { isLoading, isError, data } = useTabsList(
-    debounedSearchValue,
-    searchType,
-  )
-
-  const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
-    selectedTab.url,
-  )
-
+  
   const handleClickFavorite = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
     let newFavorites = favorites
@@ -65,36 +69,35 @@ export default function Home() {
     })
   }
 
-  return (
-    <Grid
-      templateAreas={`
-                  "nav header"
-                  "nav main"
-                  "nav footer"`}
-      gridTemplateRows={'80px 1fr 60px'}
-      gridTemplateColumns={'1fr 2fr'}
-      h="calc(100vh - 4rem)"
-      gap="1"
-    >
-      <SearchPanel
-        handleChangeType={setSearchType}
-        searchValue={searchValue}
-        type={searchType}
-        handleChangeValue={setSearchValue}
-        handleClickTab={setSelectedTab}
-        isLoading={isLoading}
-        isError={isError}
-        data={data}
-        selectedTab={selectedTab}
-      />
 
-      <TabPanel
-        isLoading={isLoadingTab}
-        selectedTab={selectedTab}
-        selectedTabContent={selectedTabContent}
-        isFavorite={favorites.find((el) => el.url === selectedTab.url)}
-        handleClickFavorite={handleClickFavorite}
-      />
-    </Grid>
+  return (
+    <>
+      <Head>
+        <title>Ultimate Tab</title>
+      </Head>
+      <Grid
+        {...gridProps}
+      >
+        <SearchPanel
+          handleChangeType={setSearchType}
+          searchValue={searchValue}
+          type={searchType}
+          handleChangeValue={setSearchValue}
+          handleClickTab={setSelectedTab}
+          isLoading={isLoading}
+          isError={isError}
+          data={data}
+          selectedTab={selectedTab}
+        />
+
+        <TabPanel
+          isLoading={isLoadingTab}
+          selectedTab={selectedTab}
+          selectedTabContent={selectedTabContent}
+          isFavorite={favorites.find((el) => el.url === selectedTab.url)}
+          handleClickFavorite={handleClickFavorite}
+        />
+      </Grid>
+    </>
   )
 }
