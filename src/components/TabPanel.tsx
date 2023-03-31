@@ -32,7 +32,7 @@ export default function TabPanel({
   useEffect(() => {
     chordDiagramRef.current.innerHTML = ''
     const showChords = async (el: HTMLSpanElement) => {
-      const ChordBox = (await import('vexchords')).ChordBox 
+      const ChordBox = (await import('vexchords')).ChordBox
       chordDiagramRef.current.innerHTML = ''
       const chord = new ChordBox(chordDiagramRef.current, {
         width: 100,

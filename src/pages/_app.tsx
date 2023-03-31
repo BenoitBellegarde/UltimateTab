@@ -14,7 +14,7 @@ const theme = extendTheme({
   styles: {
     global: (props) => ({
       'span[data-name]': {
-        cursor : 'pointer',
+        cursor: 'pointer',
         color:
           props.colorMode === 'dark'
             ? 'twitter.600 !important'

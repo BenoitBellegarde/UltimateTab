@@ -1,4 +1,5 @@
 # Ultimate Tab
+
 A web application that delivers an enhanced, ads-free and fast responsive interface to browse guitar tabs scraped from Ultimate Guitar.
 
 ![Ultimate Tab Screenshot](https://i.ibb.co/JtPZg6g/Capture-d-cran-2023-03-28-223519.png)
@@ -8,7 +9,6 @@ A web application that delivers an enhanced, ads-free and fast responsive interf
 This app enhances the user experience by being able to link your Spotify account to listen to the track while learning the tab. Moreover, you can also import your Spotify playlists directly into Ultimate Tab to have all the tabs of your favorite songs at your fingertips.
 
 The interface of Ultimate Guitar can be messy, old and with a ton of ads, which can make it challenging to browse tabs. With Ultimate Tab, you can enjoy an ads-free and modern interface to browse tabs, add your favorite ones to your playlist, and listen to the track while learning the tab.
-
 
 ## Technologies
 
@@ -33,8 +33,8 @@ To run Ultimate Tab locally, you must have Node.js and NPM or Yarn installed on 
 - Browse guitar tabs scraped from Ultimate Guitar
 - Chords visualizer
 - Add tabs to your favorites playlist
-- Link your Spotify account to listen to the track while learning the tab (*in development*)
-- Import your Spotify playlists directly into Ultimate Tab (*in development*)
+- Link your Spotify account to listen to the track while learning the tab (_in development_)
+- Import your Spotify playlists directly into Ultimate Tab (_in development_)
 - Enjoy an ads-free, modern, and responsive interface
 - Dark mode support
 

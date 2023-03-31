@@ -1,28 +1,24 @@
-
-import { useEffect, useRef } from "react";
-import { ChordBox } from "vexchords";
+import { useEffect, useRef } from 'react'
+import { ChordBox } from 'vexchords'
 
 export default function ChordDiagram({ label, notes }) {
-    const chordRef = useRef(null);
+  const chordRef = useRef(null)
 
-    useEffect(() => {
-        const chord = new ChordBox(chordRef.current, {
-            width: 200,
-            height: 240,
-            // See the docs for more available options.
-            // https://github.com/0xfe/vexchords
-        });
+  useEffect(() => {
+    const chord = new ChordBox(chordRef.current, {
+      width: 200,
+      height: 240,
+    })
 
-        chord.draw({
-            chord: notes,
-        });
-    });
+    chord.draw({
+      chord: notes,
+    })
+  })
 
-    return (
-        <div className="chord-diagram">
-            <h3>{label}</h3>
-            <div ref={chordRef}></div>
-        </div>
-    );
-};
-
+  return (
+    <div className="chord-diagram">
+      <h3>{label}</h3>
+      <div ref={chordRef}></div>
+    </div>
+  )
+}

@@ -23,7 +23,7 @@ export default function Home() {
   })
 
   const toast = useToast()
-  
+
   const gridProps = useGridProps()
 
   const { isLoading, isError, data } = useTabsList(
@@ -45,7 +45,6 @@ export default function Home() {
     localStorage.setItem('favoriteTabs', JSON.stringify(favorites))
   }, [favorites])
 
-  
   const handleClickFavorite = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
     let newFavorites = favorites
@@ -69,15 +68,12 @@ export default function Home() {
     })
   }
 
-
   return (
     <>
       <Head>
         <title>Ultimate Tab</title>
       </Head>
-      <Grid
-        {...gridProps}
-      >
+      <Grid {...gridProps}>
         <SearchPanel
           handleChangeType={setSearchType}
           searchValue={searchValue}

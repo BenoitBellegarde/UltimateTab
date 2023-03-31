@@ -86,14 +86,14 @@ export default function SearchPanel({
         {isError && (
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
         )}
-        {((searchValue && showSearchInput || !showSearchInput)) && !isLoading && data?.length === 0 && (
-          <Box textAlign="center" py={10} px={6}>
-            <Icon as={RiEmotionSadLine} boxSize={20} color={'gray.400'} />
-            <Text color={'gray.500'}>
-              No results found
-            </Text>
-          </Box>
-        )}
+        {((searchValue && showSearchInput) || !showSearchInput) &&
+          !isLoading &&
+          data?.length === 0 && (
+            <Box textAlign="center" py={10} px={6}>
+              <Icon as={RiEmotionSadLine} boxSize={20} color={'gray.400'} />
+              <Text color={'gray.500'}>No results found</Text>
+            </Box>
+          )}
         {isLoading ? (
           <Box w="100%">
             <Skeleton rounded="md" h="70px" my={2} />

@@ -31,14 +31,14 @@ export interface Tab {
 }
 
 export interface SearchPanelProps {
-  handleChangeType : Function
-  type : string
-  handleChangeValue? : Function
-  handleClickTab : Function
-  isLoading : boolean
-  isError : boolean
-  data : any
-  selectedTab : any
-  searchValue? : string,
-  showSearchInput? : boolean
+  handleChangeType: Function
+  type: string
+  handleChangeValue?: Function
+  handleClickTab: Function
+  isLoading: boolean
+  isError: boolean
+  data: any
+  selectedTab: any
+  searchValue?: string
+  showSearchInput?: boolean
 }
