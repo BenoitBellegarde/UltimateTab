@@ -8,6 +8,7 @@ import {
   Link,
   Skeleton,
   Text,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react'
 import HTMLReactParser from 'html-react-parser'
@@ -148,13 +149,20 @@ export default function TabPanel({
                 </Text>
               </Flex>
               <Flex>
-                <IconButton
-                  icon={isFavorite ? <RiHeartFill /> : <RiHeartLine />}
-                  onClick={handleClickFavorite}
-                  colorScheme={isFavorite ? 'red' : 'gray'}
-                  variant="ghost"
-                  aria-label="Add to favorite"
-                />
+                <Tooltip
+                  placement="left"
+                  label={
+                    isFavorite ? 'Remove from favorites' : 'Add to favorites'
+                  }
+                >
+                  <IconButton
+                    icon={isFavorite ? <RiHeartFill /> : <RiHeartLine />}
+                    onClick={handleClickFavorite}
+                    colorScheme={isFavorite ? 'red' : 'gray'}
+                    variant="ghost"
+                    aria-label="Add to favorite"
+                  />
+                </Tooltip>
               </Flex>
             </>
           )}
