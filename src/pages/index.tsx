@@ -11,7 +11,7 @@ import useGridProps from '../hooks/useGridProps'
 
 export default function Home() {
   const [searchValue, setSearchValue] = useState<string>('')
-  const debounedSearchValue = useDebounce(searchValue, 300)
+  const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
   const [favorites, setFavorites] = useState<Array<any>>([])
   const [selectedTab, setSelectedTab] = useState<Tab | undefined>({
