@@ -7,10 +7,11 @@ import TabPanel from '../components/TabPanel'
 import SearchPanel from '../components/SearchPanel'
 import { TAB_TYPES } from '../constants'
 import useGridProps from '../hooks/useGridProps'
+import useLocalStorage from '../hooks/useLocalStorage'
 
 export default function Favorites() {
   const [searchType, setSearchType] = useState<string>('All')
-  const [favorites, setFavorites] = useState<Array<any>>([])
+  const [favorites, setFavorites] = useLocalStorage<Array<any>>("favoriteTabs", []);
   const [selectedTab, setSelectedTab] = useState<Tab | undefined>({
     url: '',
     name: '',
@@ -31,16 +32,8 @@ export default function Favorites() {
       ? favorites
       : favorites.filter((el) => el.type === TAB_TYPES[searchType])
 
-  useEffect(() => {
-    const favoritesFetched = JSON.parse(localStorage.getItem('favoriteTabs'))
-    if (favoritesFetched) {
-      setFavorites(favoritesFetched)
-    }
-  }, [])
 
-  useEffect(() => {
-    localStorage.setItem('favoriteTabs', JSON.stringify(favorites))
-  }, [favorites])
+
 
   const handleClickFavorite = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
