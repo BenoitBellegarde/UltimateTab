@@ -11,7 +11,10 @@ import useLocalStorage from '../hooks/useLocalStorage'
 
 export default function Favorites() {
   const [searchType, setSearchType] = useState<string>('All')
-  const [favorites, setFavorites] = useLocalStorage<Array<any>>("favoriteTabs", []);
+  const [favorites, setFavorites] = useLocalStorage<Array<any>>(
+    'favoriteTabs',
+    [],
+  )
   const [selectedTab, setSelectedTab] = useState<Tab | undefined>({
     url: '',
     name: '',
@@ -31,9 +34,6 @@ export default function Favorites() {
     searchType === 'All'
       ? favorites
       : favorites.filter((el) => el.type === TAB_TYPES[searchType])
-
-
-
 
   const handleClickFavorite = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
