@@ -15,7 +15,7 @@ import { useEffect, useRef } from 'react'
 import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
 import Difficulty from './Difficulty'
-import { Chords } from '../constants'
+import { CHORDS } from '../constants'
 import dynamic from 'next/dynamic'
 
 export default function TabPanel({
@@ -38,7 +38,7 @@ export default function TabPanel({
         width: 100,
         height: 110,
       })
-      chord.draw(Chords[el.innerText.trim()])
+      chord.draw(CHORDS[el.innerText.trim()])
       const strong = document.createElement('strong')
       strong.append(el.innerText.trim())
       chordDiagramRef.current.append(strong)

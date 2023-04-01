@@ -5,7 +5,7 @@ import { Tab } from '../types/tabs'
 import useTabs from '../hooks/useTabs'
 import TabPanel from '../components/TabPanel'
 import SearchPanel from '../components/SearchPanel'
-import { tabTypes } from '../constants'
+import { TAB_TYPES } from '../constants'
 import useGridProps from '../hooks/useGridProps'
 
 export default function Favorites() {
@@ -29,7 +29,7 @@ export default function Favorites() {
   const data =
     searchType === 'All'
       ? favorites
-      : favorites.filter((el) => el.type === tabTypes[searchType])
+      : favorites.filter((el) => el.type === TAB_TYPES[searchType])
 
   useEffect(() => {
     const favoritesFetched = JSON.parse(localStorage.getItem('favoriteTabs'))

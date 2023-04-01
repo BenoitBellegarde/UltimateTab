@@ -1,16 +1,16 @@
-import { tabTypeValues } from '../../constants'
+import { TAB_TYPES_VALUES } from '../../constants'
 import puppeteer from 'puppeteer'
 
 export function validateType(type) {
   type = String(type)
-  if (tabTypeValues.hasOwnProperty(type)) {
-    return tabTypeValues[type]
+  if (TAB_TYPES_VALUES.hasOwnProperty(type)) {
+    return TAB_TYPES_VALUES[type]
   } else {
     throw new Error(
       "Unknown type '" +
         type +
         "'. Accepted type are: '" +
-        Object.keys(tabTypeValues).join("', '") +
+        Object.keys(TAB_TYPES_VALUES).join("', '") +
         "'",
     )
   }
@@ -41,7 +41,7 @@ export async function getTabsList(url) {
         result.type == 'Drums'
       )
         return tabs
-      if (result.type == 'Ukulele Chords') result.type = 'Ukulele'
+      if (result.type == 'Ukulele CHORDS') result.type = 'Ukulele'
       if (result.type == 'Bass Tabs') result.type = 'Bass'
       const tab = {
         artist: result.artist_name,

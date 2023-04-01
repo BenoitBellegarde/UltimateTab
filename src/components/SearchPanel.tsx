@@ -18,7 +18,7 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { RiEmotionSadLine } from 'react-icons/ri'
-import { tabTypes, tabTypeColor } from '../constants'
+import { TAB_TYPES, TAB_TYPES_COLORS } from '../constants'
 import { SearchPanelProps } from '../types/tabs'
 import RadioCard from './RadioCard'
 
@@ -71,7 +71,7 @@ export default function SearchPanel({
         )}
         <Flex>
           <HStack flexWrap={'wrap'} justifyContent="center" {...group}>
-            {Object.keys(tabTypes).map((value) => {
+            {Object.keys(TAB_TYPES).map((value) => {
               const radio = getRadioProps({ value })
               return (
                 <RadioCard key={value} {...radio}>
@@ -131,8 +131,8 @@ export default function SearchPanel({
                 {tab.name}
               </LinkOverlay>
               <Box display={'flex'} alignItems={'center'}>
-                {tab.type && tabTypeColor[tab.type] && (
-                  <Badge mr={2} colorScheme={tabTypeColor[tab.type]}>
+                {tab.type && TAB_TYPES_COLORS[tab.type] && (
+                  <Badge mr={2} colorScheme={TAB_TYPES_COLORS[tab.type]}>
                     {tab.type}
                   </Badge>
                 )}

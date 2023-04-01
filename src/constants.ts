@@ -1,4 +1,4 @@
-export const tabTypes = {
+export const TAB_TYPES = {
   All: 'All',
   Video: 'Video',
   Tab: 'Tabs',
@@ -7,7 +7,7 @@ export const tabTypes = {
   Ukulele: 'Ukulele',
 }
 
-export const tabTypeValues = {
+export const TAB_TYPES_VALUES = {
   All: 0,
   Video: 100,
   Tab: 200,
@@ -16,7 +16,7 @@ export const tabTypeValues = {
   Ukulele: 800,
 }
 
-export const tabTypeColor = {
+export const TAB_TYPES_COLORS = {
   Video: 'teal',
   Tabs: 'green',
   Chords: 'purple',
@@ -24,7 +24,7 @@ export const tabTypeColor = {
   Ukulele: 'orange',
 }
 
-export const Chords = {
+export const CHORDS = {
   C: {
     name: 'C',
     chord: [
