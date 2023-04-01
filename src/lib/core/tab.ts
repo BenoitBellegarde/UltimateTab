@@ -41,7 +41,7 @@ export async function getTabsList(url) {
         result.type == 'Drums'
       )
         return tabs
-      if (result.type == 'Ukulele CHORDS') result.type = 'Ukulele'
+      if (result.type == 'Ukulele Chords') result.type = 'Ukulele'
       if (result.type == 'Bass Tabs') result.type = 'Bass'
       const tab = {
         artist: result.artist_name,
