@@ -20,6 +20,7 @@ import {
 import { RiEmotionSadLine } from 'react-icons/ri'
 import { TAB_TYPES, TAB_TYPES_COLORS } from '../constants'
 import { SearchPanelProps } from '../types/tabs'
+import Pagination from './Pagination'
 import RadioCard from './RadioCard'
 
 export default function SearchPanel({
@@ -33,6 +34,7 @@ export default function SearchPanel({
   selectedTab,
   searchValue,
   showSearchInput = true,
+  handleChangePage,
 }: SearchPanelProps) {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -88,7 +90,7 @@ export default function SearchPanel({
         )}
         {((searchValue && showSearchInput) || !showSearchInput) &&
           !isLoading &&
-          data?.length === 0 && (
+          data?.results?.length === 0 && (
             <Box textAlign="center" py={10} px={6}>
               <Icon as={RiEmotionSadLine} boxSize={20} color={'gray.400'} />
               <Text color={'gray.500'}>No results found</Text>
@@ -103,7 +105,7 @@ export default function SearchPanel({
             <Skeleton rounded="md" h="70px" my={2} />
           </Box>
         ) : (
-          data?.map((tab, index) => (
+          data?.results?.map((tab, index) => (
             <LinkBox
               className="tab-result"
               key={index}
@@ -141,6 +143,13 @@ export default function SearchPanel({
               </Box>
             </LinkBox>
           ))
+        )}
+        {data?.results?.length > 0 && handleChangePage && !isLoading && (
+          <Pagination
+            currentPage={data.pagination?.current}
+            totalPageCount={data.pagination?.total}
+            onPageChange={(page) => handleChangePage(page)}
+          />
         )}
       </Flex>
     </GridItem>

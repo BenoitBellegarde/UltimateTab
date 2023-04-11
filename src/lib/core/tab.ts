@@ -1,5 +1,7 @@
+import { Tab } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import puppeteer from 'puppeteer'
+import { ApiResponseSearch } from '../../types/tabs'
 
 export function validateType(type) {
   type = String(type)
@@ -16,23 +18,25 @@ export function validateType(type) {
   }
 }
 
-export async function getTabsList(url) {
+export async function getTabsList(url: string) {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
 
   await page.goto(url)
   const tabsParsed = await page.evaluate(() => {
-    const data = window.UGAPP.store.page
-    if (!data) return []
+    const data = window.UGAPP.store.page.data
     let results = []
-    if (typeof data.data.other_tabs !== 'undefined') {
-      results = results.concat(data.data.other_tabs)
+    if (typeof data.other_tabs !== 'undefined') {
+      results = results.concat(data.other_tabs)
     }
-    if (typeof data.data.results !== 'undefined') {
-      results = results.concat(data.data.results)
+    if (typeof data.results !== 'undefined') {
+      results = results.concat(data.results)
     }
-
-    return results.reduce((tabs, result) => {
+    const pagination = {
+      current: data.pagination.current,
+      total: data.pagination.total,
+    }
+    results = results.reduce((tabs: Array<Tab>, result) => {
       if (typeof result.marketing_type !== 'undefined') return tabs
       if (
         result.type == 'Pro' ||
@@ -43,7 +47,7 @@ export async function getTabsList(url) {
         return tabs
       if (result.type == 'Ukulele Chords') result.type = 'Ukulele'
       if (result.type == 'Bass Tabs') result.type = 'Bass'
-      const tab = {
+      const tab: Tab = {
         artist: result.artist_name,
         name: result.song_name,
         url: result.tab_url,
@@ -54,6 +58,8 @@ export async function getTabsList(url) {
       tabs.push(tab)
       return tabs
     }, [])
+    const response: ApiResponseSearch = { results, pagination }
+    return response
   })
   await browser.close()
   return tabsParsed

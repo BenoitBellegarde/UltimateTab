@@ -1,3 +1,4 @@
+import { ApiResponseSearch } from './../../types/tabs'
 import { formatRequest, search } from '../../lib/api/request'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ApiRequestSearch } from '../../types/tabs'
@@ -8,10 +9,10 @@ export default async function handlerSearch(
 ) {
   let formattedReq: ApiRequestSearch = formatRequest(req.url)
   if (formattedReq.args.q) {
-    let tabs = await search(formattedReq.args)
+    let tabs: ApiResponseSearch = await search(formattedReq.args)
     if (tabs) {
-      if (Array.isArray(tabs)) {
-        tabs = tabs.sort(function (elem1, elem2) {
+      if (Array.isArray(tabs.results)) {
+        tabs.results = tabs.results.sort(function (elem1, elem2) {
           return (
             elem2.rating * elem2.numberRates - elem1.rating * elem1.numberRates
           )

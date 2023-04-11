@@ -14,6 +14,7 @@ export default function Home() {
   const [searchValue, setSearchValue] = useState<string>('')
   const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
+  const [currentPage, setCurrentPage] = useState<number>(1)
   const [favorites, setFavorites] = useLocalStorage<Array<any>>(
     'favoriteTabs',
     [],
@@ -23,7 +24,8 @@ export default function Home() {
     name: '',
     artist: '',
     numberRates: 0,
-    rating: '',
+    rating: 0,
+    type: '',
   })
 
   const toast = useToast()
@@ -33,6 +35,7 @@ export default function Home() {
   const { isLoading, isError, data } = useTabsList(
     debounedSearchValue,
     searchType,
+    currentPage,
   )
 
   const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
@@ -52,7 +55,6 @@ export default function Home() {
     }
     setFavorites([...newFavorites])
     toast({
-      // title: 'Account created.',
       description: isAdded
         ? 'Song added to your favorite'
         : 'Song removed from your favorite',
@@ -61,6 +63,10 @@ export default function Home() {
       isClosable: true,
     })
   }
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [debounedSearchValue, searchType])
 
   return (
     <>
@@ -78,6 +84,7 @@ export default function Home() {
           isError={isError}
           data={data}
           selectedTab={selectedTab}
+          handleChangePage={setCurrentPage}
         />
 
         <TabPanel

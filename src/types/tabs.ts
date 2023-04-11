@@ -3,7 +3,6 @@ export interface ApiArgsSearch {
   type?: string | Array<string>
   page?: number
   value?: string
-  // to not evoke suspicion, we try to make the same request as in the ultimate guitar web application
   search_type?: string
   order?: string
 }
@@ -12,6 +11,14 @@ export interface ApiRequestSearch {
   url: string
   type: string
   args: ApiArgsSearch
+}
+
+export interface ApiResponseSearch {
+  results: Array<Tab>
+  pagination: {
+    current: number
+    total: number
+  }
 }
 
 export interface ApiArgsTab {
@@ -27,7 +34,8 @@ export interface Tab {
   name: string
   artist: string
   numberRates: number
-  rating: string
+  rating: number
+  type: string
 }
 
 export interface SearchPanelProps {
@@ -38,6 +46,7 @@ export interface SearchPanelProps {
   isLoading: boolean
   isError: boolean
   data: any
+  handleChangePage?: Function
   selectedTab: any
   searchValue?: string
   showSearchInput?: boolean

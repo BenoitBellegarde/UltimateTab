@@ -20,7 +20,8 @@ export default function Favorites() {
     name: '',
     artist: '',
     numberRates: 0,
-    rating: '',
+    rating: 0,
+    type: '',
   })
 
   const toast = useToast()
@@ -30,10 +31,12 @@ export default function Favorites() {
   const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
     selectedTab.url,
   )
-  const data =
-    searchType === 'All'
-      ? favorites
-      : favorites.filter((el) => el.type === TAB_TYPES[searchType])
+  const data = {
+    results:
+      searchType === 'All'
+        ? favorites
+        : favorites.filter((el) => el.type === TAB_TYPES[searchType]),
+  }
 
   const handleClickFavorite = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
