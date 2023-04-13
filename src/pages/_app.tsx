@@ -31,7 +31,7 @@ const theme = extendTheme({
     body: `'Poppins', sans-serif`,
   },
 })
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const [queryClient] = useState(() => new QueryClient())
 
   return (

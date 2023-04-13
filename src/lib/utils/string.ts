@@ -1,9 +1,11 @@
-export function underscore(string) {
-  let underscored = string[0].toLowerCase()
+export function underscore(stringToModify: string): string {
+  let underscored = stringToModify[0].toLowerCase()
   return (
     underscored +
-    string.slice(1, string.length).replace(/([A-Z])/g, (match) => {
-      return '_' + match.toLowerCase()
-    })
+    stringToModify
+      .slice(1, stringToModify.length)
+      .replace(/([A-Z])/g, (match) => {
+        return '_' + match.toLowerCase()
+      })
   )
 }

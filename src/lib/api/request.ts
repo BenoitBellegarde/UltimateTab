@@ -1,8 +1,12 @@
 import { underscore } from '../utils/string'
 import { validateType, getTabsList } from '../core/tab'
-import type { ApiRequestSearch, ApiArgsSearch } from '../../types/tabs'
+import type {
+  ApiRequestSearch,
+  ApiArgsSearch,
+  ApiResponseSearch,
+} from '../../types/tabs'
 
-export async function search(args: ApiArgsSearch) {
+export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
   const url = 'http://www.ultimate-guitar.com/search.php?' + encodeParams(args)
   console.log(url)
@@ -40,7 +44,7 @@ export function formatRequest(uri: string): ApiRequestSearch {
   return output
 }
 
-export function encodeParam(key, value) {
+export function encodeParam(key: string, value: Array<any>): string {
   if (Array.isArray(value)) {
     return value.map((item) => encodeParam(`${key}[]`, item)).join('&')
   } else {
@@ -48,10 +52,10 @@ export function encodeParam(key, value) {
   }
 }
 
-export function encodeParams(params) {
+export function encodeParams(params: Object): string {
   // encode everything
   return Object.keys(params)
-    .map((key) => {
+    .map((key: string) => {
       return encodeParam(key, params[key])
     })
     .join('&')

@@ -1,5 +1,10 @@
+import { ApiResponseSearch } from './../types/tabs'
 import { useQuery } from 'react-query'
-const getDatas = async (value: string, type: string, page: number) => {
+const getDatas = async (
+  value: string,
+  type: string,
+  page: number,
+): Promise<ApiResponseSearch> => {
   const response = await fetch(
     `/api/search?q=${value}&type=${type}&page=${page}`,
   )

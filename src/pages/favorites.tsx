@@ -9,7 +9,7 @@ import { TAB_TYPES } from '../constants'
 import useGridProps from '../hooks/useGridProps'
 import useLocalStorage from '../hooks/useLocalStorage'
 
-export default function Favorites() {
+export default function Favorites(): JSX.Element {
   const [searchType, setSearchType] = useState<string>('All')
   const [favorites, setFavorites] = useLocalStorage<Array<any>>(
     'favoriteTabs',

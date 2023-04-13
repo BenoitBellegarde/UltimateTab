@@ -3,8 +3,7 @@ import { TAB_TYPES_VALUES } from '../../constants'
 import puppeteer from 'puppeteer'
 import { ApiResponseSearch } from '../../types/tabs'
 
-export function validateType(type) {
-  type = String(type)
+export function validateType(type: string): string {
   if (TAB_TYPES_VALUES.hasOwnProperty(type)) {
     return TAB_TYPES_VALUES[type]
   } else {
@@ -18,7 +17,7 @@ export function validateType(type) {
   }
 }
 
-export async function getTabsList(url: string) {
+export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
 
@@ -65,7 +64,7 @@ export async function getTabsList(url: string) {
   return tabsParsed
 }
 
-export async function getTab(url) {
+export async function getTab(url: string) {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
 
