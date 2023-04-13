@@ -1,24 +1,39 @@
+import { Box, useColorModeValue } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
-import { ChordBox } from 'vexchords'
+import { CHORDS } from '../constants'
 
-export default function ChordDiagram({ label, notes }) {
-  const chordRef = useRef(null)
+export default function ChordDiagram(dep) {
+  const borderLightColor = useColorModeValue('gray.200', 'gray.700')
+  const chordDiagramRef = useRef(null)
 
   useEffect(() => {
-    const chord = new ChordBox(chordRef.current, {
-      width: 200,
-      height: 240,
-    })
-
-    chord.draw({
-      chord: notes,
-    })
-  })
+    const showChords = async (el: HTMLSpanElement) => {
+      const ChordBox = (await import('vexchords')).ChordBox
+      chordDiagramRef.current.innerHTML = ''
+      const chord = new ChordBox(chordDiagramRef.current, {
+        width: 100,
+        height: 110,
+      })
+      chord.draw(CHORDS[el.innerText.trim()])
+      const strong = document.createElement('strong')
+      strong.append(el.innerText.trim())
+      chordDiagramRef.current.append(strong)
+    }
+    chordDiagramRef.current.innerHTML = ''
+    document
+      .querySelectorAll('span[data-name]')
+      ?.forEach((el: HTMLSpanElement) => (el.onclick = () => showChords(el)))
+  }, [dep])
 
   return (
-    <div className="chord-diagram">
-      <h3>{label}</h3>
-      <div ref={chordRef}></div>
-    </div>
+    <Box
+      borderRadius={'lg'}
+      bg={borderLightColor}
+      textAlign="center"
+      ref={chordDiagramRef}
+      position={'absolute'}
+      right={8}
+      bottom="70px"
+    ></Box>
   )
 }

@@ -12,12 +12,10 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import HTMLReactParser from 'html-react-parser'
-import { useEffect, useRef } from 'react'
 import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
 import Difficulty from './Difficulty'
-import { CHORDS } from '../constants'
-import dynamic from 'next/dynamic'
+import ChordDiagram from './ChordDiagram'
 
 export default function TabPanel({
   selectedTab,
@@ -27,28 +25,6 @@ export default function TabPanel({
   handleClickFavorite,
 }) {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-
-  const chordDiagramRef = useRef(null)
-
-  useEffect(() => {
-    chordDiagramRef.current.innerHTML = ''
-    const showChords = async (el: HTMLSpanElement) => {
-      const ChordBox = (await import('vexchords')).ChordBox
-      chordDiagramRef.current.innerHTML = ''
-      const chord = new ChordBox(chordDiagramRef.current, {
-        width: 100,
-        height: 110,
-      })
-      chord.draw(CHORDS[el.innerText.trim()])
-      const strong = document.createElement('strong')
-      strong.append(el.innerText.trim())
-      chordDiagramRef.current.append(strong)
-    }
-
-    document
-      .querySelectorAll('span[data-name]')
-      ?.forEach((el: HTMLSpanElement) => (el.onclick = () => showChords(el)))
-  }, [selectedTabContent])
 
   return (
     <>
@@ -111,22 +87,14 @@ export default function TabPanel({
             )}
           </Skeleton>
         </Flex>
-        <Box
-          borderRadius={'lg'}
-          bg={borderLightColor}
-          textAlign="center"
-          ref={chordDiagramRef}
-          position={'absolute'}
-          right={8}
-          bottom="70px"
-        ></Box>
+        <ChordDiagram dep={selectedTabContent} />
       </GridItem>
       <GridItem
         h="100%"
         display={'flex'}
         px={5}
         py={3}
-        shadow={'base'}
+        shadow={selectedTabContent && 'base'}
         area={'footer'}
         borderTopStyle={'solid'}
         borderTopWidth={selectedTabContent && '1px'}
