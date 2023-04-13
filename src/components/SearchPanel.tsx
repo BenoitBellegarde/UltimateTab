@@ -48,7 +48,7 @@ export default function SearchPanel({
   searchValue,
   showSearchInput = true,
   handleChangePage,
-}: SearchPanelProps) : JSX.Element {
+}: SearchPanelProps): JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'tabType',

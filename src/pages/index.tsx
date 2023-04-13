@@ -10,7 +10,7 @@ import Head from 'next/head'
 import useGridProps from '../hooks/useGridProps'
 import useLocalStorage from '../hooks/useLocalStorage'
 
-export default function Home() : JSX.Element {
+export default function Home(): JSX.Element {
   const [searchValue, setSearchValue] = useState<string>('')
   const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
@@ -42,7 +42,7 @@ export default function Home() : JSX.Element {
     selectedTab.url,
   )
 
-  const handleClickFavorite : MouseEventHandler<HTMLButtonElement> = () => {
+  const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
     let newFavorites = favorites
     let isAdded: Boolean

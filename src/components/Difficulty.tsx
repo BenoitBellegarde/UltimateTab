@@ -1,10 +1,10 @@
 import { Flex, Icon, Text } from '@chakra-ui/react'
 import { MdOutlineSignalCellularAlt } from 'react-icons/md'
 
-interface DifficultyProps{
-  level : string
+interface DifficultyProps {
+  level: string
 }
-export default function Difficulty({ level } : DifficultyProps) : JSX.Element {
+export default function Difficulty({ level }: DifficultyProps): JSX.Element {
   const getDifficultyIcon = (level) => {
     let color
     switch (level) {

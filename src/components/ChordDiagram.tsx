@@ -7,7 +7,7 @@ interface ChordDiagramProps {
   dep: Tab
 }
 
-export default function ChordDiagram({ dep }: ChordDiagramProps) : JSX.Element {
+export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const chordDiagramRef = useRef(null)
 
