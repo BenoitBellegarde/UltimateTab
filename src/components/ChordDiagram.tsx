@@ -4,7 +4,7 @@ import { CHORDS } from '../constants'
 import { Tab } from '../types/tabs'
 
 interface ChordDiagramProps {
-  dep: Tab
+  dep: any
 }
 
 export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {

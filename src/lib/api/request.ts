@@ -17,7 +17,7 @@ export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
 export function formatRequest(uri: string): ApiRequestSearch {
   uri = decodeURIComponent(uri)
 
-  let output = {
+  let output: ApiRequestSearch = {
     url: uri,
     type: '',
     args: {
@@ -30,7 +30,7 @@ export function formatRequest(uri: string): ApiRequestSearch {
     },
   }
 
-  output.type = /^\/(.*)\?/.exec(uri)[1]
+  output.type = /^\/(.*)\?/.exec(uri)![1]
   let raw = uri
     .slice(uri.indexOf(output.type) + output.type.length + 1, uri.length)
     .split('&')
@@ -52,7 +52,7 @@ export function encodeParam(key: string, value: any[]): string {
   }
 }
 
-export function encodeParams(params: Object): string {
+export function encodeParams(params: Record<string, any>): string {
   // encode everything
   return Object.keys(params)
     .map((key: string) => {
@@ -65,7 +65,7 @@ export function encodeParams(params: Object): string {
 export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
   let acceptedParams = ['q', 'type', 'page']
   let requiredParams = ['q']
-  let params = {
+  let params: ApiArgsSearch = {
     type: '',
     page: 1,
     value: '',

@@ -15,10 +15,7 @@ export interface ApiRequestSearch {
 
 export interface ApiResponseSearch {
   results: Tab[]
-  pagination: {
-    current: number
-    total: number
-  }
+  pagination: Pagination
 }
 
 export interface ApiArgsTab {
@@ -29,6 +26,11 @@ export interface ApiRequestTab {
   args: ApiArgsTab
 }
 
+export interface Pagination {
+  current: number
+  total: number
+}
+
 export interface Tab {
   url: string
   name: string
@@ -37,3 +39,25 @@ export interface Tab {
   rating: number
   type: string
 }
+
+export interface SearchScrapped {
+  marketing_type: string
+  song_name: string
+  tab_url: string
+  type: string
+  artist_name: string
+  rating: number
+  votes: number
+}
+
+export interface TabScrapped {
+  artist: string
+  song_name: string
+  tab_url: string
+  difficulty: string
+  tuning: string[]
+  raw_tabs: string
+  htmlTab: string
+}
+
+export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'

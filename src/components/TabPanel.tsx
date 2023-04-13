@@ -97,7 +97,7 @@ export default function TabPanel({
             )}
           </Skeleton>
         </Flex>
-        <ChordDiagram dep={selectedTab} />
+        <ChordDiagram dep={selectedTabContent} />
       </GridItem>
       <GridItem
         h="100%"

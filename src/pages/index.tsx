@@ -25,7 +25,7 @@ export default function Home(): JSX.Element {
     artist: '',
     numberRates: 0,
     rating: 0,
-    type: '',
+    type: 'Tab',
   })
 
   const toast = useToast()

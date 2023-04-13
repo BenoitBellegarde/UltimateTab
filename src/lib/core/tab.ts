@@ -1,65 +1,71 @@
-import { Tab } from './../../types/tabs'
+import {
+  Tab,
+  Pagination,
+  SearchScrapped,
+} from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
-import puppeteer from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer'
 import { ApiResponseSearch } from '../../types/tabs'
 
 export function validateType(type: string): string {
-  if (TAB_TYPES_VALUES.hasOwnProperty(type)) {
+  if (type in TAB_TYPES_VALUES) {
     return TAB_TYPES_VALUES[type]
   } else {
     throw new Error(
-      "Unknown type '" +
-        type +
-        "'. Accepted type are: '" +
-        Object.keys(TAB_TYPES_VALUES).join("', '") +
-        "'",
+      `Unknown type '${type}'. Accepted types are: '${Object.keys(
+        TAB_TYPES_VALUES,
+      ).join("', '")}'`,
     )
   }
 }
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   const browser = await puppeteer.launch()
-  const page = await browser.newPage()
+  const page: Page = await browser.newPage()
 
   await page.goto(url)
-  const tabsParsed = await page.evaluate(() => {
+  const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
-    let results = []
-    if (typeof data.other_tabs !== 'undefined') {
+    let results: SearchScrapped[] = []
+    if (data.other_tabs) {
       results = results.concat(data.other_tabs)
     }
-    if (typeof data.results !== 'undefined') {
+    if (data.results) {
       results = results.concat(data.results)
     }
-    const pagination = {
+    const pagination: Pagination = {
       current: data.pagination.current,
       total: data.pagination.total,
     }
-    results = results.reduce((tabs: Tab[], result) => {
-      if (typeof result.marketing_type !== 'undefined') return tabs
+    let tabs: Tab[] = []
+    results.forEach((result: SearchScrapped) => {
       if (
-        result.type == 'Pro' ||
-        result.type == 'Power' ||
-        result.type == 'Official' ||
-        result.type == 'Drums'
-      )
-        return tabs
-      if (result.type == 'Ukulele Chords') result.type = 'Ukulele'
-      if (result.type == 'Bass Tabs') result.type = 'Bass'
+        result.marketing_type ||
+        ['Pro', 'Power', 'Official', 'Drums'].includes(result.type)
+      ) {
+        return
+      }
+      if (result.type === 'Ukulele Chords') {
+        result.type = 'Ukulele'
+      }
+      if (result.type === 'Bass Tabs') {
+        result.type = 'Bass'
+      }
       const tab: Tab = {
         artist: result.artist_name,
         name: result.song_name,
         url: result.tab_url,
-        rating: result.rating.toFixed(2),
+        rating: parseFloat(result.rating.toFixed(2)),
         numberRates: result.votes,
         type: result.type,
       }
       tabs.push(tab)
-      return tabs
-    }, [])
-    const response: ApiResponseSearch = { results, pagination }
+    })
+
+    const response: ApiResponseSearch = { results: tabs, pagination }
     return response
   })
+
   await browser.close()
   return tabsParsed
 }
