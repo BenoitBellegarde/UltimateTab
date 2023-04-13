@@ -1,8 +1,13 @@
 import { Box, useColorModeValue } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { CHORDS } from '../constants'
+import { Tab } from '../types/tabs'
 
-export default function ChordDiagram(dep) {
+interface ChordDiagramProps {
+  dep: Tab
+}
+
+export default function ChordDiagram({ dep }: ChordDiagramProps) : JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const chordDiagramRef = useRef(null)
 

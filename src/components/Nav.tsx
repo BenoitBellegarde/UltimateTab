@@ -16,7 +16,7 @@ import {
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import NavLink from './NavLink'
 
-export default function Nav() {
+export default function Nav() : JSX.Element {
   const { colorMode, toggleColorMode } = useColorMode()
   return (
     <>

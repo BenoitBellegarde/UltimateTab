@@ -1,5 +1,5 @@
 import { Grid, useToast } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import useDebounce from '../hooks/useDebounce'
 import { Tab } from '../types/tabs'
 import useTabsList from '../hooks/useTabsList'
@@ -10,7 +10,7 @@ import Head from 'next/head'
 import useGridProps from '../hooks/useGridProps'
 import useLocalStorage from '../hooks/useLocalStorage'
 
-export default function Home() {
+export default function Home() : JSX.Element {
   const [searchValue, setSearchValue] = useState<string>('')
   const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
@@ -42,7 +42,7 @@ export default function Home() {
     selectedTab.url,
   )
 
-  const handleClickFavorite = () => {
+  const handleClickFavorite : MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
     let newFavorites = favorites
     let isAdded: Boolean

@@ -6,3 +6,6 @@ declare global {
     UGAPP: any
   }
 }
+
+//Declaring vexchords as module because the lib doesn't provide typescript support
+declare module 'vexchords'

@@ -19,9 +19,22 @@ import {
 } from '@chakra-ui/react'
 import { RiEmotionSadLine } from 'react-icons/ri'
 import { TAB_TYPES, TAB_TYPES_COLORS } from '../constants'
-import { SearchPanelProps } from '../types/tabs'
 import Pagination from './Pagination'
 import RadioCard from './RadioCard'
+
+interface SearchPanelProps {
+  handleChangeType: Function
+  type: string
+  handleChangeValue?: Function
+  handleClickTab: Function
+  isLoading: boolean
+  isError: boolean
+  data: any
+  handleChangePage?: Function
+  selectedTab: any
+  searchValue?: string
+  showSearchInput?: boolean
+}
 
 export default function SearchPanel({
   handleChangeType,
@@ -35,7 +48,7 @@ export default function SearchPanel({
   searchValue,
   showSearchInput = true,
   handleChangePage,
-}: SearchPanelProps) {
+}: SearchPanelProps) : JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'tabType',

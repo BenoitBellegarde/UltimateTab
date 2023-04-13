@@ -37,17 +37,3 @@ export interface Tab {
   rating: number
   type: string
 }
-
-export interface SearchPanelProps {
-  handleChangeType: Function
-  type: string
-  handleChangeValue?: Function
-  handleClickTab: Function
-  isLoading: boolean
-  isError: boolean
-  data: any
-  handleChangePage?: Function
-  selectedTab: any
-  searchValue?: string
-  showSearchInput?: boolean
-}

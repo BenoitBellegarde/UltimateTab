@@ -1,6 +1,10 @@
+import { ReactNode } from 'react'
 import Nav from './Nav'
 
-export default function Layout({ children }) {
+interface LayoutProps{
+  children : ReactNode
+}
+export default function Layout({ children } : LayoutProps) : JSX.Element {
   return (
     <>
       <Nav />

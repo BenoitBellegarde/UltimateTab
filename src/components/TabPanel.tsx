@@ -16,6 +16,16 @@ import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
+import { Tab } from '../types/tabs'
+import { MouseEventHandler } from 'react'
+
+interface TabPanelProps {
+  selectedTab: Tab
+  isFavorite: Boolean
+  selectedTabContent: any
+  isLoading: Boolean
+  handleClickFavorite: MouseEventHandler<HTMLButtonElement>
+}
 
 export default function TabPanel({
   selectedTab,
@@ -23,7 +33,7 @@ export default function TabPanel({
   selectedTabContent,
   isLoading,
   handleClickFavorite,
-}) {
+}: TabPanelProps) {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
 
   return (
@@ -87,7 +97,7 @@ export default function TabPanel({
             )}
           </Skeleton>
         </Flex>
-        <ChordDiagram dep={selectedTabContent} />
+        <ChordDiagram dep={selectedTab} />
       </GridItem>
       <GridItem
         h="100%"
