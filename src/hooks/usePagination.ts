@@ -1,16 +1,25 @@
 import { useMemo } from 'react'
 
+interface PaginationProps {
+  totalCount: number
+  totalPageCount?: number
+  pageSize: number
+  siblingCount?: number
+  currentPage: number
+}
+
 export default function usePagination({
   totalCount,
   totalPageCount,
   pageSize,
   siblingCount = 1,
   currentPage,
-}) {
+}: PaginationProps): (number | string)[] {
   totalPageCount = !totalPageCount
     ? Math.ceil(totalCount / pageSize)
     : totalPageCount
-  const range = (start, end) => {
+
+  const range = (start: number, end: number): number[] => {
     let length = end - start + 1
     /*
           Create an array of certain length and set the elements within it from
@@ -80,6 +89,8 @@ export default function usePagination({
       let middleRange = range(leftSiblingIndex, rightSiblingIndex)
       return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex]
     }
+
+    return []
   }, [siblingCount, currentPage, totalPageCount])
 
   return paginationRange

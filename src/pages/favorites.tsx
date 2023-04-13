@@ -11,7 +11,7 @@ import useLocalStorage from '../hooks/useLocalStorage'
 
 export default function Favorites(): JSX.Element {
   const [searchType, setSearchType] = useState<string>('All')
-  const [favorites, setFavorites] = useLocalStorage<Array<any>>(
+  const [favorites, setFavorites] = useLocalStorage<any[]>(
     'favoriteTabs',
     [],
   )

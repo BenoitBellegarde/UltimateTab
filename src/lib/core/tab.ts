@@ -35,7 +35,7 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
       current: data.pagination.current,
       total: data.pagination.total,
     }
-    results = results.reduce((tabs: Array<Tab>, result) => {
+    results = results.reduce((tabs: Tab[], result) => {
       if (typeof result.marketing_type !== 'undefined') return tabs
       if (
         result.type == 'Pro' ||

@@ -15,7 +15,7 @@ export default function Home(): JSX.Element {
   const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [favorites, setFavorites] = useLocalStorage<Array<any>>(
+  const [favorites, setFavorites] = useLocalStorage<any[]>(
     'favoriteTabs',
     [],
   )

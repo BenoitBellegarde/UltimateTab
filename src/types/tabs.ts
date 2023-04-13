@@ -1,6 +1,6 @@
 export interface ApiArgsSearch {
   q: string
-  type?: string | Array<string>
+  type?: string | string[]
   page?: number
   value?: string
   search_type?: string
@@ -14,7 +14,7 @@ export interface ApiRequestSearch {
 }
 
 export interface ApiResponseSearch {
-  results: Array<Tab>
+  results: Tab[]
   pagination: {
     current: number
     total: number
