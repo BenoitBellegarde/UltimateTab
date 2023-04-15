@@ -1,7 +1,6 @@
 import { Box, useColorModeValue } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { CHORDS } from '../constants'
-import { Tab } from '../types/tabs'
 
 interface ChordDiagramProps {
   dep: any

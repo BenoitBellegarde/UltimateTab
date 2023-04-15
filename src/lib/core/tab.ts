@@ -2,6 +2,7 @@ import {
   Tab,
   Pagination,
   SearchScrapped,
+  TabScrapped,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import puppeteer, { Page } from 'puppeteer'
@@ -26,41 +27,33 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   await page.goto(url)
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
-    let results: SearchScrapped[] = []
-    if (data.other_tabs) {
-      results = results.concat(data.other_tabs)
-    }
-    if (data.results) {
-      results = results.concat(data.results)
-    }
+    let results: SearchScrapped[] = [
+      ...(data.other_tabs || []),
+      ...(data.results || []),
+    ]
     const pagination: Pagination = {
       current: data.pagination.current,
       total: data.pagination.total,
     }
-    let tabs: Tab[] = []
-    results.forEach((result: SearchScrapped) => {
-      if (
-        result.marketing_type ||
-        ['Pro', 'Power', 'Official', 'Drums'].includes(result.type)
-      ) {
-        return
-      }
-      if (result.type === 'Ukulele Chords') {
-        result.type = 'Ukulele'
-      }
-      if (result.type === 'Bass Tabs') {
-        result.type = 'Bass'
-      }
-      const tab: Tab = {
+    const tabs: Tab[] = results
+      .filter(
+        (result) =>
+          !result.marketing_type &&
+          !['Pro', 'Power', 'Official', 'Drums'].includes(result.type),
+      )
+      .map((result) => ({
         artist: result.artist_name,
         name: result.song_name,
         url: result.tab_url,
         rating: parseFloat(result.rating.toFixed(2)),
         numberRates: result.votes,
-        type: result.type,
-      }
-      tabs.push(tab)
-    })
+        type:
+          result.type === 'Ukulele Chords'
+            ? 'Ukulele'
+            : result.type === 'Bass Tabs'
+            ? 'Bass'
+            : result.type,
+      }))
 
     const response: ApiResponseSearch = { results: tabs, pagination }
     return response
@@ -70,36 +63,34 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   return tabsParsed
 }
 
-export async function getTab(url: string) {
-  const browser = await puppeteer.launch()
+export async function getTab(url: string): Promise<TabScrapped> {
+  const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
-
   await page.goto(url)
-  const tabParsed = await page.evaluate(() => {
-    const tab_view = window.UGAPP.store.page.data.tab_view
-    const tab = window.UGAPP.store.page.data.tab
-    let htmlTab
-    let tuning = tab_view && tab_view.meta ? tab_view.meta.tuning : ''
-    let difficulty = tab_view && tab_view.meta ? tab_view.meta.difficulty : ''
 
-    if (!tuning) {
-      tuning = ['E', 'A', 'D', 'G', 'B', 'E']
-    } else {
-      tuning = tuning.value.split(' ')
-    }
-
-    if (!difficulty) {
-      difficulty = 'unknown'
-    }
+  const tabParsed: TabScrapped = await page.evaluate(() => {
+    const { tab_view } = window.UGAPP.store.page.data
+    const { tab_url, artist_name, song_name } = window.UGAPP.store.page.data.tab
+    const tuning = tab_view?.meta?.tuning?.value?.split(' ') || [
+      'E',
+      'A',
+      'D',
+      'G',
+      'B',
+      'E',
+    ]
+    const difficulty = tab_view?.meta?.difficulty || 'unknown'
+    const raw_tabs = tab_view?.wiki_tab?.content || ''
+    const htmlTab = document.querySelector('code')?.outerHTML || ''
 
     return {
-      artist: tab.artist_name,
-      song_name: tab.song_name,
-      tab_url: tab.tab_url,
-      difficulty: difficulty,
-      tuning: tuning,
-      raw_tabs: tab_view.wiki_tab.content,
-      htmlTab: document.querySelector('code').outerHTML,
+      artist: artist_name,
+      song_name,
+      tab_url,
+      difficulty,
+      tuning,
+      raw_tabs,
+      htmlTab,
     }
   })
 
