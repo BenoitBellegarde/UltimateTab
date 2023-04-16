@@ -1,62 +1,24 @@
-import { Grid, useToast } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Grid } from '@chakra-ui/react'
 import Head from 'next/head'
-import { Tab } from '../types/tabs'
-import useTabs from '../hooks/useTabs'
 import TabPanel from '../components/TabPanel'
 import SearchPanel from '../components/SearchPanel'
-import { TAB_TYPES } from '../constants'
-import useGridProps from '../hooks/useGridProps'
-import useLocalStorage from '../hooks/useLocalStorage'
+import useFavoriteTabs from '../hooks/useTabsFavorites'
+import useAppStateContext from '../hooks/useAppStateContext'
+import { Tab } from '../types/tabs'
 
 export default function Favorites(): JSX.Element {
-  const [searchType, setSearchType] = useState<string>('All')
-  const [favorites, setFavorites] = useLocalStorage<any[]>('favoriteTabs', [])
-  const [selectedTab, setSelectedTab] = useState<Tab | undefined>({
-    url: '',
-    name: '',
-    artist: '',
-    numberRates: 0,
-    rating: 0,
-    type: 'Tab',
-  })
-
-  const toast = useToast()
-
-  const gridProps = useGridProps()
-
-  const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
-    selectedTab.url,
-  )
-  const data = {
-    results:
-      searchType === 'All'
-        ? favorites
-        : favorites.filter((el) => el.type === TAB_TYPES[searchType]),
-  }
-
-  const handleClickFavorite = () => {
-    const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
-    let newFavorites = favorites
-    let isAdded: Boolean
-    if (indexEntry !== -1) {
-      newFavorites.splice(indexEntry, 1)
-      isAdded = false
-    } else {
-      newFavorites.push(selectedTab)
-      isAdded = true
-    }
-    setFavorites([...newFavorites])
-    toast({
-      // title: 'Account created.',
-      description: isAdded
-        ? 'Song added to your favorite'
-        : 'Song removed from your favorite',
-      status: isAdded ? 'success' : 'info',
-      duration: 3000,
-      isClosable: true,
-    })
-  }
+  const {
+    searchType,
+    setSearchType,
+    favorites,
+    selectedTab,
+    setSelectedTab,
+    gridProps,
+    isLoadingTab,
+    selectedTabContent,
+    handleClickFavorite,
+  } = useAppStateContext()
+  const { data } = useFavoriteTabs(favorites, searchType)
 
   return (
     <>
@@ -79,7 +41,10 @@ export default function Favorites(): JSX.Element {
           isLoading={isLoadingTab}
           selectedTab={selectedTab}
           selectedTabContent={selectedTabContent}
-          isFavorite={favorites.find((el) => el.url === selectedTab.url)}
+          isFavorite={
+            typeof favorites.find((el : Tab) => el.url === selectedTab.url) !==
+            "undefined"
+          }
           handleClickFavorite={handleClickFavorite}
         />
       </Grid>

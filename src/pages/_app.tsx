@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { useState } from 'react'
 import Layout from '../components/Layout'
+import { AppStateProvider } from '../contexts/AppContext'
 
 import '../styles/styles.scss'
 import '@fontsource/poppins/400.css'
@@ -37,9 +38,11 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <AppStateProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AppStateProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </ChakraProvider>
     </QueryClientProvider>

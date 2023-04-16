@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { RiEmotionSadLine } from 'react-icons/ri'
 import { TAB_TYPES, TAB_TYPES_COLORS } from '../constants'
+import { ApiResponseSearch } from '../types/tabs'
 import Pagination from './Pagination'
 import RadioCard from './RadioCard'
 
@@ -29,7 +30,7 @@ interface SearchPanelProps {
   handleClickTab: Function
   isLoading: boolean
   isError: boolean
-  data: any
+  data: ApiResponseSearch
   handleChangePage?: Function
   selectedTab: any
   searchValue?: string
