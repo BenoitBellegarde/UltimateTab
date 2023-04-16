@@ -9,35 +9,14 @@ import { AppStateProvider } from '../contexts/AppContext'
 import '../styles/styles.scss'
 import '@fontsource/poppins/400.css'
 
-import { extendTheme } from '@chakra-ui/react'
+import { extendedTheme } from '../theme'
 
-const theme = extendTheme({
-  styles: {
-    global: (props) => ({
-      'span[data-name]': {
-        cursor: 'pointer',
-        color:
-          props.colorMode === 'dark'
-            ? 'twitter.600 !important'
-            : 'twitter.600 !important',
-        fontWeight: 'bold',
-      },
-      'pre, code': {
-        fontFamily: `'Poppins Mono', monospace !important`,
-        fontSize: 'md !important',
-      },
-    }),
-  },
-  fonts: {
-    body: `'Poppins', sans-serif`,
-  },
-})
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const [queryClient] = useState(() => new QueryClient())
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={extendedTheme}>
         <AppStateProvider>
           <Layout>
             <Component {...pageProps} />
