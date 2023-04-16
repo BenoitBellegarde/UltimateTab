@@ -59,8 +59,8 @@ export default function Home(): JSX.Element {
           selectedTab={selectedTab}
           selectedTabContent={selectedTabContent}
           isFavorite={
-            typeof favorites.find((el : Tab) => el.url === selectedTab.url) !==
-            "undefined"
+            typeof favorites.find((el: Tab) => el.url === selectedTab.url) !==
+            'undefined'
           }
           handleClickFavorite={handleClickFavorite}
         />

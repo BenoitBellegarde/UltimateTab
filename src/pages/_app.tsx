@@ -5,11 +5,9 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { useState } from 'react'
 import Layout from '../components/Layout'
 import { AppStateProvider } from '../contexts/AppContext'
-
+import { extendedTheme } from '../theme'
 import '../styles/styles.scss'
 import '@fontsource/poppins/400.css'
-
-import { extendedTheme } from '../theme'
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const [queryClient] = useState(() => new QueryClient())

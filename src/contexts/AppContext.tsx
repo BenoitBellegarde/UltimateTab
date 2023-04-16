@@ -71,12 +71,10 @@ export function AppStateProvider({ children }) {
         gridProps,
         isLoadingTab,
         selectedTabContent,
-        handleClickFavorite
+        handleClickFavorite,
       }}
     >
       {children}
     </AppStateContext.Provider>
   )
 }
-
-
