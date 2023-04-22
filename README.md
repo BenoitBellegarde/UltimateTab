@@ -2,7 +2,7 @@
 
 A web application that delivers an enhanced, ads-free and fast responsive interface to browse guitar tabs scraped from Ultimate Guitar.
 
-![Ultimate Tab Screenshot](https://i.ibb.co/JtPZg6g/Capture-d-cran-2023-03-28-223519.png)
+![Ultimate Tab Screenshot](https://i.ibb.co/y57Zr7r/screenzy-1682151757031.png)
 
 ## Description
 
