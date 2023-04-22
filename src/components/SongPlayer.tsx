@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import SpotifyPlayer from 'react-spotify-web-playback'
-import { SpotifyAccessToken } from '../types/tabs'
-
-const SPOTIFY_CLIENT_ID =
-  'BQAggQigHk6NlF4Mlhrj9Bco8iBB3-LtCZKBmj-MahxO9c7yAJqRPTdFjkPUyHUxELLkMC9IB-D6DW2WtXiWGWD4d026DbD2OWvCycW-GgWlMU4dJs7tFOgIXveeVHZ5dEMxj81tQpYrwoxvunGxjMeKNYSpz3Mvh58jOioRanFJYXLeWFlfgRSzxXeWsP81-yZMr4mkxyIm_no1IWfN9GWLrJMcgcqPhw'
 
 interface SongPlayerProps {
   songName: string
