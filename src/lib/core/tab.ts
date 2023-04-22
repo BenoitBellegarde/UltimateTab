@@ -1,8 +1,10 @@
+import { getSpotifyAccessToken } from './../api/spotify'
 import {
   Tab,
   Pagination,
   SearchScrapped,
   TabScrapped,
+  ApiResponseTab,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import puppeteer, { Page } from 'puppeteer'
@@ -63,7 +65,7 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   return tabsParsed
 }
 
-export async function getTab(url: string): Promise<TabScrapped> {
+export async function getTab(url: string): Promise<ApiResponseTab> {
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
   await page.goto(url)
@@ -93,7 +95,7 @@ export async function getTab(url: string): Promise<TabScrapped> {
       htmlTab,
     }
   })
-
   await browser.close()
-  return tabParsed
+  const { access_token } = await getSpotifyAccessToken()
+  return { tab: tabParsed, spotify_access_token: access_token }
 }

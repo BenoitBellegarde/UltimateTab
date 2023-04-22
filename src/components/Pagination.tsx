@@ -51,7 +51,7 @@ const Pagination = (props) => {
         <Button
           size={'sm'}
           mr={2}
-          key={pageNumber + index}
+          key={parseInt(pageNumber.toString()) + index}
           colorScheme={pageNumber === currentPage ? 'twitter' : 'gray'}
           onClick={() => onPageChange(pageNumber)}
           variant={pageNumber === '...' ? 'ghost' : 'solid'}

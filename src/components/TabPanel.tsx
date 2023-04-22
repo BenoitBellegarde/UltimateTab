@@ -16,13 +16,14 @@ import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
-import { Tab } from '../types/tabs'
+import { ApiResponseTab, Tab, TabScrapped } from '../types/tabs'
 import { MouseEventHandler } from 'react'
+import SongPlayer from './SongPlayer'
 
 interface TabPanelProps {
   selectedTab: Tab
   isFavorite: Boolean
-  selectedTabContent: any
+  selectedTabContent: ApiResponseTab
   isLoading: Boolean
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
 }
@@ -35,6 +36,10 @@ export default function TabPanel({
   handleClickFavorite,
 }: TabPanelProps) {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
+  const spotifyAccessToken =
+    selectedTabContent &&
+    typeof selectedTabContent?.spotify_access_token === 'string' &&
+    selectedTabContent?.spotify_access_token
 
   return (
     <>
@@ -59,9 +64,9 @@ export default function TabPanel({
               <Flex justifyContent={'space-between'}>
                 <Box>
                   <Text fontSize={'lg'} as="b">
-                    {selectedTabContent.artist}
+                    {selectedTabContent.tab.artist}
                   </Text>{' '}
-                  {selectedTabContent.song_name}
+                  {selectedTabContent.tab.song_name}
                 </Box>
                 <Flex alignItems={'center'}>
                   <StarIcon color={'yellow.400'} mr={'5px'} />{' '}
@@ -73,14 +78,14 @@ export default function TabPanel({
                   <Text color={'gray.500'} as="b" mr={1}>
                     Difficulty
                   </Text>{' '}
-                  <Difficulty level={selectedTabContent.difficulty} />
+                  <Difficulty level={selectedTabContent.tab.difficulty} />
                 </Flex>{' '}
                 <Flex fontSize={'sm'}>
                   <Text color={'gray.500'} as="b" mr={1}>
                     Tuning
                   </Text>{' '}
                   <Icon boxSize={5} as={GiGuitarHead} mr={1} />
-                  {selectedTabContent.tuning.join(' ')}
+                  {selectedTabContent.tab.tuning.join(' ')}
                 </Flex>{' '}
               </Flex>
             </>
@@ -92,7 +97,7 @@ export default function TabPanel({
           <Skeleton display={'flex'} h="100%" w="100%" isLoaded={!isLoading}>
             {selectedTabContent && (
               <Flex h={'100%'} w="100%">
-                {HTMLReactParser(selectedTabContent.htmlTab)}
+                {HTMLReactParser(selectedTabContent.tab.htmlTab)}
               </Flex>
             )}
           </Skeleton>
@@ -120,11 +125,18 @@ export default function TabPanel({
         >
           {selectedTabContent && (
             <>
-              <Flex>
-                <Text fontSize={'sm'}>
-                  <Link color="green">Link your Spotify account</Link> to listen
-                  the track
-                </Text>
+              <Flex w={'100%'}>
+                {spotifyAccessToken ? (
+                  <SongPlayer
+                    songName={`${selectedTabContent.tab.artist} ${selectedTabContent.tab.song_name}`}
+                    accessToken={spotifyAccessToken}
+                  />
+                ) : (
+                  <Text fontSize={'sm'}>
+                    <Link color="green">Link your Spotify account</Link> to
+                    listen the track
+                  </Text>
+                )}
               </Flex>
               <Flex>
                 <Tooltip

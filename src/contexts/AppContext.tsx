@@ -1,5 +1,5 @@
 import { useToast } from '@chakra-ui/react'
-import { useState, createContext, useContext, MouseEventHandler } from 'react'
+import { useState, createContext, MouseEventHandler } from 'react'
 import useDebounce from '../hooks/useDebounce'
 import useGridProps from '../hooks/useGridProps'
 import useLocalStorage from '../hooks/useLocalStorage'

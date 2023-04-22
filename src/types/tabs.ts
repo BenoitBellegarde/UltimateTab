@@ -18,12 +18,13 @@ export interface ApiResponseSearch {
   pagination: Pagination
 }
 
-export interface ApiArgsTab {
-  url: string
-}
 export interface ApiRequestTab {
   url: string
-  args: ApiArgsTab
+}
+
+export interface ApiResponseTab {
+  tab: TabScrapped
+  spotify_access_token: SpotifyAccessToken
 }
 
 export interface Pagination {
@@ -61,3 +62,9 @@ export interface TabScrapped {
 }
 
 export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'
+
+export type SpotifyAccessToken = string | Boolean
+
+export interface SpotifyAuthResponse {
+  access_token: SpotifyAccessToken
+}

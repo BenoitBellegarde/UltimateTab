@@ -31,13 +31,14 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
 
   return (
     <Box
+      className="chord--diagram"
       borderRadius={'lg'}
       bg={borderLightColor}
       textAlign="center"
       ref={chordDiagramRef}
       position={'absolute'}
       right={8}
-      bottom="70px"
+      bottom="90px"
     ></Box>
   )
 }

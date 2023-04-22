@@ -4,6 +4,7 @@ import type {
   ApiRequestSearch,
   ApiArgsSearch,
   ApiResponseSearch,
+  ApiRequestTab,
 } from '../../types/tabs'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
@@ -14,7 +15,7 @@ export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   return tabs
 }
 
-export function formatRequest(uri: string): ApiRequestSearch {
+export function formatRequestSearch(uri: string): ApiRequestSearch {
   uri = decodeURIComponent(uri)
 
   let output: ApiRequestSearch = {
@@ -41,6 +42,16 @@ export function formatRequest(uri: string): ApiRequestSearch {
       output.args[keyVal[0]] = keyVal[1]
     }
   }
+  return output
+}
+
+export function formatRequestTab(uri: string): ApiRequestTab {
+  uri = decodeURIComponent(uri)
+
+  let output: ApiRequestTab = {
+    url: uri.split('=')[1],
+  }
+
   return output
 }
 

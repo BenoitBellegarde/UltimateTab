@@ -1,5 +1,5 @@
 import { ApiResponseSearch } from './../../types/tabs'
-import { formatRequest, search } from '../../lib/api/request'
+import { formatRequestSearch, search } from '../../lib/api/request'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ApiRequestSearch } from '../../types/tabs'
 
@@ -7,7 +7,7 @@ export default async function handlerSearch(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  let formattedReq: ApiRequestSearch = formatRequest(req.url)
+  let formattedReq: ApiRequestSearch = formatRequestSearch(req.url)
   if (formattedReq.args.q) {
     let tabs: ApiResponseSearch = await search(formattedReq.args)
     if (tabs) {
