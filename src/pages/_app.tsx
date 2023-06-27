@@ -8,6 +8,7 @@ import { AppStateProvider } from '../contexts/AppContext'
 import { extendedTheme } from '../theme'
 import '../styles/styles.scss'
 import '@fontsource/poppins/400.css'
+import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   const [queryClient] = useState(() => new QueryClient())
@@ -17,6 +18,9 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
       <ChakraProvider theme={extendedTheme}>
         <AppStateProvider>
           <Layout>
+            <Head>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+            </Head>
             <Component {...pageProps} />
           </Layout>
         </AppStateProvider>

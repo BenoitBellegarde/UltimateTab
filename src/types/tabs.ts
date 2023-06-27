@@ -34,6 +34,7 @@ export interface Pagination {
 
 export interface Tab {
   url: string
+  slug : string
   name: string
   artist: string
   numberRates: number

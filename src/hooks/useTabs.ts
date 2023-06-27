@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import { TabScrapped } from '../types/tabs'
-const getDatasTab = async (url: string): Promise<TabScrapped> => {
+export const getDatasTab = async (url: string): Promise<TabScrapped> => {
   const response = await fetch(`/api/tab?q=${url}`)
   return response.json()
 }

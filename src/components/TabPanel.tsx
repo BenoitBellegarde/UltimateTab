@@ -57,20 +57,21 @@ export default function TabPanel({
           flexDirection="column"
           display={'flex'}
           h="100%"
+          // minH={'80px'}
           isLoaded={!isLoading}
         >
-          {selectedTabContent && (
-            <>
+          {/* {selectedTabContent && ( */}
+            {/* <> */}
               <Flex justifyContent={'space-between'}>
                 <Box pb={1}>
                   <Text fontSize={'lg'} as="b">
-                    {selectedTabContent.tab.artist}
+                    {selectedTabContent?.tab.artist}
                   </Text>{' '}
-                  {selectedTabContent.tab.song_name}
+                  {selectedTabContent?.tab.song_name}
                 </Box>
                 <Flex alignItems={'center'}>
                   <StarIcon color={'yellow.400'} mr={'5px'} />{' '}
-                  {selectedTab.rating} ({selectedTab.numberRates})
+                  {selectedTab?.rating} ({selectedTab?.numberRates})
                 </Flex>
               </Flex>
               <Flex justifyContent={'space-between'}>
@@ -78,32 +79,32 @@ export default function TabPanel({
                   <Text color={'gray.500'} as="b" mr={1}>
                     Difficulty
                   </Text>{' '}
-                  <Difficulty level={selectedTabContent.tab.difficulty} />
+                  <Difficulty level={selectedTabContent?.tab.difficulty} />
                 </Flex>{' '}
                 <Flex fontSize={'sm'}>
                   <Text color={'gray.500'} as="b" mr={1}>
                     Tuning
                   </Text>{' '}
                   <Icon boxSize={5} as={GiGuitarHead} mr={1} />
-                  {selectedTabContent.tab.tuning.join(' ')}
+                  {selectedTabContent?.tab.tuning.join(' ')}
                 </Flex>{' '}
               </Flex>
-            </>
-          )}
+            {/* </> */}
+          {/* )} */}
         </Skeleton>
       </GridItem>
-      <GridItem h="100%" p="5" overflowY={'auto'} area={'main'}>
-        <Flex h="100%" w="100%" wrap={'wrap'} justifyContent="center">
-          <Skeleton display={'flex'} h="100%" w="100%" isLoaded={!isLoading}>
-            {selectedTabContent && (
+      
+        <Flex p={5} h="100%" w="100%" flexGrow={1} alignItems={'stretch'} wrap={'wrap'} justifyContent="center">
+          <Skeleton display={'flex'}  w="100%" isLoaded={!isLoading}>
+            {/* {selectedTabContent && ( */}
               <Flex h={'100%'} w="100%">
-                {HTMLReactParser(selectedTabContent.tab.htmlTab)}
+                {selectedTabContent && HTMLReactParser(selectedTabContent?.tab?.htmlTab)}
               </Flex>
-            )}
+            {/* )} */}
           </Skeleton>
         </Flex>
         <ChordDiagram dep={selectedTabContent} />
-      </GridItem>
+      
       <GridItem
         h="100%"
         display={'flex'}

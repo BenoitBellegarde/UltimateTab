@@ -47,6 +47,7 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
         artist: result.artist_name,
         name: result.song_name,
         url: result.tab_url,
+        slug : result.tab_url.split('/').splice(-2).join('/'),
         rating: parseFloat(result.rating.toFixed(2)),
         numberRates: result.votes,
         type:

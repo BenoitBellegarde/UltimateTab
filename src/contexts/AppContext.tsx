@@ -16,6 +16,7 @@ export function AppStateProvider({ children }) {
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])
   const [selectedTab, setSelectedTab] = useState<Tab>({
     url: '',
+    slug : '',
     name: '',
     artist: '',
     numberRates: 0,

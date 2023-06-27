@@ -1,6 +1,7 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 export const extendedTheme = extendTheme({
+  initialColorMode: 'dark',
   styles: {
     global: (props: StyleFunctionProps) => ({
       'span[data-name]': {

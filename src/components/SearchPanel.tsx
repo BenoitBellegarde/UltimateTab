@@ -109,8 +109,8 @@ export default function SearchPanel({
               className="tab-result"
               key={index}
               onClick={(e) => {
-                router.push('/tab')
-                handleClickTab(tab)
+                router.push(`/tab/${tab.slug}`)
+                //handleClickTab(tab)
               }}
               as="div"
               p="5"

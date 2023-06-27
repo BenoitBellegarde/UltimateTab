@@ -1,5 +1,7 @@
 // pages/_document.js
+import { ColorModeScript } from '@chakra-ui/react'
 import { Html, Head, Main, NextScript } from 'next/document'
+import { extendedTheme } from '../theme'
 
 export default function Document(): JSX.Element {
   return (
@@ -24,9 +26,9 @@ export default function Document(): JSX.Element {
         />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="author" content="Benoit Bellegarde" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
       </Head>
       <body>
+        <ColorModeScript initialColorMode={extendedTheme.initialColorMode} />
         <Main />
         <NextScript />
       </body>
