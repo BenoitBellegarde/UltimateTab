@@ -12,37 +12,66 @@ import {
   useColorMode,
   Center,
   Text,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Link,
+  useBreakpointValue,
 } from '@chakra-ui/react'
-import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import { MoonIcon, SearchIcon, SunIcon } from '@chakra-ui/icons'
 import NavLink from './NavLink'
-
+import { useRouter } from 'next/router'
+import useAppStateContext from '../hooks/useAppStateContext'
+import NextLink from 'next/link'
 export default function Nav(): JSX.Element {
   const { colorMode, toggleColorMode } = useColorMode()
+  const { setSearchValue } = useAppStateContext()
+  const router = useRouter()
   return (
     <>
-      <Box shadow={'md'} px={4}>
+      <Box px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Flex alignItems={'center'}>
-            <Text
-              bgGradient="linear(to-l, #7928CA, #1a94da)"
-              bgClip="text"
-              fontSize={'lg'}
-              mr={5}
-              fontWeight="extrabold"
-            >
-              Ultimate tab
-            </Text>
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/favorites">Favorites</NavLink>
+            <Link as={NextLink} href="/" style={{ textDecoration: 'none' }}>
+              <Text
+                bgGradient="linear(to-l, #7928CA, #1a94da)"
+                bgClip="text"
+                fontSize={useBreakpointValue({ base: 'lg', md: 'xl' })}
+                mr={5}
+                fontWeight="extrabold"
+                whiteSpace={'nowrap'}
+              >
+                Ultimate tab
+              </Text>
+            </Link>
+          </Flex>
+          <Flex alignItems={'center'} width={'100%'}>
+            <InputGroup mr={5}>
+              <InputLeftElement h={'100%'} pointerEvents="none">
+                <SearchIcon color="gray.300" />
+              </InputLeftElement>
+
+              <Input
+                onChange={(e) => {
+                  router.push('/search')
+                  setSearchValue(e.target.value)
+                }}
+                placeholder="Search a song or an artist..."
+                size={useBreakpointValue({ base: 'sm', md: 'md' })}
+                borderRadius="full"
+              />
+            </InputGroup>
+            {/* <NavLink href="/">Home</NavLink> */}
+            {/* <NavLink href="/favorites">Favorites</NavLink> */}
           </Flex>
 
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              <Button onClick={toggleColorMode}>
+              <Button size={useBreakpointValue({ base: 'sm', md: 'md' })} onClick={toggleColorMode}>
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
 
-              <Menu>
+              {/* <Menu>
                 <MenuButton
                   as={Button}
                   rounded={'full'}
@@ -73,7 +102,7 @@ export default function Nav(): JSX.Element {
                   <MenuItem>Account Settings</MenuItem>
                   <MenuItem>Logout</MenuItem>
                 </MenuList>
-              </Menu>
+              </Menu> */}
             </Stack>
           </Flex>
         </Flex>

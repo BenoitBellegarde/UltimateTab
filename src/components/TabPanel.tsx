@@ -62,7 +62,7 @@ export default function TabPanel({
           {selectedTabContent && (
             <>
               <Flex justifyContent={'space-between'}>
-                <Box>
+                <Box pb={1}>
                   <Text fontSize={'lg'} as="b">
                     {selectedTabContent.tab.artist}
                   </Text>{' '}

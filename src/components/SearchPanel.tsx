@@ -17,6 +17,7 @@ import {
   Text,
   Icon,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { RiEmotionSadLine } from 'react-icons/ri'
 import { TAB_TYPES, TAB_TYPES_COLORS } from '../constants'
 import { ApiResponseSearch } from '../types/tabs'
@@ -51,54 +52,38 @@ export default function SearchPanel({
   handleChangePage,
 }: SearchPanelProps): JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'tabType',
-    defaultValue: type,
-    onChange: (value) => handleChangeType(value),
-  })
-
-  const group = getRootProps()
+  const router = useRouter()
 
   return (
     <GridItem
-      p="5"
+      px="5"
+      py={4}
       overflowY={'auto'}
-      borderRightStyle={'solid'}
-      borderRightWidth="1px"
-      borderRightColor={borderLightColor}
+      // borderRightStyle={'solid'}
+      // borderRightWidth="1px"
+      // borderRightColor={borderLightColor}
       area={'nav'}
     >
-      <Flex wrap={'wrap'} justifyContent="center">
+      {/* <Flex wrap={'wrap'} justifyContent="center">
         {showSearchInput && (
           <Stack mb="5" spacing={4} w="100%">
-            <InputGroup>
+            { <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
 
               <Input
                 onChange={(e) => handleChangeValue(e.target.value)}
-                placeholder="Search a song or artist... (e.g. Slash, Wish you were here,...)"
+                placeholder="Search a song or an artist..."
                 size={'md'}
                 borderRadius="full"
               />
-            </InputGroup>
+            </InputGroup> }
           </Stack>
         )}
-        <Flex>
-          <HStack flexWrap={'wrap'} justifyContent="center" {...group}>
-            {Object.keys(TAB_TYPES).map((value) => {
-              const radio = getRadioProps({ value })
-              return (
-                <RadioCard key={value} {...radio}>
-                  {value}
-                </RadioCard>
-              )
-            })}
-          </HStack>
-        </Flex>
-      </Flex>
-      <Flex mt="5" wrap={'wrap'} justifyContent="center">
+        
+      </Flex> */}
+      <Flex wrap={'wrap'} justifyContent="center">
         {isError && (
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
         )}
@@ -123,7 +108,10 @@ export default function SearchPanel({
             <LinkBox
               className="tab-result"
               key={index}
-              onClick={(e) => handleClickTab(tab)}
+              onClick={(e) => {
+                router.push('/tab')
+                handleClickTab(tab)
+              }}
               as="div"
               p="5"
               my="2"
@@ -143,8 +131,8 @@ export default function SearchPanel({
               <LinkOverlay>
                 <Text fontSize={'lg'} as="b">
                   {tab.artist}
-                </Text>{' '}
-                {tab.name}
+                </Text>
+                <br /> {tab.name}
               </LinkOverlay>
               <Box display={'flex'} alignItems={'center'}>
                 {tab.type && TAB_TYPES_COLORS[tab.type] && (

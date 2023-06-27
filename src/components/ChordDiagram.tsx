@@ -36,9 +36,9 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
       bg={borderLightColor}
       textAlign="center"
       ref={chordDiagramRef}
-      position={'absolute'}
-      right={8}
-      bottom="90px"
+      position={'fixed'}
+      right={'17px'}
+      bottom="17px"
     ></Box>
   )
 }
