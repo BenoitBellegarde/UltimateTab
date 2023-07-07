@@ -7,15 +7,16 @@ interface LayoutProps {
   children: ReactNode
 }
 export default function Layout({ children }: LayoutProps): JSX.Element {
-  const {pathname } = useRouter()
-  const flexDirectionContent = (pathname === '/') ? 'row' : 'column'
+  const { pathname } = useRouter()
+  const flexDirectionContent = pathname === '/' ? 'row' : 'column'
   return (
-    <Container maxW='8xl'>
-    <Flex minH={'100vh'} direction={'column'}>
-      <Nav />
-      <Flex grow={1} direction={flexDirectionContent}>{children}</Flex>
-    </Flex>
+    <Container maxW="8xl">
+      <Flex minH={'100vh'} direction={'column'}>
+        <Nav />
+        <Flex grow={1} direction={flexDirectionContent}>
+          {children}
+        </Flex>
+      </Flex>
     </Container>
-      
   )
 }

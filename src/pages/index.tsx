@@ -1,6 +1,5 @@
 import {
   Flex,
-  Grid,
   Text,
   Heading,
   Stack,
@@ -8,41 +7,11 @@ import {
   Button,
   Image,
 } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import useTabsList from '../hooks/useTabsList'
-import TabPanel from '../components/TabPanel'
-import SearchPanel from '../components/SearchPanel'
 import Head from 'next/head'
-import useAppStateContext from '../hooks/useAppStateContext'
-import { Tab } from '../types/tabs'
+import { useRouter } from 'next/router'
 
 export default function Home(): JSX.Element {
-  // const {
-  //   searchValue,
-  //   setSearchValue,
-  //   debounedSearchValue,
-  //   searchType,
-  //   setSearchType,
-  //   currentPage,
-  //   setCurrentPage,
-  //   favorites,
-  //   selectedTab,
-  //   setSelectedTab,
-  //   gridProps,
-  //   isLoadingTab,
-  //   selectedTabContent,
-  //   handleClickFavorite,
-  // } = useAppStateContext()
-
-  // const { isLoading, isError, data } = useTabsList(
-  //   debounedSearchValue,
-  //   searchType,
-  //   currentPage,
-  // )
-
-  // useEffect(() => {
-  //   setCurrentPage(1)
-  // }, [debounedSearchValue, searchType, setCurrentPage])
+  const router = useRouter()
 
   return (
     <>
@@ -92,20 +61,21 @@ export default function Home(): JSX.Element {
               </Text>{' '}
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-              Browse every guitar tabs scraped from Ultimate Guitar with an enhanced, ads-free and responsive interface.
+              Browse every guitar tabs scraped from Ultimate Guitar with an
+              ads-free, enhanced and responsive interface.
             </Text>
             <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
               <Button
                 rounded={'full'}
                 bg={'blue.400'}
                 color={'white'}
+                onClick={() => router.push('/search')}
                 _hover={{
                   bg: 'blue.500',
                 }}
               >
                 Search a tab
               </Button>
-              {/* <Button rounded={'full'}>How It Works</Button> */}
             </Stack>
           </Stack>
         </Flex>
@@ -126,31 +96,6 @@ export default function Home(): JSX.Element {
           />
         </Flex>
       </Flex>
-      {/* <Grid {...gridProps}>
-        <SearchPanel
-          handleChangeType={setSearchType}
-          searchValue={searchValue}
-          type={searchType}
-          handleChangeValue={setSearchValue}
-          handleClickTab={setSelectedTab}
-          isLoading={isLoading}
-          isError={isError}
-          data={data}
-          selectedTab={selectedTab}
-          handleChangePage={setCurrentPage}
-        />
-
-        <TabPanel
-          isLoading={isLoadingTab}
-          selectedTab={selectedTab}
-          selectedTabContent={selectedTabContent}
-          isFavorite={
-            typeof favorites.find((el: Tab) => el.url === selectedTab.url) !==
-            'undefined'
-          }
-          handleClickFavorite={handleClickFavorite}
-        />
-      </Grid> */}
     </>
   )
 }

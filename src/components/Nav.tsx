@@ -53,7 +53,9 @@ export default function Nav(): JSX.Element {
 
               <Input
                 onChange={(e) => {
-                  router.push('/search')
+                  if (router.pathname !== '/search') {
+                    router.push('/search')
+                  }
                   setSearchValue(e.target.value)
                 }}
                 placeholder="Search a song or an artist..."
@@ -67,7 +69,10 @@ export default function Nav(): JSX.Element {
 
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
-              <Button size={useBreakpointValue({ base: 'sm', md: 'md' })} onClick={toggleColorMode}>
+              <Button
+                size={useBreakpointValue({ base: 'sm', md: 'md' })}
+                onClick={toggleColorMode}
+              >
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
 

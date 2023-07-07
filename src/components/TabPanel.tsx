@@ -1,11 +1,9 @@
 import { StarIcon } from '@chakra-ui/icons'
 import {
-  Box,
   Flex,
   GridItem,
   Icon,
   IconButton,
-  Link,
   Skeleton,
   Text,
   Tooltip,
@@ -18,7 +16,6 @@ import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
 import { ApiResponseTab, Tab, TabScrapped } from '../types/tabs'
 import { MouseEventHandler } from 'react'
-import SongPlayer from './SongPlayer'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -29,17 +26,12 @@ interface TabPanelProps {
 }
 
 export default function TabPanel({
-  selectedTab,
   isFavorite,
   selectedTabContent,
   isLoading,
   handleClickFavorite,
 }: TabPanelProps) {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-  const spotifyAccessToken =
-    selectedTabContent &&
-    typeof selectedTabContent?.spotify_access_token === 'string' &&
-    selectedTabContent?.spotify_access_token
 
   return (
     <>
@@ -57,91 +49,19 @@ export default function TabPanel({
           flexDirection="column"
           display={'flex'}
           h="100%"
-          // minH={'80px'}
           isLoaded={!isLoading}
         >
-          {/* {selectedTabContent && ( */}
-            {/* <> */}
-              <Flex justifyContent={'space-between'}>
-                <Box pb={1}>
-                  <Text fontSize={'lg'} as="b">
-                    {selectedTabContent?.tab.artist}
-                  </Text>{' '}
-                  {selectedTabContent?.tab.song_name}
-                </Box>
-                <Flex alignItems={'center'}>
-                  <StarIcon color={'yellow.400'} mr={'5px'} />{' '}
-                  {selectedTab?.rating} ({selectedTab?.numberRates})
-                </Flex>
+          <Flex justifyContent={'space-between'}>
+            <Flex alignItems={'center'} pb={0}>
+              <Flex alignItems={'baseline'}>
+                <Text fontSize={'lg'} as="b" mr={1}>
+                  {selectedTabContent?.tab.artist}
+                </Text>{' '}
+                <Text fontSize={'sm'}>{selectedTabContent?.tab.song_name}</Text>
               </Flex>
-              <Flex justifyContent={'space-between'}>
-                <Flex fontSize={'sm'}>
-                  <Text color={'gray.500'} as="b" mr={1}>
-                    Difficulty
-                  </Text>{' '}
-                  <Difficulty level={selectedTabContent?.tab.difficulty} />
-                </Flex>{' '}
-                <Flex fontSize={'sm'}>
-                  <Text color={'gray.500'} as="b" mr={1}>
-                    Tuning
-                  </Text>{' '}
-                  <Icon boxSize={5} as={GiGuitarHead} mr={1} />
-                  {selectedTabContent?.tab.tuning.join(' ')}
-                </Flex>{' '}
-              </Flex>
-            {/* </> */}
-          {/* )} */}
-        </Skeleton>
-      </GridItem>
-      
-        <Flex p={5} h="100%" w="100%" flexGrow={1} alignItems={'stretch'} wrap={'wrap'} justifyContent="center">
-          <Skeleton display={'flex'}  w="100%" isLoaded={!isLoading}>
-            {/* {selectedTabContent && ( */}
-              <Flex h={'100%'} w="100%">
-                {selectedTabContent && HTMLReactParser(selectedTabContent?.tab?.htmlTab)}
-              </Flex>
-            {/* )} */}
-          </Skeleton>
-        </Flex>
-        <ChordDiagram dep={selectedTabContent} />
-      
-      <GridItem
-        h="100%"
-        display={'flex'}
-        px={5}
-        py={3}
-        shadow={selectedTabContent && 'base'}
-        area={'footer'}
-        borderTopStyle={'solid'}
-        borderTopWidth={selectedTabContent && '1px'}
-        borderTopColor={borderLightColor}
-      >
-        <Skeleton
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          display={'flex'}
-          h="100%"
-          w="100%"
-          isLoaded={!isLoading}
-        >
-          {selectedTabContent && (
-            <>
-              <Flex w={'100%'}>
-                {spotifyAccessToken ? (
-                  <SongPlayer
-                    songName={`${selectedTabContent.tab.artist} ${selectedTabContent.tab.song_name}`}
-                    accessToken={spotifyAccessToken}
-                  />
-                ) : (
-                  <Text fontSize={'sm'}>
-                    <Link color="green">Link your Spotify account</Link> to
-                    listen the track
-                  </Text>
-                )}
-              </Flex>
-              <Flex>
+              <Flex fontSize={'sm'} justifyContent={'start'}>
                 <Tooltip
-                  placement="left"
+                  placement="right"
                   label={
                     isFavorite ? 'Remove from favorites' : 'Add to favorites'
                   }
@@ -152,13 +72,54 @@ export default function TabPanel({
                     colorScheme={isFavorite ? 'red' : 'gray'}
                     variant="ghost"
                     aria-label="Add to favorite"
+                    size={'sm'}
                   />
                 </Tooltip>
               </Flex>
-            </>
-          )}
+            </Flex>
+            <Flex alignItems={'center'}>
+              <StarIcon color={'yellow.400'} mr={'5px'} />{' '}
+              {selectedTabContent?.tab.rating} (
+              {selectedTabContent?.tab.numberRates})
+            </Flex>
+          </Flex>
+          <Flex justifyContent={'space-between'}>
+            <Flex fontSize={'sm'}>
+              <Text color={'gray.500'} as="b" mr={1}>
+                Difficulty
+              </Text>{' '}
+              <Difficulty level={selectedTabContent?.tab.difficulty} />
+            </Flex>{' '}
+            <Flex fontSize={'sm'}>
+              <Text color={'gray.500'} as="b" mr={1}>
+                Tuning
+              </Text>{' '}
+              <Icon boxSize={5} as={GiGuitarHead} mr={1} />
+              {selectedTabContent?.tab.tuning.join(' ')}
+            </Flex>{' '}
+          </Flex>
         </Skeleton>
       </GridItem>
+
+      <Flex
+        p={5}
+        h="100%"
+        w="100%"
+        flexGrow={1}
+        alignItems={'stretch'}
+        wrap={'wrap'}
+        justifyContent="center"
+      >
+        <Skeleton display={'flex'} w="100%" isLoaded={!isLoading}>
+          {/* {selectedTabContent && ( */}
+          <Flex h={'100%'} w="100%">
+            {selectedTabContent &&
+              HTMLReactParser(selectedTabContent?.tab?.htmlTab)}
+          </Flex>
+          {/* )} */}
+        </Skeleton>
+      </Flex>
+      <ChordDiagram dep={selectedTabContent} />
     </>
   )
 }

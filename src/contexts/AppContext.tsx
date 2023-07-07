@@ -16,7 +16,7 @@ export function AppStateProvider({ children }) {
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])
   const [selectedTab, setSelectedTab] = useState<Tab>({
     url: '',
-    slug : '',
+    slug: '',
     name: '',
     artist: '',
     numberRates: 0,
@@ -49,8 +49,7 @@ export function AppStateProvider({ children }) {
         ? 'Song added to your favorite'
         : 'Song removed from your favorite',
       status: isAdded ? 'success' : 'info',
-      duration: 3000,
-      isClosable: true,
+      duration: 2000,
     })
   }
 

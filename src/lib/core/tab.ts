@@ -41,13 +41,13 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
       .filter(
         (result) =>
           !result.marketing_type &&
-          !['Pro', 'Power', 'Official', 'Drums'].includes(result.type),
+          !['Pro', 'Power', 'Official', 'Drums', 'Video'].includes(result.type),
       )
       .map((result) => ({
         artist: result.artist_name,
         name: result.song_name,
         url: result.tab_url,
-        slug : result.tab_url.split('/').splice(-2).join('/'),
+        slug: result.tab_url.split('/').splice(-2).join('/'),
         rating: parseFloat(result.rating.toFixed(2)),
         numberRates: result.votes,
         type:
@@ -73,7 +73,8 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
 
   const tabParsed: TabScrapped = await page.evaluate(() => {
     const { tab_view } = window.UGAPP.store.page.data
-    const { tab_url, artist_name, song_name } = window.UGAPP.store.page.data.tab
+    const { tab_url, artist_name, song_name, rating, votes } =
+      window.UGAPP.store.page.data.tab
     const tuning = tab_view?.meta?.tuning?.value?.split(' ') || [
       'E',
       'A',
@@ -94,6 +95,8 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
       tuning,
       raw_tabs,
       htmlTab,
+      numberRates: votes,
+      rating: parseFloat(rating.toFixed(2)),
     }
   })
   await browser.close()

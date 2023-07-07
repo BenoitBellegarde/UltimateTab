@@ -9,7 +9,6 @@ export default function RadioCard(props): JSX.Element {
     <Box as="label">
       <input {...input} />
       <Box
-        mb={2}
         {...checkbox}
         cursor="pointer"
         borderWidth="1px"

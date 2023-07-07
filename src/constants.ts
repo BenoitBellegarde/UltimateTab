@@ -1,6 +1,5 @@
 export const TAB_TYPES = {
   All: 'All',
-  Video: 'Video',
   Tab: 'Tabs',
   Chords: 'Chords',
   Bass: 'Bass',
@@ -9,7 +8,6 @@ export const TAB_TYPES = {
 
 export const TAB_TYPES_VALUES = {
   All: 0,
-  Video: 100,
   Tab: 200,
   Chords: 300,
   Bass: 400,
@@ -17,7 +15,6 @@ export const TAB_TYPES_VALUES = {
 }
 
 export const TAB_TYPES_COLORS = {
-  Video: 'teal',
   Tabs: 'green',
   Chords: 'purple',
   Bass: 'red',
