@@ -4,11 +4,14 @@ import { MdOutlineSignalCellularAlt } from 'react-icons/md'
 interface DifficultyProps {
   level: string
 }
-export default function Difficulty({ level }: DifficultyProps): JSX.Element {
-  const getDifficultyIcon = (level) => {
-    let color
+export default function Difficulty({
+  level = 'unknown',
+}: DifficultyProps): JSX.Element {
+  const getDifficultyIcon = (level: string) => {
+    let color = ''
     switch (level) {
       case 'novice':
+      case 'beginner':
         color = 'green'
         break
       case 'intermediate':
@@ -33,7 +36,7 @@ export default function Difficulty({ level }: DifficultyProps): JSX.Element {
   return (
     <Flex>
       {getDifficultyIcon(level)}
-      <Text ml={1}>{level}</Text>
+      <Text ml={1}>{level.charAt(0).toUpperCase() + level.slice(1)}</Text>
     </Flex>
   )
 }

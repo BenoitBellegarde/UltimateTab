@@ -1,5 +1,7 @@
 // pages/_document.js
+import { ColorModeScript } from '@chakra-ui/react'
 import { Html, Head, Main, NextScript } from 'next/document'
+import { extendedTheme } from '../theme'
 
 export default function Document(): JSX.Element {
   return (
@@ -26,6 +28,7 @@ export default function Document(): JSX.Element {
         <meta name="author" content="Benoit Bellegarde" />
       </Head>
       <body>
+        <ColorModeScript initialColorMode={extendedTheme.initialColorMode} />
         <Main />
         <NextScript />
       </body>

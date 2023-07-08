@@ -1,27 +1,21 @@
-import { SearchIcon, StarIcon } from '@chakra-ui/icons'
+import { StarIcon } from '@chakra-ui/icons'
 import {
-  GridItem,
   Flex,
-  Stack,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  HStack,
   Skeleton,
   LinkBox,
   LinkOverlay,
   Badge,
   Box,
-  useColorModeValue,
-  useRadioGroup,
+  useBreakpointValue,
   Text,
   Icon,
+  useToken,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { RiEmotionSadLine } from 'react-icons/ri'
-import { TAB_TYPES, TAB_TYPES_COLORS } from '../constants'
+import { TAB_TYPES_COLORS } from '../constants'
 import { ApiResponseSearch } from '../types/tabs'
 import Pagination from './Pagination'
-import RadioCard from './RadioCard'
 
 interface SearchPanelProps {
   handleChangeType: Function
@@ -35,82 +29,40 @@ interface SearchPanelProps {
   selectedTab: any
   searchValue?: string
   showSearchInput?: boolean
+  favoriteActive: boolean
 }
 
 export default function SearchPanel({
-  handleChangeType,
-  type,
-  handleChangeValue,
-  handleClickTab,
   isLoading,
   isError,
   data,
-  selectedTab,
   searchValue,
   showSearchInput = true,
   handleChangePage,
+  favoriteActive,
 }: SearchPanelProps): JSX.Element {
-  const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'tabType',
-    defaultValue: type,
-    onChange: (value) => handleChangeType(value),
-  })
-
-  const group = getRootProps()
+  const hexColors = useToken(
+    'colors',
+    Object.values(TAB_TYPES_COLORS).map((color) => color + '.300'),
+  )
+  const router = useRouter()
+  const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
 
   return (
-    <GridItem
-      p="5"
-      overflowY={'auto'}
-      borderRightStyle={'solid'}
-      borderRightWidth="1px"
-      borderRightColor={borderLightColor}
-      area={'nav'}
-    >
+    <Box px="2" py={3} overflowY={'auto'}>
       <Flex wrap={'wrap'} justifyContent="center">
-        {showSearchInput && (
-          <Stack mb="5" spacing={4} w="100%">
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <SearchIcon color="gray.300" />
-              </InputLeftElement>
-
-              <Input
-                onChange={(e) => handleChangeValue(e.target.value)}
-                placeholder="Search a song or artist... (e.g. Slash, Wish you were here,...)"
-                size={'md'}
-                borderRadius="full"
-              />
-            </InputGroup>
-          </Stack>
-        )}
-        <Flex>
-          <HStack flexWrap={'wrap'} justifyContent="center" {...group}>
-            {Object.keys(TAB_TYPES).map((value) => {
-              const radio = getRadioProps({ value })
-              return (
-                <RadioCard key={value} {...radio}>
-                  {value}
-                </RadioCard>
-              )
-            })}
-          </HStack>
-        </Flex>
-      </Flex>
-      <Flex mt="5" wrap={'wrap'} justifyContent="center">
         {isError && (
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
         )}
         {((searchValue && showSearchInput) || !showSearchInput) &&
-          !isLoading &&
+          ((!isLoading && !favoriteActive) || favoriteActive) &&
           data?.results?.length === 0 && (
             <Box textAlign="center" py={10} px={6}>
               <Icon as={RiEmotionSadLine} boxSize={20} color={'gray.400'} />
               <Text color={'gray.500'}>No results found</Text>
             </Box>
           )}
-        {isLoading ? (
+        {isLoading && !favoriteActive ? (
           <Box w="100%">
             <Skeleton rounded="md" h="70px" my={2} />
             <Skeleton rounded="md" h="70px" my={2} />
@@ -123,28 +75,39 @@ export default function SearchPanel({
             <LinkBox
               className="tab-result"
               key={index}
-              onClick={(e) => handleClickTab(tab)}
+              onClick={(e) => {
+                router.push(`/tab/${tab.slug}`)
+              }}
               as="div"
               p="5"
-              my="2"
+              m="2"
               cursor={'pointer'}
-              width={'100%'}
+              width={widthResult}
               borderWidth="1px"
               rounded="md"
               display={'flex'}
+              flexGrow={'1'}
               justifyContent={'space-between'}
               alignItems="center"
-              boxShadow="base"
-              bg={selectedTab.url === tab.url && 'twitter.400'}
-              color={selectedTab.url === tab.url && 'white'}
-              _hover={selectedTab.url !== tab.url && { bg: 'twitter.200' }}
+              boxShadow="md"
+              style={{
+                boxShadow: `${
+                  hexColors[Object.keys(TAB_TYPES_COLORS).indexOf(tab.type)]
+                }5c 0px 4px 6px -1px, ${
+                  hexColors[Object.keys(TAB_TYPES_COLORS).indexOf(tab.type)]
+                }5c 0px 2px 4px -1px`,
+              }}
+              _hover={{
+                bg: `${TAB_TYPES_COLORS[tab.type]}.600`,
+                color: 'white',
+              }}
               transition="background-color 0.2s ease 0s"
             >
               <LinkOverlay>
                 <Text fontSize={'lg'} as="b">
                   {tab.artist}
-                </Text>{' '}
-                {tab.name}
+                </Text>
+                <br /> {tab.name}
               </LinkOverlay>
               <Box display={'flex'} alignItems={'center'}>
                 {tab.type && TAB_TYPES_COLORS[tab.type] && (
@@ -158,14 +121,16 @@ export default function SearchPanel({
             </LinkBox>
           ))
         )}
-        {data?.results?.length > 0 && handleChangePage && !isLoading && (
+      </Flex>
+      {data?.results?.length > 0 && handleChangePage && !isLoading && (
+        <Flex justifyContent={'center'}>
           <Pagination
             currentPage={data.pagination?.current}
             totalPageCount={data.pagination?.total}
             onPageChange={(page) => handleChangePage(page)}
           />
-        )}
-      </Flex>
-    </GridItem>
+        </Flex>
+      )}
+    </Box>
   )
 }

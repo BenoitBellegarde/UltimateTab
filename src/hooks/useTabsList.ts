@@ -8,7 +8,7 @@ const getDatas = async (
   const response = await fetch(
     `/api/search?q=${value}&type=${type}&page=${page}`,
   )
-  return response.json()
+  return await response.json()
 }
 export default function useTabsList(value: string, type: string, page: number) {
   return useQuery(

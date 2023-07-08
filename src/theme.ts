@@ -1,6 +1,10 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 export const extendedTheme = extendTheme({
+  initialColorMode: 'dark',
+  colors: {
+    fadebp: 'linear-gradient(to left, #7928CA, #1a94da) padding-box',
+  },
   styles: {
     global: (props: StyleFunctionProps) => ({
       'span[data-name]': {
@@ -30,7 +34,7 @@ export const extendedTheme = extendTheme({
         stroke: props.colorMode === 'dark' && 'twitter.600 !important',
       },
       '.chord--diagram text': {
-        stroke: props.colorMode === 'dark' && 'gray.400 !important',
+        stroke: props.colorMode === 'dark' && 'gray.200 !important',
       },
     }),
   },

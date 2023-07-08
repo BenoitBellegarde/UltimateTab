@@ -4,12 +4,11 @@ export default function RadioCard(props): JSX.Element {
 
   const input = getInputProps()
   const checkbox = getCheckboxProps()
-
+  console.log(props)
   return (
     <Box as="label">
       <input {...input} />
       <Box
-        mb={2}
         {...checkbox}
         cursor="pointer"
         borderWidth="1px"
@@ -18,16 +17,13 @@ export default function RadioCard(props): JSX.Element {
         boxShadow="md"
         transition="background-color 0.2s ease 0s"
         _hover={{
-          bg: 'twitter.300',
+          bg: 'twitter.400',
           color: 'white',
+          opacity: props.isChecked ? 0.8 : 1,
         }}
         _checked={{
-          bg: 'twitter.600',
+          bg: 'fadebp',
           color: 'white',
-          borderColor: 'twitter.600',
-        }}
-        _focus={{
-          boxShadow: 'outline',
         }}
         p="2"
       >
