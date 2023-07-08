@@ -50,6 +50,7 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
       position={'fixed'}
       right={'17px'}
       bottom="17px"
+      onClick={() => chordDiagramRef.current.innerHTML = ''}
     ></Box>
   )
 }
