@@ -1,6 +1,5 @@
 import { StarIcon } from '@chakra-ui/icons'
 import {
-  GridItem,
   Flex,
   Skeleton,
   LinkBox,
@@ -50,7 +49,7 @@ export default function SearchPanel({
   const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
 
   return (
-    <GridItem px="2" py={3} overflowY={'auto'} area={'nav'}>
+    <Box px="2" py={3} overflowY={'auto'}>
       <Flex wrap={'wrap'} justifyContent="center">
         {isError && (
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
@@ -132,6 +131,6 @@ export default function SearchPanel({
           />
         </Flex>
       )}
-    </GridItem>
+    </Box>
   )
 }

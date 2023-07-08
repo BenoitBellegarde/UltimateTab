@@ -1,7 +1,7 @@
 import { StarIcon } from '@chakra-ui/icons'
 import {
+  Box,
   Flex,
-  GridItem,
   Icon,
   IconButton,
   Skeleton,
@@ -36,14 +36,13 @@ export default function TabPanel({
 
   return (
     <>
-      <GridItem
+      <Box
         h="100%"
         px={5}
         py={3}
         borderBottomStyle={'solid'}
         borderBottomWidth={selectedTabContent && '1px'}
         borderBottomColor={borderLightColor}
-        area={'header'}
       >
         <Skeleton
           justifyContent={'space-between'}
@@ -116,7 +115,7 @@ export default function TabPanel({
             </Flex>{' '}
           </Flex>
         </Skeleton>
-      </GridItem>
+      </Box>
 
       <Flex
         p={5}
@@ -128,11 +127,9 @@ export default function TabPanel({
         justifyContent="center"
       >
         <Skeleton display={'flex'} w="100%" isLoaded={!isLoading}>
-          {/* {selectedTabContent && ( */}
           <Flex h={'100%'} w="100%">
             {selectedTabContent && HTMLReactParser(selectedTabContent?.htmlTab)}
           </Flex>
-          {/* )} */}
         </Skeleton>
       </Flex>
       <ChordDiagram dep={selectedTabContent} />
