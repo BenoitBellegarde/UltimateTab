@@ -26,7 +26,7 @@ export default function Nav(): JSX.Element {
           <Flex alignItems={'center'}>
             <Link as={NextLink} href="/" style={{ textDecoration: 'none' }}>
               <Text
-                bgGradient="linear(to-l, #7928CA, #1a94da)"
+                bg="fadebp"
                 bgClip="text"
                 fontSize={useBreakpointValue({ base: 'lg', md: 'xl' })}
                 mr={5}

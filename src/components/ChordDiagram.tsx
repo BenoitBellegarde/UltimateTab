@@ -14,14 +14,14 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
 
   useEffect(() => {
     const showChords = async (el: HTMLSpanElement) => {
-      if(typeof CHORDS[el.innerText.trim()] === "undefined"){
+      if (typeof CHORDS[el.innerText.trim()] === 'undefined') {
         chordDiagramRef.current.innerHTML = ''
         toast({
-          description: "No diagram found for this chord 😥",
+          description: 'No diagram found for this chord 😥',
           status: 'info',
-          duration: 2500,
+          duration: 2000,
         })
-        return;
+        return
       }
       const ChordBox = (await import('vexchords')).ChordBox
       chordDiagramRef.current.innerHTML = ''
@@ -38,7 +38,7 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
     document
       .querySelectorAll('span[data-name]')
       ?.forEach((el: HTMLSpanElement) => (el.onclick = () => showChords(el)))
-  }, [dep,toast])
+  }, [dep, toast])
 
   return (
     <Box

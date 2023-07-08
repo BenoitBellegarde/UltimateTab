@@ -30,7 +30,7 @@ interface SearchPanelProps {
   selectedTab: any
   searchValue?: string
   showSearchInput?: boolean
-  favoriteActive : boolean
+  favoriteActive: boolean
 }
 
 export default function SearchPanel({
@@ -40,13 +40,12 @@ export default function SearchPanel({
   searchValue,
   showSearchInput = true,
   handleChangePage,
-  favoriteActive
+  favoriteActive,
 }: SearchPanelProps): JSX.Element {
   const hexColors = useToken(
     'colors',
     Object.values(TAB_TYPES_COLORS).map((color) => color + '.300'),
   )
-
   const router = useRouter()
   const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
 
@@ -57,14 +56,14 @@ export default function SearchPanel({
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
         )}
         {((searchValue && showSearchInput) || !showSearchInput) &&
-          !isLoading &&
+          ((!isLoading && !favoriteActive) || favoriteActive) &&
           data?.results?.length === 0 && (
             <Box textAlign="center" py={10} px={6}>
               <Icon as={RiEmotionSadLine} boxSize={20} color={'gray.400'} />
               <Text color={'gray.500'}>No results found</Text>
             </Box>
           )}
-        {(isLoading && !favoriteActive) ? (
+        {isLoading && !favoriteActive ? (
           <Box w="100%">
             <Skeleton rounded="md" h="70px" my={2} />
             <Skeleton rounded="md" h="70px" my={2} />

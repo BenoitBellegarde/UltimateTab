@@ -3,15 +3,12 @@ import {
   Flex,
   HStack,
   Icon,
-  Menu,
   Image,
   Text,
-  MenuButton,
-  MenuItem,
-  MenuList,
   useBreakpointValue,
   useColorModeValue,
   useRadioGroup,
+  Fade,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import useTabsList from '../hooks/useTabsList'
@@ -20,8 +17,6 @@ import Head from 'next/head'
 import useAppStateContext from '../hooks/useAppStateContext'
 import { TAB_TYPES } from '../constants'
 import RadioCard from '../components/RadioCard'
-import { ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
-import { MdFilterList } from 'react-icons/md'
 import { RiHeartFill } from 'react-icons/ri'
 import useFavoriteTabs from '../hooks/useTabsFavorites'
 
@@ -77,53 +72,58 @@ export default function Search(): JSX.Element {
       <Head>
         <title>Search - Ultimate Tab</title>
       </Head>
-      <Flex>
-        <HStack
-          mx={4}
-          pb={2}
-          w="100%"
-          borderBottomStyle={'solid'}
-          borderBottomWidth={'1px'}
-          borderBottomColor={borderLightColor}
-          flexWrap={'wrap'}
-          justifyContent="space-between"
-          {...group}
-        >
-          <HStack>
-            {Object.keys(TAB_TYPES).map((value) => {
-              const radio = getRadioProps({ value })
-              return (
-                <RadioCard key={value} {...radio}>
-                  {value}
-                </RadioCard>
-              )
-            })}
-          </HStack>
-          <HStack marginInlineStart={'0 !important'} py={3}>
-            <Button
-              variant="outline"
-              _hover={{
-                bg: 'twitter.300',
-                color: 'white',
-              }}
-              _active={{
-                bg: 'twitter.600',
-                color: 'white',
-              }}
-              isActive={favoriteActive}
-              onClick={() =>
-                setFavoriteActive((prevState: boolean) => !prevState)
-              }
-              size={'sm'}
-              boxShadow="md"
-              fontWeight={'normal'}
-              px="3"
-              py="4"
-              leftIcon={<Icon color="red.200" as={RiHeartFill} />}
-            >
-              Favorites
-            </Button>
-            <Menu>
+      <Fade
+        style={{ display: 'flex', flexGrow: '1', flexDirection: 'column' }}
+        in={true}
+      >
+        <Flex>
+          <HStack
+            mx={4}
+            pb={2}
+            w="100%"
+            borderBottomStyle={'solid'}
+            borderBottomWidth={'1px'}
+            borderBottomColor={borderLightColor}
+            flexWrap={'wrap'}
+            justifyContent="space-between"
+            {...group}
+          >
+            <HStack>
+              {Object.keys(TAB_TYPES).map((value) => {
+                const radio = getRadioProps({ value })
+                return (
+                  <RadioCard key={value} {...radio}>
+                    {value}
+                  </RadioCard>
+                )
+              })}
+            </HStack>
+            <HStack marginInlineStart={'0 !important'} py={3}>
+              <Button
+                variant="outline"
+                _hover={{
+                  bg: 'twitter.400',
+                  color: 'white',
+                  opacity: favoriteActive ? 0.8 : 1,
+                }}
+                _active={{
+                  bg: 'fadebp',
+                  color: 'white',
+                }}
+                isActive={favoriteActive}
+                onClick={() =>
+                  setFavoriteActive((prevState: boolean) => !prevState)
+                }
+                size={'sm'}
+                boxShadow="md"
+                fontWeight={'normal'}
+                px="3"
+                py="4"
+                leftIcon={<Icon color="red.200" as={RiHeartFill} />}
+              >
+                Favorites
+              </Button>
+              {/* <Menu>
               <MenuButton
                 as={Button}
                 variant="outline"
@@ -197,45 +197,51 @@ export default function Search(): JSX.Element {
                   <StarIcon color="yellow.400" />
                 </MenuItem>
               </MenuList>
-            </Menu>
+            </Menu> */}
+            </HStack>
           </HStack>
-        </HStack>
-      </Flex>
-      {searchValue.trim() !== '' ? (
-        <SearchPanel
-          handleChangeType={setSearchType}
-          searchValue={searchValue}
-          type={searchType}
-          handleChangeValue={setSearchValue}
-          handleClickTab={setSelectedTab}
-          isLoading={isLoading}
-          isError={isError}
-          data={favoriteActive ? dataFavorites : data}
-          selectedTab={selectedTab}
-          handleChangePage={setCurrentPage}
-          favoriteActive={favoriteActive}
-        />
-      ) : (
-        <Flex
-          px={4}
-          py={6}
-          flex={1}
-          direction={'column'}
-          align={'center'}
-          justify={'start'}
-        >
-          <Text textAlign={'center'} fontSize={'lg'} color={'gray.500'} mb={5}>
-            Use the search bar to start finding your favorite tabs
-          </Text>
-          <Image
-            alt={'Search image'}
-            mt={5}
-            h={sizeImg}
-            w={sizeImg}
-            src={'search-illustration.svg'}
-          />
         </Flex>
-      )}
+        {searchValue.trim() !== '' ? (
+          <SearchPanel
+            handleChangeType={setSearchType}
+            searchValue={searchValue}
+            type={searchType}
+            handleChangeValue={setSearchValue}
+            handleClickTab={setSelectedTab}
+            isLoading={isLoading}
+            isError={isError}
+            data={favoriteActive ? dataFavorites : data}
+            selectedTab={selectedTab}
+            handleChangePage={setCurrentPage}
+            favoriteActive={favoriteActive}
+          />
+        ) : (
+          <Flex
+            px={4}
+            py={6}
+            flex={1}
+            direction={'column'}
+            align={'center'}
+            justify={'start'}
+          >
+            <Text
+              textAlign={'center'}
+              fontSize={'lg'}
+              color={'gray.500'}
+              mb={5}
+            >
+              Use the search bar to start finding your favorite tabs
+            </Text>
+            <Image
+              alt={'Search image'}
+              mt={5}
+              h={sizeImg}
+              w={sizeImg}
+              src={'search-illustration.svg'}
+            />
+          </Flex>
+        )}
+      </Fade>
     </>
   )
 }

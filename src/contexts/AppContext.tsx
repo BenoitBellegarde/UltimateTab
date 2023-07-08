@@ -1,27 +1,33 @@
 import { useToast } from '@chakra-ui/react'
-import { useState, createContext, MouseEventHandler, SetStateAction, Dispatch } from 'react'
+import {
+  useState,
+  createContext,
+  MouseEventHandler,
+  SetStateAction,
+  Dispatch,
+} from 'react'
 import useDebounce from '../hooks/useDebounce'
 import useLocalStorage from '../hooks/useLocalStorage'
 import useTabs from '../hooks/useTabs'
-import { Tab, TabScrapped } from '../types/tabs'
+import { Tab } from '../types/tabs'
 
 interface AppState {
-  searchValue : string,
-  setSearchValue : Dispatch<SetStateAction<string>>,
-  debounedSearchValue : string,
-  searchType : string,
-  setSearchType : Dispatch<SetStateAction<string>>,
-  currentPage : number,
-  setCurrentPage : Dispatch<SetStateAction<number>>,
-  favorites : Tab[],
-  setFavorites : Dispatch<SetStateAction<Tab[]>>,
-  selectedTab : Tab,
-  setSelectedTab : Dispatch<SetStateAction<Tab>>,
-  isLoadingTab : boolean,
-  selectedTabContent : TabScrapped,
-  handleClickFavorite : MouseEventHandler<HTMLButtonElement>,
-  favoriteActive : boolean,
-  setFavoriteActive : Dispatch<SetStateAction<boolean>>
+  searchValue: string
+  setSearchValue: Dispatch<SetStateAction<string>>
+  debounedSearchValue: string
+  searchType: string
+  setSearchType: Dispatch<SetStateAction<string>>
+  currentPage: number
+  setCurrentPage: Dispatch<SetStateAction<number>>
+  favorites: Tab[]
+  setFavorites: Dispatch<SetStateAction<Tab[]>>
+  selectedTab: Tab
+  setSelectedTab: Dispatch<SetStateAction<Tab>>
+  isLoadingTab: boolean
+  selectedTabContent: Tab
+  handleClickFavorite: MouseEventHandler<HTMLButtonElement>
+  favoriteActive: boolean
+  setFavoriteActive: Dispatch<SetStateAction<boolean>>
 }
 export const AppStateContext = createContext<AppState | null>(null)
 
@@ -42,7 +48,7 @@ export function AppStateProvider({ children }) {
     type: 'Tab',
   })
 
-  const toast  = useToast()
+  const toast = useToast()
 
   const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
     selectedTab.url,
@@ -56,7 +62,7 @@ export function AppStateProvider({ children }) {
       newFavorites.splice(indexEntry, 1)
       isAdded = false
     } else {
-      newFavorites.push(selectedTab)
+      newFavorites.push(selectedTabContent)
       isAdded = true
     }
     setFavorites([...newFavorites])
@@ -87,7 +93,7 @@ export function AppStateProvider({ children }) {
         selectedTabContent,
         handleClickFavorite,
         favoriteActive,
-        setFavoriteActive
+        setFavoriteActive,
       }}
     >
       {children}

@@ -23,23 +23,13 @@ export interface ApiRequestTab {
 }
 
 export interface ApiResponseTab {
-  tab: TabScrapped
+  tab: Tab
   spotify_access_token: SpotifyAccessToken
 }
 
 export interface Pagination {
   current: number
   total: number
-}
-
-export interface Tab {
-  url: string
-  slug: string
-  name: string
-  artist: string
-  numberRates: number
-  rating: number
-  type: string
 }
 
 export interface SearchScrapped {
@@ -52,16 +42,18 @@ export interface SearchScrapped {
   votes: number
 }
 
-export interface TabScrapped {
+export interface Tab {
+  url: string
+  slug: string
+  name: string
   artist: string
-  song_name: string
-  tab_url: string
-  difficulty: string
-  tuning: string[]
-  raw_tabs: string
-  htmlTab: string
-  rating: number
   numberRates: number
+  rating: number
+  type: string
+  difficulty?: string
+  tuning?: string[]
+  raw_tabs?: string
+  htmlTab?: string
 }
 
 export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'
