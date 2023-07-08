@@ -81,9 +81,20 @@ export default function TabPanel({
                 </Tooltip>
               </Flex>
             </Flex>
-            <Flex alignItems={'center'}>
-              <StarIcon fontSize={'small'} color={'yellow.400'} mr={'5px'} />{' '}
-              {selectedTabContent?.rating} ({selectedTabContent?.numberRates})
+            <Flex alignItems={'center'} py={1}>
+              {
+                // Hack with top and relative position to make the star icon perfectly vertically aligned
+              }
+              <StarIcon
+                fontSize={'sm'}
+                color={'yellow.400'}
+                position="relative"
+                top="-0.05rem"
+                mr={'5px'}
+              />{' '}
+              <Flex>
+                {selectedTabContent?.rating} ({selectedTabContent?.numberRates})
+              </Flex>
             </Flex>
           </Flex>
           <Flex
