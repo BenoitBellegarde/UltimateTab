@@ -39,7 +39,13 @@ export default function Nav(): JSX.Element {
           </Flex>
           <Flex alignItems={'center'} width={'100%'}>
             <InputGroup mr={5}>
-              <InputLeftElement h={'100%'} pointerEvents="none">
+              <InputLeftElement
+                h={'100%'}
+                cursor={'pointer'}
+                onClick={() =>
+                  router.pathname !== '/search' && router.push('/search')
+                }
+              >
                 <SearchIcon color="gray.300" />
               </InputLeftElement>
 

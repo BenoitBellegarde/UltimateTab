@@ -23,7 +23,7 @@ export default function RadioCard(props): JSX.Element {
         }}
         _checked={{
           bg: 'fadebp',
-          color: 'white'
+          color: 'white',
         }}
         p="2"
       >
