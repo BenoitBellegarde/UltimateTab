@@ -1,5 +1,6 @@
 import { Box, useColorModeValue } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
+import { useToast } from '@chakra-ui/react'
 import { CHORDS } from '../constants'
 
 interface ChordDiagramProps {
@@ -9,9 +10,19 @@ interface ChordDiagramProps {
 export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const chordDiagramRef = useRef(null)
+  const toast = useToast()
 
   useEffect(() => {
     const showChords = async (el: HTMLSpanElement) => {
+      if(typeof CHORDS[el.innerText.trim()] === "undefined"){
+        chordDiagramRef.current.innerHTML = ''
+        toast({
+          description: "No diagram found for this chord 😥",
+          status: 'info',
+          duration: 2500,
+        })
+        return;
+      }
       const ChordBox = (await import('vexchords')).ChordBox
       chordDiagramRef.current.innerHTML = ''
       const chord = new ChordBox(chordDiagramRef.current, {
@@ -27,7 +38,7 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
     document
       .querySelectorAll('span[data-name]')
       ?.forEach((el: HTMLSpanElement) => (el.onclick = () => showChords(el)))
-  }, [dep])
+  }, [dep,toast])
 
   return (
     <Box

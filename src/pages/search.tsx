@@ -23,6 +23,7 @@ import RadioCard from '../components/RadioCard'
 import { ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
 import { MdFilterList } from 'react-icons/md'
 import { RiHeartFill } from 'react-icons/ri'
+import useFavoriteTabs from '../hooks/useTabsFavorites'
 
 export default function Search(): JSX.Element {
   const {
@@ -35,8 +36,10 @@ export default function Search(): JSX.Element {
     setCurrentPage,
     selectedTab,
     setSelectedTab,
+    favorites,
+    favoriteActive,
+    setFavoriteActive,
   } = useAppStateContext()
-
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const sizeImg = useBreakpointValue({
     base: '100%',
@@ -49,6 +52,12 @@ export default function Search(): JSX.Element {
     debounedSearchValue,
     searchType,
     currentPage,
+  )
+
+  const { data: dataFavorites } = useFavoriteTabs(
+    favorites,
+    debounedSearchValue,
+    searchType,
   )
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -101,6 +110,10 @@ export default function Search(): JSX.Element {
                 bg: 'twitter.600',
                 color: 'white',
               }}
+              isActive={favoriteActive}
+              onClick={() =>
+                setFavoriteActive((prevState: boolean) => !prevState)
+              }
               size={'sm'}
               boxShadow="md"
               fontWeight={'normal'}
@@ -197,9 +210,10 @@ export default function Search(): JSX.Element {
           handleClickTab={setSelectedTab}
           isLoading={isLoading}
           isError={isError}
-          data={data}
+          data={favoriteActive ? dataFavorites : data}
           selectedTab={selectedTab}
           handleChangePage={setCurrentPage}
+          favoriteActive={favoriteActive}
         />
       ) : (
         <Flex

@@ -19,9 +19,9 @@ import { MouseEventHandler } from 'react'
 
 interface TabPanelProps {
   selectedTab: Tab
-  isFavorite: Boolean
+  isFavorite: boolean
   selectedTabContent: ApiResponseTab
-  isLoading: Boolean
+  isLoading: boolean
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -57,7 +57,7 @@ export default function TabPanel({
                 <Text fontSize={'lg'} as="b" mr={1}>
                   {selectedTabContent?.tab.artist}
                 </Text>{' '}
-                <Text fontSize={'sm'}>{selectedTabContent?.tab.song_name}</Text>
+                <Text fontSize={'md'}>{selectedTabContent?.tab.song_name}</Text>
               </Flex>
               <Flex fontSize={'sm'} justifyContent={'start'}>
                 <Tooltip
@@ -71,7 +71,7 @@ export default function TabPanel({
                     onClick={handleClickFavorite}
                     colorScheme={isFavorite ? 'red' : 'gray'}
                     variant="ghost"
-                    aria-label="Add to favorite"
+                    aria-label="Add to favorites"
                     size={'sm'}
                   />
                 </Tooltip>

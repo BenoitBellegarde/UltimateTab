@@ -1,16 +1,9 @@
 import {
   Box,
   Flex,
-  Avatar,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   Stack,
   useColorMode,
-  Center,
   Text,
   InputGroup,
   InputLeftElement,
@@ -19,7 +12,6 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react'
 import { MoonIcon, SearchIcon, SunIcon } from '@chakra-ui/icons'
-import NavLink from './NavLink'
 import { useRouter } from 'next/router'
 import useAppStateContext from '../hooks/useAppStateContext'
 import NextLink from 'next/link'
@@ -63,8 +55,6 @@ export default function Nav(): JSX.Element {
                 borderRadius="full"
               />
             </InputGroup>
-            {/* <NavLink href="/">Home</NavLink> */}
-            {/* <NavLink href="/favorites">Favorites</NavLink> */}
           </Flex>
 
           <Flex alignItems={'center'}>
@@ -75,39 +65,6 @@ export default function Nav(): JSX.Element {
               >
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
-
-              {/* <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={'full'}
-                  variant={'link'}
-                  cursor={'pointer'}
-                  minW={0}
-                >
-                  <Avatar
-                    size={'sm'}
-                    src={'https://avatars.dicebear.com/api/male/username.svg'}
-                  />
-                </MenuButton>
-                <MenuList alignItems={'center'}>
-                  <br />
-                  <Center>
-                    <Avatar
-                      size={'2xl'}
-                      src={'https://avatars.dicebear.com/api/male/username.svg'}
-                    />
-                  </Center>
-                  <br />
-                  <Center>
-                    <p>Username</p>
-                  </Center>
-                  <br />
-                  <MenuDivider />
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
-                </MenuList>
-              </Menu> */}
             </Stack>
           </Flex>
         </Flex>

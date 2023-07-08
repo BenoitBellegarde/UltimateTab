@@ -66,7 +66,7 @@ export interface TabScrapped {
 
 export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'
 
-export type SpotifyAccessToken = string | Boolean
+export type SpotifyAccessToken = string | boolean
 
 export interface SpotifyAuthResponse {
   access_token: SpotifyAccessToken

@@ -30,6 +30,7 @@ interface SearchPanelProps {
   selectedTab: any
   searchValue?: string
   showSearchInput?: boolean
+  favoriteActive : boolean
 }
 
 export default function SearchPanel({
@@ -39,6 +40,7 @@ export default function SearchPanel({
   searchValue,
   showSearchInput = true,
   handleChangePage,
+  favoriteActive
 }: SearchPanelProps): JSX.Element {
   const hexColors = useToken(
     'colors',
@@ -62,7 +64,7 @@ export default function SearchPanel({
               <Text color={'gray.500'}>No results found</Text>
             </Box>
           )}
-        {isLoading ? (
+        {(isLoading && !favoriteActive) ? (
           <Box w="100%">
             <Skeleton rounded="md" h="70px" my={2} />
             <Skeleton rounded="md" h="70px" my={2} />

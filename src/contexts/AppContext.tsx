@@ -1,12 +1,29 @@
 import { useToast } from '@chakra-ui/react'
-import { useState, createContext, MouseEventHandler } from 'react'
+import { useState, createContext, MouseEventHandler, SetStateAction, Dispatch } from 'react'
 import useDebounce from '../hooks/useDebounce'
-import useGridProps from '../hooks/useGridProps'
 import useLocalStorage from '../hooks/useLocalStorage'
 import useTabs from '../hooks/useTabs'
-import { Tab } from '../types/tabs'
+import { Tab, TabScrapped } from '../types/tabs'
 
-export const AppStateContext = createContext(null)
+interface AppState {
+  searchValue : string,
+  setSearchValue : Dispatch<SetStateAction<string>>,
+  debounedSearchValue : string,
+  searchType : string,
+  setSearchType : Dispatch<SetStateAction<string>>,
+  currentPage : number,
+  setCurrentPage : Dispatch<SetStateAction<number>>,
+  favorites : Tab[],
+  setFavorites : Dispatch<SetStateAction<Tab[]>>,
+  selectedTab : Tab,
+  setSelectedTab : Dispatch<SetStateAction<Tab>>,
+  isLoadingTab : boolean,
+  selectedTabContent : TabScrapped,
+  handleClickFavorite : MouseEventHandler<HTMLButtonElement>,
+  favoriteActive : boolean,
+  setFavoriteActive : Dispatch<SetStateAction<boolean>>
+}
+export const AppStateContext = createContext<AppState | null>(null)
 
 export function AppStateProvider({ children }) {
   const [searchValue, setSearchValue] = useState<string>('')
@@ -14,6 +31,7 @@ export function AppStateProvider({ children }) {
   const [searchType, setSearchType] = useState<string>('All')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])
+  const [favoriteActive, setFavoriteActive] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<Tab>({
     url: '',
     slug: '',
@@ -24,9 +42,7 @@ export function AppStateProvider({ children }) {
     type: 'Tab',
   })
 
-  const toast = useToast()
-
-  const gridProps = useGridProps()
+  const toast  = useToast()
 
   const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
     selectedTab.url,
@@ -35,7 +51,7 @@ export function AppStateProvider({ children }) {
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
     let newFavorites = favorites
-    let isAdded: Boolean
+    let isAdded: boolean
     if (indexEntry !== -1) {
       newFavorites.splice(indexEntry, 1)
       isAdded = false
@@ -46,8 +62,8 @@ export function AppStateProvider({ children }) {
     setFavorites([...newFavorites])
     toast({
       description: isAdded
-        ? 'Song added to your favorite'
-        : 'Song removed from your favorite',
+        ? 'Song added to your favorites'
+        : 'Song removed from your favorites',
       status: isAdded ? 'success' : 'info',
       duration: 2000,
     })
@@ -67,11 +83,11 @@ export function AppStateProvider({ children }) {
         setFavorites,
         selectedTab,
         setSelectedTab,
-        toast,
-        gridProps,
         isLoadingTab,
         selectedTabContent,
         handleClickFavorite,
+        favoriteActive,
+        setFavoriteActive
       }}
     >
       {children}
