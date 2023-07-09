@@ -6,7 +6,8 @@ import {
   ApiResponseTab,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
-import puppeteer, { Page } from 'puppeteer'
+import puppeteer, { Page } from 'puppeteer-core'
+import Chromium from '@sparticuz/chromium'
 import { ApiResponseSearch } from '../../types/tabs'
 
 export function validateType(type: string): string {
@@ -22,16 +23,28 @@ export function validateType(type: string): string {
 }
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
-  const browser = await puppeteer.launch()
+  console.log(
+    process.env.CHROME_EXECUTABLE_PATH || (await Chromium.executablePath()),
+  )
+  const browser = await puppeteer.launch({
+    args: process.env.IS_LOCAL ? puppeteer.defaultArgs() : Chromium.args,
+    defaultViewport: Chromium.defaultViewport,
+    executablePath: process.env.IS_LOCAL
+      ? process.env.CHROME_EXECUTABLE_PATH
+      : await Chromium.executablePath(),
+    headless: process.env.IS_LOCAL ? false : Chromium.headless,
+  })
   const page: Page = await browser.newPage()
 
   await page.goto(url)
+
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
     let results: SearchScrapped[] = [
       ...(data.other_tabs || []),
       ...(data.results || []),
     ]
+
     const pagination: Pagination = {
       current: data.pagination.current,
       total: data.pagination.total,
@@ -66,7 +79,14 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
 }
 
 export async function getTab(url: string): Promise<ApiResponseTab> {
-  const browser = await puppeteer.launch({ headless: true })
+  const browser = await puppeteer.launch({
+    args: process.env.IS_LOCAL ? puppeteer.defaultArgs() : Chromium.args,
+    defaultViewport: Chromium.defaultViewport,
+    executablePath: process.env.IS_LOCAL
+      ? process.env.CHROME_EXECUTABLE_PATH
+      : await Chromium.executablePath(),
+    headless: process.env.IS_LOCAL ? false : Chromium.headless,
+  })
   const page = await browser.newPage()
   await page.goto(url)
 
