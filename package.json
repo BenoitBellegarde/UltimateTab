@@ -14,7 +14,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/poppins": "^4.5.10",
-    "@sparticuz/chromium": "^114.0.0",
+    "@sparticuz/chromium-min": "^114.0.0",
     "framer-motion": "^10.5.0",
     "html-react-parser": "^3.0.12",
     "next": "latest",

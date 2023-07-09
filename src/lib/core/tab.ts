@@ -7,7 +7,7 @@ import {
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import puppeteer, { Page } from 'puppeteer-core'
-import Chromium from '@sparticuz/chromium'
+import Chromium from '@sparticuz/chromium-min'
 import { ApiResponseSearch } from '../../types/tabs'
 
 export function validateType(type: string): string {
@@ -24,14 +24,14 @@ export function validateType(type: string): string {
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   console.log(
-    process.env.CHROME_EXECUTABLE_PATH || (await Chromium.executablePath()),
+    process.env.CHROME_EXECUTABLE_PATH || (await Chromium.executablePath(process.env.CHROMIUM_PACK_LOCATION)),
   )
   const browser = await puppeteer.launch({
     args: process.env.IS_LOCAL ? puppeteer.defaultArgs() : Chromium.args,
     defaultViewport: Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
-      : await Chromium.executablePath(),
+      : await Chromium.executablePath(process.env.CHROMIUM_PACK_LOCATION),
     headless: process.env.IS_LOCAL ? false : Chromium.headless,
   })
   const page: Page = await browser.newPage()
@@ -73,7 +73,6 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
     const response: ApiResponseSearch = { results: tabs, pagination }
     return response
   })
-
   await browser.close()
   return tabsParsed
 }
@@ -84,7 +83,7 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
     defaultViewport: Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
-      : await Chromium.executablePath(),
+      : await Chromium.executablePath(process.env.CHROMIUM_PACK_LOCATION),
     headless: process.env.IS_LOCAL ? false : Chromium.headless,
   })
   const page = await browser.newPage()
