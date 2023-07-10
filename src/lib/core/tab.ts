@@ -6,9 +6,9 @@ import {
   ApiResponseTab,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
-import puppeteer, { Page } from 'puppeteer-core'
-import Chromium from 'chrome-aws-lambda'
+import { Page } from 'puppeteer-core'
 import { ApiResponseSearch } from '../../types/tabs'
+import { getPuppeteerConf } from '../api/request'
 
 export function validateType(type: string): string {
   if (type in TAB_TYPES_VALUES) {
@@ -23,17 +23,8 @@ export function validateType(type: string): string {
 }
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
-
-  const browser = await puppeteer.launch({
-    args: Chromium.args,
-    defaultViewport: Chromium.defaultViewport,
-    executablePath: process.env.IS_LOCAL
-      ? process.env.CHROME_EXECUTABLE_PATH
-      : await Chromium.executablePath,
-    headless: true,
-  })
+  const browser = await getPuppeteerConf()
   const page: Page = await browser.newPage()
-
   await page.goto(url)
 
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
@@ -76,15 +67,8 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
 }
 
 export async function getTab(url: string): Promise<ApiResponseTab> {
-  const browser = await puppeteer.launch({
-    args: Chromium.args,
-    defaultViewport: Chromium.defaultViewport,
-    executablePath: process.env.IS_LOCAL
-      ? process.env.CHROME_EXECUTABLE_PATH
-      : await Chromium.executablePath,
-    headless: true,
-  })
-  const page = await browser.newPage()
+  const browser = await getPuppeteerConf()
+  const page: Page = await browser.newPage()
   await page.goto(url)
 
   const tabParsed: Tab = await page.evaluate(() => {
