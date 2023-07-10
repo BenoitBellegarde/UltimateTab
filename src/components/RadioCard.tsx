@@ -4,7 +4,6 @@ export default function RadioCard(props): JSX.Element {
 
   const input = getInputProps()
   const checkbox = getCheckboxProps()
-  console.log(props)
   return (
     <Box as="label">
       <input {...input} />

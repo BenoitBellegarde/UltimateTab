@@ -6,6 +6,8 @@ import type {
   ApiResponseSearch,
   ApiRequestTab,
 } from '../../types/tabs'
+import Chromium from 'chrome-aws-lambda'
+import puppeteer from 'puppeteer-core'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -116,4 +118,16 @@ export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
   params.value = params.q
 
   return params
+}
+
+//Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
+export async function getPuppeteerConf(){
+  return puppeteer.launch({
+    args: Chromium.args,
+    defaultViewport: Chromium.defaultViewport,
+    executablePath: process.env.IS_LOCAL
+      ? process.env.CHROME_EXECUTABLE_PATH
+      : await Chromium.executablePath,
+    headless: true,
+  })
 }

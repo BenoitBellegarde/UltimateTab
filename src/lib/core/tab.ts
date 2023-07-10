@@ -6,8 +6,9 @@ import {
   ApiResponseTab,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
-import puppeteer, { Page } from 'puppeteer'
+import { Page } from 'puppeteer-core'
 import { ApiResponseSearch } from '../../types/tabs'
+import { getPuppeteerConf } from '../api/request'
 
 export function validateType(type: string): string {
   if (type in TAB_TYPES_VALUES) {
@@ -22,16 +23,17 @@ export function validateType(type: string): string {
 }
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
-  const browser = await puppeteer.launch()
+  const browser = await getPuppeteerConf()
   const page: Page = await browser.newPage()
-
   await page.goto(url)
+
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
     let results: SearchScrapped[] = [
       ...(data.other_tabs || []),
       ...(data.results || []),
     ]
+
     const pagination: Pagination = {
       current: data.pagination.current,
       total: data.pagination.total,
@@ -60,14 +62,13 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
     const response: ApiResponseSearch = { results: tabs, pagination }
     return response
   })
-
   await browser.close()
   return tabsParsed
 }
 
 export async function getTab(url: string): Promise<ApiResponseTab> {
-  const browser = await puppeteer.launch({ headless: true })
-  const page = await browser.newPage()
+  const browser = await getPuppeteerConf()
+  const page: Page = await browser.newPage()
   await page.goto(url)
 
   const tabParsed: Tab = await page.evaluate(() => {
