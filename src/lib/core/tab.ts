@@ -25,12 +25,12 @@ export function validateType(type: string): string {
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
 
   const browser = await puppeteer.launch({
-    args: process.env.IS_LOCAL ? puppeteer.defaultArgs() : Chromium.args,
+    args: Chromium.args,
     defaultViewport: Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
       : await Chromium.executablePath,
-    headless: process.env.IS_LOCAL ? false : Chromium.headless,
+    headless: true,
   })
   const page: Page = await browser.newPage()
 
@@ -77,12 +77,12 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
 
 export async function getTab(url: string): Promise<ApiResponseTab> {
   const browser = await puppeteer.launch({
-    args: process.env.IS_LOCAL ? puppeteer.defaultArgs() : Chromium.args,
+    args: Chromium.args,
     defaultViewport: Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
       : await Chromium.executablePath,
-    headless: process.env.IS_LOCAL ? false : Chromium.headless,
+    headless: true,
   })
   const page = await browser.newPage()
   await page.goto(url)
