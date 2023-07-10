@@ -121,7 +121,7 @@ export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
 }
 
 //Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
-export async function getPuppeteerConf(){
+export async function getPuppeteerConf() {
   return puppeteer.launch({
     args: Chromium.args,
     defaultViewport: Chromium.defaultViewport,
