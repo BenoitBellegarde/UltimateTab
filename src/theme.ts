@@ -36,6 +36,18 @@ export const extendedTheme = extendTheme({
       '.chord--diagram text': {
         stroke: props.colorMode === 'dark' && 'gray.200 !important',
       },
+      '@keyframes blink_input_opacity_to_prevent_scrolling_when_focus' : {
+        '0%' : {
+          opacity: 0
+        },
+        '100%' : {
+          opacity: 1
+        }
+      },
+      /* Hack to prevent iOS Safari to zoom and scroll on input when focused */
+      'input:focus' :{
+        animation:'blink_input_opacity_to_prevent_scrolling_when_focus 0.01s'
+      }
     }),
   },
   fonts: {
