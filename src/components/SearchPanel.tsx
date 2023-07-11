@@ -75,7 +75,7 @@ export default function SearchPanel({
             <LinkBox
               className="tab-result"
               key={index}
-              onClick={(e) => {
+              onClick={() => {
                 router.push(`/tab/${tab.slug}`)
               }}
               as="div"

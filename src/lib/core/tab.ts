@@ -2,8 +2,8 @@ import { getSpotifyAccessToken } from './../api/spotify'
 import {
   Tab,
   Pagination,
-  SearchScrapped,
   ApiResponseTab,
+  TabScrapped,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import { Page } from 'puppeteer-core'
@@ -29,7 +29,7 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
 
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
-    let results: SearchScrapped[] = [
+    let results: TabScrapped[] = [
       ...(data.other_tabs || []),
       ...(data.results || []),
     ]
@@ -73,9 +73,15 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
 
   const tabParsed: Tab = await page.evaluate(() => {
     const { tab_view } = window.UGAPP.store.page.data
-    const { tab_url, artist_name, song_name, rating, votes, type } =
-      window.UGAPP.store.page.data.tab
-    const tuning = tab_view?.meta?.tuning?.value?.split(' ') || [
+    const {
+      tab_url,
+      artist_name,
+      song_name,
+      rating,
+      votes,
+      type,
+    }: TabScrapped = window.UGAPP.store.page.data.tab
+    const tuning: string[] = tab_view?.meta?.tuning?.value?.split(' ') || [
       'E',
       'A',
       'D',
@@ -83,9 +89,30 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
       'B',
       'E',
     ]
-    const difficulty = tab_view?.ug_difficulty || 'unknown'
-    const raw_tabs = tab_view?.wiki_tab?.content || ''
-    const htmlTab = document.querySelector('code')?.outerHTML || ''
+    const difficulty: string = tab_view?.ug_difficulty || 'unknown'
+    const raw_tabs: string = tab_view?.wiki_tab?.content || ''
+    const htmlTab: string = document.querySelector('code')?.outerHTML || ''
+    const versions: TabScrapped[] = tab_view?.versions.filter((tab : TabScrapped) => tab.type !== 'Official') || []
+    let versionsFormatted: Tab[] = versions.map((tabScrapped) => {
+      return {
+        artist: tabScrapped.artist_name,
+        name: tabScrapped.song_name,
+        url: tabScrapped.tab_url,
+        difficulty: tabScrapped.difficulty,
+        numberRates: tabScrapped.votes,
+        type: tabScrapped.type,
+        slug: tabScrapped.tab_url.split('/').splice(-2).join('/'),
+        rating: parseFloat(tabScrapped.rating.toFixed(2)),
+      }
+    })
+
+    if (Array.isArray(versionsFormatted)) {
+      versionsFormatted = versionsFormatted.sort(function (elem1, elem2) {
+        return (
+          elem2.rating * elem2.numberRates - elem1.rating * elem1.numberRates
+        )
+      })
+    }
 
     return {
       artist: artist_name,
@@ -99,6 +126,7 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
       type: type,
       slug: tab_url.split('/').splice(-2).join('/'),
       rating: parseFloat(rating.toFixed(2)),
+      versions : versionsFormatted,
     }
   })
   await browser.close()
