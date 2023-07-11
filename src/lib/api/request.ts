@@ -122,15 +122,15 @@ export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
   return params
 }
 
-export function formatTabResult(tab : TabScrapped) : Tab {
+export function formatTabResult(tab: TabScrapped): Tab {
   return {
     artist: tab.artist_name,
     name: tab.song_name,
     url: tab.tab_url,
-    difficulty : tab.difficulty,
-    tuning : tab.tuning,
-    raw_tabs : tab.raw_tabs,
-    htmlTab : tab.htmlTab,
+    difficulty: tab.difficulty,
+    tuning: tab.tuning,
+    raw_tabs: tab.raw_tabs,
+    htmlTab: tab.htmlTab,
     numberRates: tab.votes,
     type: tab.type,
     slug: tab.tab_url.split('/').splice(-2).join('/'),

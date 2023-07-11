@@ -24,7 +24,6 @@ export default function TabPage(): JSX.Element {
   const title = selectedTabContent
     ? `${selectedTabContent.name} by ${selectedTabContent.artist} - Ultimate Tab`
     : 'Tab - Ultimate Tab'
-  
 
   useEffect(() => {
     if (slug) {
@@ -38,9 +37,7 @@ export default function TabPage(): JSX.Element {
   return (
     <>
       <Head>
-        <title>
-          {title}
-        </title>
+        <title>{title}</title>
       </Head>
       <Fade
         style={{ display: 'flex', flexGrow: '1', flexDirection: 'column' }}

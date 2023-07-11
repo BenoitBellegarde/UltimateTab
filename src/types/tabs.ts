@@ -32,7 +32,6 @@ export interface Pagination {
   total: number
 }
 
-
 export interface Tab {
   url: string
   slug: string
@@ -56,10 +55,10 @@ export interface TabScrapped {
   rating: number
   votes: number
   type: string
-  difficulty? : string
-  tuning? : string[]
-  raw_tabs? : string
-  htmlTab? : string
+  difficulty?: string
+  tuning?: string[]
+  raw_tabs?: string
+  htmlTab?: string
 }
 
 export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'

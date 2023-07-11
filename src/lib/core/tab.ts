@@ -92,7 +92,10 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
     const difficulty: string = tab_view?.ug_difficulty || 'unknown'
     const raw_tabs: string = tab_view?.wiki_tab?.content || ''
     const htmlTab: string = document.querySelector('code')?.outerHTML || ''
-    const versions: TabScrapped[] = tab_view?.versions.filter((tab : TabScrapped) => tab.type !== 'Official') || []
+    const versions: TabScrapped[] =
+      tab_view?.versions.filter(
+        (tab: TabScrapped) => tab.type !== 'Official',
+      ) || []
     let versionsFormatted: Tab[] = versions.map((tabScrapped) => {
       return {
         artist: tabScrapped.artist_name,
@@ -126,7 +129,7 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
       type: type,
       slug: tab_url.split('/').splice(-2).join('/'),
       rating: parseFloat(rating.toFixed(2)),
-      versions : versionsFormatted,
+      versions: versionsFormatted,
     }
   })
   await browser.close()

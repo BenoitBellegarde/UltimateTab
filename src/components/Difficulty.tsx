@@ -12,6 +12,7 @@ export default function Difficulty({
     switch (level) {
       case 'novice':
       case 'beginner':
+      case 'absolute beginner':
         color = 'green'
         break
       case 'intermediate':
