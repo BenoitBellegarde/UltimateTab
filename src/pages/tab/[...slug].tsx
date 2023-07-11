@@ -21,6 +21,11 @@ export default function TabPage(): JSX.Element {
     handleClickFavorite,
   } = useAppStateContext()
 
+  const title = selectedTabContent
+    ? `${selectedTabContent.name} by ${selectedTabContent.artist} - Ultimate Tab`
+    : 'Tab - Ultimate Tab'
+  
+
   useEffect(() => {
     if (slug) {
       setSelectedTab((prevState) => ({
@@ -34,10 +39,7 @@ export default function TabPage(): JSX.Element {
     <>
       <Head>
         <title>
-          {selectedTabContent
-            ? `${selectedTabContent.name} by ${selectedTabContent.artist}`
-            : 'Tab'}{' '}
-          - Ultimate Tab
+          {title}
         </title>
       </Head>
       <Fade

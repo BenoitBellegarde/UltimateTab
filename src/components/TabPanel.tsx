@@ -1,9 +1,14 @@
-import { StarIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
 import {
   Box,
+  Button,
   Flex,
   Icon,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Skeleton,
   Text,
   Tooltip,
@@ -17,6 +22,7 @@ import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
 import { Tab } from '../types/tabs'
 import { MouseEventHandler } from 'react'
+import { useRouter } from 'next/router'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -32,8 +38,8 @@ export default function TabPanel({
   isLoading,
   handleClickFavorite,
 }: TabPanelProps) {
+  const router = useRouter()
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-
   return (
     <>
       <Box
@@ -53,7 +59,6 @@ export default function TabPanel({
         >
           <Flex
             justifyContent={'space-between'}
-            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
           >
             <Flex alignItems={'center'} pb={0}>
               <Flex alignItems={'baseline'} py={1}>
@@ -62,28 +67,30 @@ export default function TabPanel({
                 </Text>{' '}
                 <Text fontSize={'md'}>{selectedTabContent?.name}</Text>
               </Flex>
-              <Flex fontSize={'sm'} justifyContent={'start'}>
-                <Tooltip
-                  placement="right"
-                  label={
-                    isFavorite ? 'Remove from favorites' : 'Add to favorites'
-                  }
-                >
-                  <IconButton
-                    icon={isFavorite ? <RiHeartFill /> : <RiHeartLine />}
-                    onClick={handleClickFavorite}
-                    colorScheme={isFavorite ? 'red' : 'gray'}
-                    variant="ghost"
-                    aria-label="Add to favorites"
-                    size={'sm'}
-                  />
-                </Tooltip>
-              </Flex>
             </Flex>
-            <Flex alignItems={'center'} py={1}>
-              {
-                // Hack with top and relative position to make the star icon perfectly vertically aligned
-              }
+            <Flex fontSize={'sm'} justifyContent={'start'}>
+              <Tooltip
+                placement="right"
+                label={
+                  isFavorite ? 'Remove from favorites' : 'Add to favorites'
+                }
+              >
+                <IconButton
+                  icon={isFavorite ? <RiHeartFill /> : <RiHeartLine />}
+                  onClick={handleClickFavorite}
+                  colorScheme={isFavorite ? 'red' : 'gray'}
+                  variant="ghost"
+                  aria-label="Add to favorites"
+                  size={'md'}
+                />
+              </Tooltip>
+            </Flex>
+          </Flex>
+          <Flex alignItems={'center'} justifyContent={'space-between'} py={1}>
+            {
+              // Hack with top and relative position to make the star icon perfectly vertically aligned
+            }
+            <Flex alignItems={'center'}>
               <StarIcon
                 fontSize={'sm'}
                 color={'yellow.400'}
@@ -95,18 +102,70 @@ export default function TabPanel({
                 {selectedTabContent?.rating} ({selectedTabContent?.numberRates})
               </Flex>
             </Flex>
+            {selectedTabContent?.versions.length > 0 && (
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  variant="outline"
+                  _hover={{
+                    bg: 'twitter.300',
+                    color: 'white',
+                  }}
+                  _active={{
+                    bg: 'twitter.600',
+                    color: 'white',
+                  }}
+                  size={'sm'}
+                  boxShadow="md"
+                  fontWeight={'normal'}
+                  px="3"
+                  py="1"
+                  rightIcon={<ChevronDownIcon />}
+                  leftIcon={
+                    <Icon
+                      fontSize={'sm'}
+                      color={'yellow.400'}
+                      position="relative"
+                      top="-0.05rem"
+                      as={StarIcon}
+                    />
+                  }
+                >
+                  More versions
+                </MenuButton>
+                <MenuList>
+                  {selectedTabContent?.versions?.map((tab) => (
+                    <MenuItem
+                      onClick={() => {
+                        router.push(`/tab/${tab.slug}`)
+                      }}
+                      key={tab.slug}
+                    >
+                      <StarIcon
+                        fontSize={'sm'}
+                        color={'yellow.400'}
+                        position="relative"
+                        top="-0.05rem"
+                        mr={'5px'}
+                      />{' '}
+                      {tab.rating} ({tab.numberRates})
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
+            )}
           </Flex>
           <Flex
             justifyContent={'space-between'}
             flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
           >
-            <Flex fontSize={'sm'} py={1}>
+            <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
                 Difficulty
               </Text>{' '}
               <Difficulty level={selectedTabContent?.difficulty} />
             </Flex>{' '}
-            <Flex fontSize={'sm'} py={1}>
+            <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
                 Tuning
               </Text>{' '}
