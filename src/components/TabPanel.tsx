@@ -3,12 +3,15 @@ import {
   Box,
   Button,
   Flex,
+  FlexboxProps,
+  FlexProps,
   Icon,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  ResponsiveValue,
   Skeleton,
   Text,
   Tooltip,
@@ -39,13 +42,21 @@ export default function TabPanel({
   handleClickFavorite,
 }: TabPanelProps) {
   const router = useRouter()
+  const flexSongNameDirection = useBreakpointValue({
+    base:
+      selectedTabContent &&
+      selectedTabContent.artist?.length + selectedTabContent.name?.length > 30
+        ? 'column'
+        : 'row',
+    sm: 'row',
+  })
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   return (
     <>
       <Box
         h="100%"
         px={5}
-        py={3}
+        py={2}
         borderBottomStyle={'solid'}
         borderBottomWidth={selectedTabContent && '1px'}
         borderBottomColor={borderLightColor}
@@ -57,11 +68,13 @@ export default function TabPanel({
           h="100%"
           isLoaded={!isLoading}
         >
-          <Flex
-            justifyContent={'space-between'}
-          >
+          <Flex justifyContent={'space-between'} alignItems={'center'}>
             <Flex alignItems={'center'} pb={0}>
-              <Flex alignItems={'baseline'} py={1}>
+              <Flex
+                alignItems={'baseline'}
+                flexDirection={flexSongNameDirection as 'row' | 'column'}
+                py={1}
+              >
                 <Text fontSize={'lg'} as="b" mr={1}>
                   {selectedTabContent?.artist}
                 </Text>{' '}
