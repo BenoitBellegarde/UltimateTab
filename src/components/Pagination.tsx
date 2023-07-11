@@ -26,10 +26,12 @@ const Pagination = (props) => {
 
   const onNext = () => {
     onPageChange((prevPage: number) => prevPage + 1)
+    window.scrollTo(0, 0)
   }
 
   const onPrevious = () => {
     onPageChange((prevPage: number) => prevPage - 1)
+    window.scrollTo(0, 0)
   }
 
   let lastPage = paginationRange[paginationRange.length - 1]
@@ -53,7 +55,10 @@ const Pagination = (props) => {
           mr={2}
           key={parseInt(pageNumber.toString()) + index}
           colorScheme={pageNumber === currentPage ? 'twitter' : 'gray'}
-          onClick={() => onPageChange(pageNumber)}
+          onClick={() => {
+            onPageChange(pageNumber)
+            window.scrollTo(0, 0)
+          }}
           variant={pageNumber === '...' ? 'ghost' : 'solid'}
           disabled={pageNumber === '...' ? true : false}
         >
