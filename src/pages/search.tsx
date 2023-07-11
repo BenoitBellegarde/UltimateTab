@@ -155,7 +155,7 @@ export default function Search(): JSX.Element {
               color={'gray.500'}
               mb={5}
             >
-              Use the search bar to start finding tabs
+              Use the search bar above to start finding tabs
             </Text>
             <Image
               alt={'Search image'}

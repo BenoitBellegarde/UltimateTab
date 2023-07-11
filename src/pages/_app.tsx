@@ -8,6 +8,7 @@ import Layout from '../components/Layout'
 import { AppStateProvider } from '../contexts/AppContext'
 import { extendedTheme } from '../theme'
 import '@fontsource/poppins/400.css'
+import '../styles/styles.scss'
 import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {

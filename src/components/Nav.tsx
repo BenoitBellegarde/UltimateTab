@@ -19,6 +19,7 @@ export default function Nav(): JSX.Element {
   const { colorMode, toggleColorMode } = useColorMode()
   const { setSearchValue } = useAppStateContext()
   const router = useRouter()
+  const titleHeader = useBreakpointValue({ base: 'Ut', md: 'Ultimate tab' })
   return (
     <>
       <Box px={4}>
@@ -28,12 +29,12 @@ export default function Nav(): JSX.Element {
               <Text
                 bg="fadebp"
                 bgClip="text"
-                fontSize={useBreakpointValue({ base: 'lg', md: 'xl' })}
-                mr={5}
+                fontSize={useBreakpointValue({ base: 'xl', md: 'xl' })}
+                mr={4}
                 fontWeight="extrabold"
                 whiteSpace={'nowrap'}
               >
-                Ultimate tab
+                {titleHeader}
               </Text>
             </Link>
           </Flex>
