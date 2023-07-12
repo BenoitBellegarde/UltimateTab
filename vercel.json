@@ -4,11 +4,6 @@
       "memory": 3008,
       "maxDuration": 30,
       "excludeFiles": "public/**"
-    },
-    "api/**/*": {
-      "memory": 3008,
-      "maxDuration": 30,
-      "excludeFiles": "public/**"
     }
   }
 }
