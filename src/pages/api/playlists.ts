@@ -10,7 +10,6 @@ export default async function handlerPlaylists(
     res: NextApiResponse,
   ) {
   const {accessToken} = await getToken({ req })
-  console.log(accessToken)
   const response = await getUsersPlaylists(accessToken);
   const {items} = await response.json();
 

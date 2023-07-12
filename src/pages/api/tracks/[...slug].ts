@@ -11,5 +11,6 @@ export default async function handlerPlaylistBySlug(
   const { accessToken } = await getToken({ req })
   const response = await getPlaylistTracks(accessToken,slug)
   const { items } = await response.json()
-  return res.status(200).json(items)
+  const itemsFiltered = items.map((item) => item.track)
+  return res.status(200).json(itemsFiltered)
 }

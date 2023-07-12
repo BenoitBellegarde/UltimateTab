@@ -1,5 +1,6 @@
-import { SpotifyAuthResponse } from '../../types/tabs'
-export const getSpotifyAccessToken = async (refresh_token : string): Promise<SpotifyAuthResponse> => {
+export const getSpotifyAccessToken = async (
+  refresh_token: string,
+): Promise<{ access_token: string | boolean }> => {
   const client_id: string = process.env.SPOTIFY_CLIENT_ID
   const client_secret: string = process.env.SPOTIFY_CLIENT_SECRET
 
@@ -17,7 +18,7 @@ export const getSpotifyAccessToken = async (refresh_token : string): Promise<Spo
     }),
   })
 
-  const data: SpotifyAuthResponse = await response.json()
+  const data = await response.json()
 
   if (!response.ok) {
     return { access_token: false }
@@ -26,23 +27,23 @@ export const getSpotifyAccessToken = async (refresh_token : string): Promise<Spo
   return data
 }
 
-export const getUsersPlaylists = async (refresh_token) => {
-
-  const {access_token} = await getSpotifyAccessToken(refresh_token);
+export const getUsersPlaylists = async (refresh_token: any) => {
+  const { access_token } = await getSpotifyAccessToken(refresh_token)
   return fetch('https://api.spotify.com/v1/me/playlists', {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
-  });
-};
+  })
+}
 
-export const getPlaylistTracks = async (refresh_token,slug) => {
-
-  const {access_token} = await getSpotifyAccessToken(refresh_token);
+export const getPlaylistTracks = async (
+  refresh_token: any,
+  slug: any,
+) => {
+  const { access_token } = await getSpotifyAccessToken(refresh_token)
   return fetch(`https://api.spotify.com/v1/playlists/${slug}/tracks`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
-  });
-};
-
+  })
+}

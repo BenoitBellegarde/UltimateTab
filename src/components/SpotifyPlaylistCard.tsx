@@ -8,9 +8,10 @@ import {
   Image,
   Flex,
 } from '@chakra-ui/react'
+import { SpotifyPlaylist } from '../types/tabs'
 
 interface SpotifyPlaylistCardProps {
-  playlist: Object
+  playlist: SpotifyPlaylist
   handleClick: Function
 }
 export default function SpotifyPlaylistCard({
@@ -22,7 +23,7 @@ export default function SpotifyPlaylistCard({
     <LinkBox
       className="tab-result"
       onClick={() => {
-        handleClick(playlist.id)
+        handleClick(playlist)
         window.scrollTo(0,0)
         console.log(playlist)
       }}

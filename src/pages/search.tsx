@@ -42,17 +42,19 @@ export default function Search(): JSX.Element {
     setPlaylistsActive,
     spotifyTracks,
     selectedPlaylist,
-    setSelectedPlaylist
+    setSelectedPlaylist,
+    selectedTrack,
+    setSelectedTrack
   } = useAppStateContext()
   const {data: session} = useSession();
   console.log(spotifyPlaylists)
   console.log(selectedPlaylist)
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const sizeImg = useBreakpointValue({
-    base: '100%',
-    sm: '50%',
-    md: '40%',
-    lg: '30%',
+    base: '80%',
+    sm: '40%',
+    md: '30%',
+    lg: '20%',
   })
   const { isLoading, isError, data } = useTabsList(
     debounedSearchValue,
@@ -178,6 +180,9 @@ export default function Search(): JSX.Element {
             playlistsActive={playlistsActive}
             spotifyTracks={spotifyTracks}
             setSelectedPlaylist={setSelectedPlaylist}
+            selectedPlaylist={selectedPlaylist}
+            setSelectedTrack={setSelectedTrack}
+            selectedTrack={selectedTrack}
           />
         ) : (
           <Flex
@@ -208,7 +213,7 @@ export default function Search(): JSX.Element {
             {(session && !playlistsActive) ? <Button leftIcon={<Icon as={BsSpotify}/>} colorScheme={'green'} onClick={() => {refetchSpotifyPlaylists();setPlaylistsActive(true)}}>View your Spotify playlists</Button> : <Button leftIcon={<Icon as={BsSpotify}/>} onClick={() => signIn()}>Sync your Spotify playlists</Button>}
             <Image
               alt={'Search image'}
-              mt={5}
+              mt={8}
               h={sizeImg}
               w={sizeImg}
               src={'search-illustration.svg'}

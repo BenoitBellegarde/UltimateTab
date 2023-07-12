@@ -11,12 +11,14 @@ import {
   Icon,
   useToken,
   Button,
+  Image,
+  IconButton,
 } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { RiEmotionSadLine } from 'react-icons/ri'
 import { TAB_TYPES_COLORS } from '../constants'
-import { ApiResponseSearch } from '../types/tabs'
+import { ApiResponseSearch, SpotifyPlaylist, SpotifyTrack } from '../types/tabs'
 import Pagination from './Pagination'
 import SpotifyPlaylistCard from './SpotifyPlaylistCard'
 import SpotifyTrackCard from './SpotifyTrackCard'
@@ -34,10 +36,13 @@ interface SearchPanelProps {
   searchValue?: string
   showSearchInput?: boolean
   favoriteActive: boolean
-  spotifyPlaylists: Object[]
+  spotifyPlaylists: SpotifyPlaylist[]
   playlistsActive: boolean
   setSelectedPlaylist: Function
-  spotifyTracks: Object[]
+  selectedPlaylist: SpotifyPlaylist
+  spotifyTracks: SpotifyTrack[]
+  selectedTrack: SpotifyTrack
+  setSelectedTrack: Function
 }
 
 export default function SearchPanel({
@@ -47,11 +52,15 @@ export default function SearchPanel({
   searchValue,
   showSearchInput = true,
   handleChangePage,
+  handleChangeValue,
   favoriteActive,
   spotifyPlaylists,
   playlistsActive,
+  selectedPlaylist,
   setSelectedPlaylist,
   spotifyTracks,
+  selectedTrack,
+  setSelectedTrack,
 }: SearchPanelProps): JSX.Element {
   const { data: session } = useSession()
   const hexColors = useToken(
@@ -70,21 +79,128 @@ export default function SearchPanel({
           spotifyPlaylists &&
           (spotifyTracks ? (
             <>
-              <Flex p="2" w={'100%'}>
-                <Button
-                  leftIcon={<ArrowLeftIcon />}
-                  onClick={() => setSelectedPlaylist('')}
-                >
-                  Back to playlists
-                </Button>
-              </Flex>
-              {spotifyTracks.map((track) => (
-                <SpotifyTrackCard
-                  key={track.id}
-                  handleClick={setSelectedPlaylist}
-                  track={track.track}
-                />
-              ))}
+              {selectedTrack && searchValue ? (
+                <Flex p="2" alignItems={'center'} w={'100%'}>
+                  <Flex
+                    className="tab-result"
+                    as="div"
+                    py={5}
+                    px={3}
+                    my={2}
+                    mx={0}
+                    width={widthResult}
+                    borderWidth="0px"
+                    rounded="md"
+                    display={'flex'}
+                    flexGrow={'1'}
+                    justifyContent={'space-between'}
+                    alignItems="center"
+                    boxShadow="md"
+                  >
+                    <Flex alignItems={'center'}>
+                      <IconButton
+                        icon={<ArrowLeftIcon />}
+                        onClick={() => {
+                          handleChangeValue('')
+                          setSelectedTrack(null)
+                        }}
+                        title="Back to tracks"
+                        aria-label="Back to tracks"
+                        mr={4}
+                      />
+                      <Image
+                        objectFit="cover"
+                        w={'50px'}
+                        h={'50px'}
+                        src={selectedTrack.album?.images[0]?.url}
+                        alt="Caffe Latte"
+                        mr={2}
+                      />{' '}
+                      <Box>
+                        <Text fontSize={'lg'} as="b">
+                          {selectedTrack?.name}
+                        </Text>
+                        <br /> {selectedTrack?.artists[0].name}
+                      </Box>
+                    </Flex>
+                    <Box
+                      display={'flex'}
+                      alignItems={'center'}
+                      whiteSpace={'pre'}
+                      ml={2}
+                    >
+                      <Badge mr={2}>{selectedTrack?.duration_ms}</Badge>
+                    </Box>
+                  </Flex>
+                </Flex>
+              ) : (
+                <>
+                  <Flex p="2" alignItems={'center'} w={'100%'}>
+                    <Flex
+                      className="tab-result"
+                      as="div"
+                      py={5}
+                      px={3}
+                      my={2}
+                      mx={0}
+                      width={widthResult}
+                      borderWidth="0px"
+                      rounded="md"
+                      display={'flex'}
+                      flexGrow={'1'}
+                      justifyContent={'space-between'}
+                      alignItems="center"
+                      boxShadow="md"
+                    >
+                      <Flex alignItems={'center'}>
+                        <IconButton
+                          icon={<ArrowLeftIcon />}
+                          onClick={() => setSelectedPlaylist(null)}
+                          title="Back to playlists"
+                          aria-label="Back to playlists"
+                          mr={4}
+                        />
+                        <Image
+                          objectFit="cover"
+                          w={'50px'}
+                          h={'50px'}
+                          src={selectedPlaylist?.images[0]?.url}
+                          alt="Caffe Latte"
+                          mr={2}
+                        />{' '}
+                        <Box>
+                          <Text fontSize={'lg'} as="b">
+                            {selectedPlaylist?.name}
+                          </Text>
+                          <br /> {selectedPlaylist?.owner.display_name}
+                        </Box>
+                      </Flex>
+                      <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        whiteSpace={'pre'}
+                        ml={2}
+                      >
+                        <Badge mr={2}>
+                          {selectedPlaylist?.tracks.total} tracks
+                        </Badge>
+                      </Box>
+                    </Flex>
+                  </Flex>
+                  {spotifyTracks.map((track) => (
+                    <SpotifyTrackCard
+                      key={track.id}
+                      handleClick={(track: SpotifyTrack) => {
+                        setSelectedTrack(track)
+                        handleChangeValue(
+                          `${track.artists[0].name} ${track.name}`,
+                        )
+                      }}
+                      track={track}
+                    />
+                  ))}
+                </>
+              )}
             </>
           ) : (
             <>

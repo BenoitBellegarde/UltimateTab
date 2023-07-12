@@ -60,10 +60,33 @@ export interface TabScrapped {
   htmlTab?: string
 }
 
-export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'
-
-export type SpotifyAccessToken = string | boolean
-
-export interface SpotifyAuthResponse {
-  access_token: SpotifyAccessToken
+export interface SpotifyPlaylist {
+  id: number
+  images: {
+    url: string
+  }
+  name: string
+  owner: {
+    display_name: string
+  }
+  tracks: {
+    href: string
+    total: number
+  }
 }
+
+export interface SpotifyTrack {
+  id: number
+  duration_ms: number
+  album: {
+    images : {
+      url : string
+    }
+  }
+  name: string
+  artists : Array<{
+    name : string
+  }>
+}
+
+export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'

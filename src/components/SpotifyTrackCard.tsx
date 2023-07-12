@@ -6,11 +6,11 @@ import {
   Box,
   Badge,
   Image,
-  Flex,
 } from '@chakra-ui/react'
+import { SpotifyTrack } from '../types/tabs'
 
 interface SpotifyTrackCardProps {
-  track: Object
+  track: SpotifyTrack
   handleClick: Function
 }
 export default function SpotifyTrackCard({
@@ -18,10 +18,12 @@ export default function SpotifyTrackCard({
   handleClick,
 }: SpotifyTrackCardProps): JSX.Element {
   const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
-  let trackArtists = track.artists.map((elem) => elem.name)
-  trackArtists = trackArtists.join(', ').slice(0, -2)
-  var minutesDuration: number = Math.floor(track.duration_ms / 60000)
-  var secondsDuration: number = ((track.duration_ms % 60000) / 1000).toFixed(0)
+  const trackArtists = track.artists.map((elem) => elem.name)
+  const trackArtistsJoined = trackArtists.join(', ')
+  const minutesDuration: number = Math.floor(track.duration_ms / 60000)
+  const secondsDuration: number = parseInt(
+    ((track.duration_ms % 60000) / 1000).toFixed(0),
+  )
   const durationFormatted: string =
     secondsDuration == 60
       ? minutesDuration + 1 + ':00'
@@ -34,7 +36,7 @@ export default function SpotifyTrackCard({
     <LinkBox
       className="tab-result"
       onClick={() => {
-        //   handleClick(track.id)
+        handleClick(track)
         console.log(track)
       }}
       as="div"
@@ -69,7 +71,7 @@ export default function SpotifyTrackCard({
             {track.name}
           </Text>
           <br />
-          {trackArtists}
+          {trackArtistsJoined}
         </Box>
       </LinkOverlay>
       <Box display={'flex'} alignItems={'center'} whiteSpace={'pre'} ml={2}>

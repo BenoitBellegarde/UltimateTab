@@ -6,12 +6,13 @@ import {
   SetStateAction,
   Dispatch,
 } from 'react'
+import { SpotifyTrack } from '../types/tabs'
 import useDebounce from '../hooks/useDebounce'
 import useLocalStorage from '../hooks/useLocalStorage'
 import useSpotifyPlaylists from '../hooks/useSpotifyPlaylists'
 import useSpotifyTracks from '../hooks/useSpotifyTracks'
 import useTabs from '../hooks/useTabs'
-import { Tab } from '../types/tabs'
+import { SpotifyPlaylist, Tab } from '../types/tabs'
 
 interface AppState {
   searchValue: string
@@ -30,13 +31,15 @@ interface AppState {
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
   favoriteActive: boolean
   setFavoriteActive: Dispatch<SetStateAction<boolean>>
-  spotifyPlaylists : Object[]
+  spotifyPlaylists : SpotifyPlaylist[]
   refetchSpotifyPlaylists : any
   playlistsActive: boolean
   setPlaylistsActive: Dispatch<SetStateAction<boolean>>
-  spotifyTracks : Object[]
-  selectedPlaylist : string
-  setSelectedPlaylist : Dispatch<SetStateAction<string>>
+  spotifyTracks : SpotifyTrack[]
+  selectedPlaylist : SpotifyPlaylist
+  setSelectedPlaylist : Dispatch<SetStateAction<SpotifyPlaylist>>
+  selectedTrack : SpotifyTrack
+  setSelectedTrack : Dispatch<SetStateAction<SpotifyTrack>>
 
 }
 export const AppStateContext = createContext<AppState | null>(null)
@@ -58,7 +61,8 @@ export function AppStateProvider({ children }) {
     rating: 0,
     type: 'Tab',
   })
-  const [selectedPlaylist, setSelectedPlaylist] = useState<string>('')
+  const [selectedPlaylist, setSelectedPlaylist] = useState<SpotifyPlaylist | null>(null)
+  const [selectedTrack, setSelectedTrack] = useState<SpotifyTrack | null>(null)
 
 
   const toast = useToast()
@@ -119,7 +123,9 @@ export function AppStateProvider({ children }) {
         setPlaylistsActive,
         spotifyTracks,
         selectedPlaylist,
-        setSelectedPlaylist
+        setSelectedPlaylist,
+        selectedTrack,
+        setSelectedTrack
       }}
     >
       {children}
