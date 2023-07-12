@@ -1,9 +1,7 @@
 import { getUsersPlaylists } from '../../lib/api/spotify';
-import {getSession} from 'next-auth/react';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './auth/[...nextauth]';
+
 
 export default async function handlerPlaylists(
     req: NextApiRequest,
