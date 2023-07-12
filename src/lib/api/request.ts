@@ -9,7 +9,6 @@ import type {
   TabScrapped,
 } from '../../types/tabs'
 import Chromium from 'chrome-aws-lambda'
-import puppeteer from 'puppeteer-core'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -140,7 +139,7 @@ export function formatTabResult(tab: TabScrapped): Tab {
 
 //Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
 export async function getPuppeteerConf() {
-  return puppeteer.launch({
+  return Chromium.puppeteer.launch({
     args: Chromium.args,
     defaultViewport: Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL

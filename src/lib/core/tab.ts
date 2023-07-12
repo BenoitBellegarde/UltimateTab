@@ -1,4 +1,3 @@
-import { getSpotifyAccessToken } from './../api/spotify'
 import {
   Tab,
   Pagination,
@@ -6,8 +5,8 @@ import {
   TabScrapped,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
-import { Page } from 'puppeteer-core'
-import { ApiResponseSearch } from '../../types/tabs'
+import type { Page } from 'puppeteer-core'
+import type { ApiResponseSearch } from '../../types/tabs'
 import { getPuppeteerConf } from '../api/request'
 
 export function validateType(type: string): string {

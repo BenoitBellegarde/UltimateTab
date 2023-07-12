@@ -3,7 +3,7 @@
     "src/pages/**/*": {
       "memory": 3008,
       "maxDuration": 30,
-      "excludeFiles": "public/**"
+      "excludeFiles": "node_modules/framer-motion/dist/**/*"
     }
   }
 }
