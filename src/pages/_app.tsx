@@ -6,28 +6,34 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { useState } from 'react'
 import Layout from '../components/Layout'
 import { AppStateProvider } from '../contexts/AppContext'
+import { SessionProvider } from 'next-auth/react'
 import { extendedTheme } from '../theme'
 import '@fontsource/poppins/400.css'
 import Head from 'next/head'
 
-export default function App({ Component, pageProps }: AppProps): JSX.Element {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps): JSX.Element {
   const [queryClient] = useState(() => new QueryClient())
 
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={extendedTheme}>
-        <AppStateProvider>
-          <Layout>
-            <Head>
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-              />
-            </Head>
-            <Component {...pageProps} />
-            <Analytics />
-          </Layout>
-        </AppStateProvider>
+        <SessionProvider session={session}>
+          <AppStateProvider>
+            <Layout>
+              <Head>
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+                />
+              </Head>
+              <Component {...pageProps} />
+              <Analytics />
+            </Layout>
+          </AppStateProvider>
+        </SessionProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </ChakraProvider>
     </QueryClientProvider>

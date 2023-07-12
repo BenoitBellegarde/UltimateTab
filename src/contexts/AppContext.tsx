@@ -8,6 +8,8 @@ import {
 } from 'react'
 import useDebounce from '../hooks/useDebounce'
 import useLocalStorage from '../hooks/useLocalStorage'
+import useSpotifyPlaylists from '../hooks/useSpotifyPlaylists'
+import useSpotifyTracks from '../hooks/useSpotifyTracks'
 import useTabs from '../hooks/useTabs'
 import { Tab } from '../types/tabs'
 
@@ -28,6 +30,14 @@ interface AppState {
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
   favoriteActive: boolean
   setFavoriteActive: Dispatch<SetStateAction<boolean>>
+  spotifyPlaylists : Object[]
+  refetchSpotifyPlaylists : any
+  playlistsActive: boolean
+  setPlaylistsActive: Dispatch<SetStateAction<boolean>>
+  spotifyTracks : Object[]
+  selectedPlaylist : string
+  setSelectedPlaylist : Dispatch<SetStateAction<string>>
+
 }
 export const AppStateContext = createContext<AppState | null>(null)
 
@@ -38,6 +48,7 @@ export function AppStateProvider({ children }) {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])
   const [favoriteActive, setFavoriteActive] = useState<boolean>(false)
+  const [playlistsActive, setPlaylistsActive] = useState<boolean>(false)
   const [selectedTab, setSelectedTab] = useState<Tab>({
     url: '',
     slug: '',
@@ -47,12 +58,20 @@ export function AppStateProvider({ children }) {
     rating: 0,
     type: 'Tab',
   })
+  const [selectedPlaylist, setSelectedPlaylist] = useState<string>('')
+
 
   const toast = useToast()
 
   const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
     selectedTab.url,
   )
+
+  const { isLoading: isLoadingTracks, data: spotifyTracks } = useSpotifyTracks(
+    selectedPlaylist,
+  )
+
+  const { isLoading: isLoadingPlaylists, data: spotifyPlaylists, refetch : refetchSpotifyPlaylists } = useSpotifyPlaylists()
 
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
@@ -94,6 +113,13 @@ export function AppStateProvider({ children }) {
         handleClickFavorite,
         favoriteActive,
         setFavoriteActive,
+        spotifyPlaylists,
+        refetchSpotifyPlaylists,
+        playlistsActive,
+        setPlaylistsActive,
+        spotifyTracks,
+        selectedPlaylist,
+        setSelectedPlaylist
       }}
     >
       {children}

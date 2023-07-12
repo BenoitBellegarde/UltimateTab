@@ -1,4 +1,4 @@
-import { StarIcon } from '@chakra-ui/icons'
+import { ArrowLeftIcon, StarIcon } from '@chakra-ui/icons'
 import {
   Flex,
   Skeleton,
@@ -10,12 +10,16 @@ import {
   Text,
   Icon,
   useToken,
+  Button,
 } from '@chakra-ui/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { RiEmotionSadLine } from 'react-icons/ri'
 import { TAB_TYPES_COLORS } from '../constants'
 import { ApiResponseSearch } from '../types/tabs'
 import Pagination from './Pagination'
+import SpotifyPlaylistCard from './SpotifyPlaylistCard'
+import SpotifyTrackCard from './SpotifyTrackCard'
 
 interface SearchPanelProps {
   handleChangeType: Function
@@ -30,6 +34,10 @@ interface SearchPanelProps {
   searchValue?: string
   showSearchInput?: boolean
   favoriteActive: boolean
+  spotifyPlaylists: Object[]
+  playlistsActive: boolean
+  setSelectedPlaylist: Function
+  spotifyTracks: Object[]
 }
 
 export default function SearchPanel({
@@ -40,17 +48,55 @@ export default function SearchPanel({
   showSearchInput = true,
   handleChangePage,
   favoriteActive,
+  spotifyPlaylists,
+  playlistsActive,
+  setSelectedPlaylist,
+  spotifyTracks,
 }: SearchPanelProps): JSX.Element {
+  const { data: session } = useSession()
   const hexColors = useToken(
     'colors',
     Object.values(TAB_TYPES_COLORS).map((color) => color + '.300'),
   )
+  console.log(spotifyTracks)
   const router = useRouter()
   const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
 
   return (
     <Box px="2" py={3} overflowY={'auto'}>
       <Flex wrap={'wrap'} justifyContent="center">
+        {session &&
+          playlistsActive &&
+          spotifyPlaylists &&
+          (spotifyTracks ? (
+            <>
+              <Flex p="2" w={'100%'}>
+                <Button
+                  leftIcon={<ArrowLeftIcon />}
+                  onClick={() => setSelectedPlaylist('')}
+                >
+                  Back to playlists
+                </Button>
+              </Flex>
+              {spotifyTracks.map((track) => (
+                <SpotifyTrackCard
+                  key={track.id}
+                  handleClick={setSelectedPlaylist}
+                  track={track.track}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {spotifyPlaylists.map((playlist) => (
+                <SpotifyPlaylistCard
+                  key={playlist.id}
+                  handleClick={setSelectedPlaylist}
+                  playlist={playlist}
+                />
+              ))}
+            </>
+          ))}
         {isError && (
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
         )}
@@ -109,7 +155,12 @@ export default function SearchPanel({
                 </Text>
                 <br /> {tab.name}
               </LinkOverlay>
-              <Box display={'flex'} alignItems={'center'} whiteSpace={'pre'} ml={2}>
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                whiteSpace={'pre'}
+                ml={2}
+              >
                 {tab.type && TAB_TYPES_COLORS[tab.type] && (
                   <Badge mr={2} colorScheme={TAB_TYPES_COLORS[tab.type]}>
                     {tab.type}

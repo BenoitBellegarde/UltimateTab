@@ -24,7 +24,6 @@ export interface ApiRequestTab {
 
 export interface ApiResponseTab {
   tab: Tab
-  spotify_access_token: SpotifyAccessToken
 }
 
 export interface Pagination {

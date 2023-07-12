@@ -19,6 +19,7 @@
     "framer-motion": "^10.5.0",
     "html-react-parser": "^3.0.12",
     "next": "latest",
+    "next-auth": "^4.22.1",
     "puppeteer-core": "^6.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

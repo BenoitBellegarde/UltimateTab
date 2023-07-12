@@ -133,6 +133,5 @@ export async function getTab(url: string): Promise<ApiResponseTab> {
     }
   })
   await browser.close()
-  const { access_token } = await getSpotifyAccessToken()
-  return { tab: tabParsed, spotify_access_token: access_token }
+  return { tab: tabParsed }
 }

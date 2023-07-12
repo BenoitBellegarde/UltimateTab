@@ -19,6 +19,8 @@ import { TAB_TYPES } from '../constants'
 import RadioCard from '../components/RadioCard'
 import { RiHeartFill } from 'react-icons/ri'
 import useFavoriteTabs from '../hooks/useTabsFavorites'
+import {useSession, signIn, signOut} from 'next-auth/react';
+import {BsSpotify} from 'react-icons/bs'
 
 export default function Search(): JSX.Element {
   const {
@@ -34,7 +36,17 @@ export default function Search(): JSX.Element {
     favorites,
     favoriteActive,
     setFavoriteActive,
+    spotifyPlaylists,
+    refetchSpotifyPlaylists,
+    playlistsActive,
+    setPlaylistsActive,
+    spotifyTracks,
+    selectedPlaylist,
+    setSelectedPlaylist
   } = useAppStateContext()
+  const {data: session} = useSession();
+  console.log(spotifyPlaylists)
+  console.log(selectedPlaylist)
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const sizeImg = useBreakpointValue({
     base: '100%',
@@ -42,7 +54,6 @@ export default function Search(): JSX.Element {
     md: '40%',
     lg: '30%',
   })
-
   const { isLoading, isError, data } = useTabsList(
     debounedSearchValue,
     searchType,
@@ -123,10 +134,34 @@ export default function Search(): JSX.Element {
               >
                 Favorites
               </Button>
+              <Button
+                variant="outline"
+                _hover={{
+                  bg: 'twitter.400',
+                  color: 'white',
+                  opacity: playlistsActive ? 0.8 : 1,
+                }}
+                _active={{
+                  bg: 'green',
+                  color: 'white',
+                }}
+                isActive={playlistsActive}
+                onClick={() =>
+                  setPlaylistsActive((prevState: boolean) => !prevState)
+                }
+                size={'sm'}
+                boxShadow="md"
+                fontWeight={'normal'}
+                px="3"
+                py="4"
+                leftIcon={<Icon as={BsSpotify} />}
+              >
+                Playlists
+              </Button>
             </HStack>
           </HStack>
         </Flex>
-        {searchValue.trim() !== '' ? (
+        {(searchValue.trim() !== '' || playlistsActive) ? (
           <SearchPanel
             handleChangeType={setSearchType}
             searchValue={searchValue}
@@ -139,6 +174,10 @@ export default function Search(): JSX.Element {
             selectedTab={selectedTab}
             handleChangePage={setCurrentPage}
             favoriteActive={favoriteActive}
+            spotifyPlaylists={spotifyPlaylists}
+            playlistsActive={playlistsActive}
+            spotifyTracks={spotifyTracks}
+            setSelectedPlaylist={setSelectedPlaylist}
           />
         ) : (
           <Flex
@@ -157,6 +196,16 @@ export default function Search(): JSX.Element {
             >
               Use the search bar above to start finding tabs
             </Text>
+            <Text
+              textAlign={'center'}
+              fontSize={'xl'}
+              color={'gray.300'}
+              fontWeight={'bold'}
+              mb={5}
+            >
+              OR
+            </Text>
+            {(session && !playlistsActive) ? <Button leftIcon={<Icon as={BsSpotify}/>} colorScheme={'green'} onClick={() => {refetchSpotifyPlaylists();setPlaylistsActive(true)}}>View your Spotify playlists</Button> : <Button leftIcon={<Icon as={BsSpotify}/>} onClick={() => signIn()}>Sync your Spotify playlists</Button>}
             <Image
               alt={'Search image'}
               mt={5}
