@@ -16,7 +16,6 @@
     "@fontsource/poppins": "^4.5.10",
     "@vercel/analytics": "^1.0.1",
     "chrome-aws-lambda": "^6.0.0",
-    "framer-motion": "^10.5.0",
     "html-react-parser": "^3.0.12",
     "next": "latest",
     "next-auth": "^4.22.1",
