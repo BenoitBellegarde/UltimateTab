@@ -210,7 +210,7 @@ export default function Search(): JSX.Element {
             >
               OR
             </Text>
-            {(session && !playlistsActive) ? <Button leftIcon={<Icon as={BsSpotify}/>} colorScheme={'green'} onClick={() => {refetchSpotifyPlaylists();setPlaylistsActive(true)}}>View your Spotify playlists</Button> : <Button leftIcon={<Icon as={BsSpotify}/>} onClick={() => signIn()}>Sync your Spotify playlists</Button>}
+            {(session && !playlistsActive) ? <Button leftIcon={<Icon as={BsSpotify}/>} colorScheme={'green'} onClick={() => {refetchSpotifyPlaylists();setPlaylistsActive(true)}}>View your Spotify playlists</Button> : <Button leftIcon={<Icon as={BsSpotify}/>} onClick={() => signIn('spotify')}>Sync your Spotify playlists</Button>}
             <Image
               alt={'Search image'}
               mt={8}
