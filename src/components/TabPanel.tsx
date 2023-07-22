@@ -67,6 +67,7 @@ export default function TabPanel({
     // Hook executed only in browser to prevent NextJS SSR to return a warning
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useLayoutEffect(() => {
+      if (!selectedTabContent) return
       if (firstUpdate.current) {
         firstUpdate.current = false
         return
@@ -74,6 +75,7 @@ export default function TabPanel({
       if (refToastId.current) {
         toast.close(refToastId.current)
       }
+
       refToastId.current = toast({
         description: 'Adapting tab to your browser dimensions...',
         status: 'info',
@@ -83,6 +85,8 @@ export default function TabPanel({
       refetchTab().then(() => {
         toast.close(refToastId.current)
       })
+      // Disabling this effect on the first load of the tab to prevent triggering the toast only because of scrollbar appearing/disappearing
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [widthBrowser, refetchTab, toast])
   }
   return (

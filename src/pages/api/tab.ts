@@ -6,7 +6,6 @@ export default async function handlerTab(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  
   let formattedReq: ApiRequestTab = {
     url: req.query.q as string,
     width: req.query.width as string,
