@@ -138,7 +138,7 @@ export async function getPuppeteerConf(
     defaultViewport:
       options.widthBrowser && options.heightBrowser
         ? {
-            width: parseInt(options.widthBrowser) - 40,
+            width: parseInt(options.widthBrowser) - 50,
             height: parseInt(options.heightBrowser),
           }
         : Chromium.defaultViewport,

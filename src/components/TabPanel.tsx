@@ -46,11 +46,9 @@ export default function TabPanel({
   const router = useRouter()
   const widthBrowser = useDebounce<number>(
     typeof document !== 'undefined' ? document.documentElement.clientWidth : 0,
-    300,
+    500,
   )
-  console.log(widthBrowser)
   const firstUpdate = useRef<boolean>(true)
-  console.log(firstUpdate)
 
   const flexSongNameDirection = useBreakpointValue({
     base:
