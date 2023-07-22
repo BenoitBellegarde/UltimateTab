@@ -48,7 +48,9 @@ export default function TabPanel({
     typeof document !== 'undefined' ? document.documentElement.clientWidth : 0,
     300,
   )
+  console.log(widthBrowser)
   const firstUpdate = useRef<boolean>(true)
+  console.log(firstUpdate)
 
   const flexSongNameDirection = useBreakpointValue({
     base:
@@ -67,11 +69,11 @@ export default function TabPanel({
     // Hook executed only in browser to prevent NextJS SSR to return a warning
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useLayoutEffect(() => {
-      if (!selectedTabContent) return
       if (firstUpdate.current) {
         firstUpdate.current = false
         return
       }
+      if (!selectedTabContent) return
       if (refToastId.current) {
         toast.close(refToastId.current)
       }
