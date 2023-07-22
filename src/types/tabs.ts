@@ -20,6 +20,8 @@ export interface ApiResponseSearch {
 
 export interface ApiRequestTab {
   url: string
+  width: string
+  height: string
 }
 
 export interface ApiResponseTab {
@@ -59,6 +61,12 @@ export interface TabScrapped {
   tuning?: string[]
   raw_tabs?: string
   htmlTab?: string
+}
+
+export interface PuppeteerOptions {
+  widthBrowser?: string
+  heightBrowser?: string
+  isMobile?: boolean
 }
 
 export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'

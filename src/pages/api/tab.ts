@@ -1,4 +1,3 @@
-import { formatRequestTab } from '../../lib/api/request'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { ApiRequestTab } from '../../types/tabs'
 import { getTab } from '../../lib/core/tab'
@@ -7,9 +6,17 @@ export default async function handlerTab(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  let formattedReq: ApiRequestTab = formatRequestTab(req.url)
+  let formattedReq: ApiRequestTab = {
+    url: req.query.q as string,
+    width: req.query.width as string,
+    height: req.query.height as string,
+  }
   if (formattedReq.url) {
-    let tabs = await getTab(formattedReq.url)
+    let tabs = await getTab(
+      formattedReq.url,
+      formattedReq.width,
+      formattedReq.height,
+    )
     if (tabs) {
       res.status(200).json(tabs)
     } else {

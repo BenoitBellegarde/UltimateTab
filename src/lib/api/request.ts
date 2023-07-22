@@ -7,9 +7,10 @@ import type {
   ApiRequestTab,
   Tab,
   TabScrapped,
+  PuppeteerOptions,
 } from '../../types/tabs'
+import puppeteer, { Page } from 'puppeteer-core'
 import Chromium from 'chrome-aws-lambda'
-import puppeteer from 'puppeteer-core'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -46,16 +47,6 @@ export function formatRequestSearch(uri: string): ApiRequestSearch {
       output.args[keyVal[0]] = keyVal[1]
     }
   }
-  return output
-}
-
-export function formatRequestTab(uri: string): ApiRequestTab {
-  uri = decodeURIComponent(uri)
-
-  let output: ApiRequestTab = {
-    url: uri.split('=')[1],
-  }
-
   return output
 }
 
@@ -116,7 +107,7 @@ export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
       params.type = validateType(params.type)
     }
   }
-  // Rename `q` => `value`
+  // Rename `q` to `value`
   params.value = params.q
 
   return params
@@ -139,13 +130,26 @@ export function formatTabResult(tab: TabScrapped): Tab {
 }
 
 //Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
-export async function getPuppeteerConf() {
-  return puppeteer.launch({
+export async function getPuppeteerConf(
+  options: PuppeteerOptions = {},
+): Promise<{ page: Page; browser: any }> {
+  const browser = await puppeteer.launch({
     args: Chromium.args,
-    defaultViewport: Chromium.defaultViewport,
+    defaultViewport:
+      options.widthBrowser && options.heightBrowser
+        ? {
+            width: parseInt(options.widthBrowser) - 50,
+            height: parseInt(options.heightBrowser),
+          }
+        : Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
       : await Chromium.executablePath,
     headless: true,
   })
+
+  const page: Page = await browser.newPage()
+  options.isMobile &&
+    page.setUserAgent((await browser.userAgent()) + ' Mobile Safari iPhone')
+  return { page, browser }
 }

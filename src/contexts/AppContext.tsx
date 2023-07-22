@@ -28,6 +28,7 @@ interface AppState {
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
   favoriteActive: boolean
   setFavoriteActive: Dispatch<SetStateAction<boolean>>
+  refetchTab: Function
 }
 export const AppStateContext = createContext<AppState | null>(null)
 
@@ -50,9 +51,11 @@ export function AppStateProvider({ children }) {
 
   const toast = useToast()
 
-  const { isLoading: isLoadingTab, data: selectedTabContent } = useTabs(
-    selectedTab.url,
-  )
+  const {
+    isLoading: isLoadingTab,
+    data: selectedTabContent,
+    refetch: refetchTab,
+  } = useTabs(selectedTab.url)
 
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
@@ -94,6 +97,7 @@ export function AppStateProvider({ children }) {
         handleClickFavorite,
         favoriteActive,
         setFavoriteActive,
+        refetchTab,
       }}
     >
       {children}

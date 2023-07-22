@@ -126,7 +126,7 @@ export default function Search(): JSX.Element {
             </HStack>
           </HStack>
         </Flex>
-        {searchValue.trim() !== '' ? (
+        {(!favoriteActive && searchValue.trim() !== '') || favoriteActive ? (
           <SearchPanel
             handleChangeType={setSearchType}
             searchValue={searchValue}

@@ -19,6 +19,7 @@ export default function TabPage(): JSX.Element {
     isLoadingTab,
     selectedTabContent,
     handleClickFavorite,
+    refetchTab,
   } = useAppStateContext()
 
   const title = selectedTabContent
@@ -52,6 +53,7 @@ export default function TabPage(): JSX.Element {
             'undefined'
           }
           handleClickFavorite={handleClickFavorite}
+          refetchTab={refetchTab}
         />
       </Fade>
     </>
