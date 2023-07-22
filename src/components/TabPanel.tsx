@@ -87,7 +87,7 @@ export default function TabPanel({
       })
       // Disabling this effect on the first load of the tab to prevent triggering the toast only because of scrollbar appearing/disappearing
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [widthBrowser, refetchTab, toast])
+    }, [widthBrowser, refetchTab])
   }
   return (
     <>

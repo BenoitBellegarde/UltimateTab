@@ -47,19 +47,21 @@ export default function SearchPanel({
   )
   const router = useRouter()
   const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
-
   return (
     <Box px="2" py={3} overflowY={'auto'}>
       <Flex wrap={'wrap'} justifyContent="center">
         {isError && (
           <Box color={'red'}>Erreur lors de la récupération des données</Box>
         )}
-        {((searchValue && showSearchInput) || !showSearchInput) &&
+        {((!favoriteActive && searchValue && showSearchInput) ||
+          favoriteActive) &&
           ((!isLoading && !favoriteActive) || favoriteActive) &&
-          data?.results?.length === 0 && (
+          (data?.results?.length === 0 || data?.results === null) && (
             <Box textAlign="center" py={10} px={6}>
               <Icon as={RiEmotionSadLine} boxSize={20} color={'gray.400'} />
-              <Text color={'gray.500'}>No results found</Text>
+              <Text color={'gray.500'}>
+                No {favoriteActive ? 'favorites' : 'results'} found
+              </Text>
             </Box>
           )}
         {isLoading && !favoriteActive ? (
