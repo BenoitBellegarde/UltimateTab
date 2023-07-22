@@ -45,7 +45,7 @@ export default function TabPanel({
 }: TabPanelProps) {
   const router = useRouter()
   const widthBrowser = useDebounce<number>(
-    typeof window !== 'undefined' ? document.documentElement.clientWidth : 0,
+    typeof document !== 'undefined' ? document.documentElement.clientWidth : 0,
     300,
   )
   const firstUpdate = useRef<boolean>(true)
@@ -62,25 +62,29 @@ export default function TabPanel({
   const refToastId = useRef<ToastId>()
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
 
-  // Refetch tab when resizing browser or changing orientation to get the updated responsive tab from UG  
-  useLayoutEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false
-      return
-    }
-    if (refToastId.current) {
-      toast.close(refToastId.current)
-    }
-    refToastId.current = toast({
-      description: 'Adapting tab to your browser dimensions...',
-      status: 'info',
-      duration: null,
-      isClosable: true,
-    })
-    refetchTab().then(() => {
-      toast.close(refToastId.current)
-    })
-  }, [widthBrowser, refetchTab, toast])
+  // Refetch tab when resizing browser or changing orientation to get the updated responsive tab from UG
+  if (typeof document !== 'undefined') {
+    // Hook executed only in browser to prevent NextJS SSR to return a warning
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useLayoutEffect(() => {
+      if (firstUpdate.current) {
+        firstUpdate.current = false
+        return
+      }
+      if (refToastId.current) {
+        toast.close(refToastId.current)
+      }
+      refToastId.current = toast({
+        description: 'Adapting tab to your browser dimensions...',
+        status: 'info',
+        duration: null,
+        isClosable: true,
+      })
+      refetchTab().then(() => {
+        toast.close(refToastId.current)
+      })
+    }, [widthBrowser, refetchTab, toast])
+  }
   return (
     <>
       <Box

@@ -50,15 +50,6 @@ export function formatRequestSearch(uri: string): ApiRequestSearch {
   return output
 }
 
-export function formatRequestTab(uri: string): ApiRequestTab {
-  const uriParams = new URLSearchParams(uri)
-  return {
-    url: uriParams.get('/api/tab?q'),
-    width: uriParams.get('width'),
-    height: uriParams.get('height'),
-  }
-}
-
 export function encodeParam(key: string, value: any[]): string {
   if (Array.isArray(value)) {
     return value.map((item) => encodeParam(`${key}[]`, item)).join('&')
