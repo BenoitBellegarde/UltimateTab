@@ -8,8 +8,8 @@ import type {
   Tab,
   TabScrapped,
 } from '../../types/tabs'
+import puppeteer, { Page } from 'puppeteer-core'
 import Chromium from 'chrome-aws-lambda'
-import puppeteer from 'puppeteer-core'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -50,13 +50,13 @@ export function formatRequestSearch(uri: string): ApiRequestSearch {
 }
 
 export function formatRequestTab(uri: string): ApiRequestTab {
-  uri = decodeURIComponent(uri)
-
-  let output: ApiRequestTab = {
-    url: uri.split('=')[1],
+  const uriParams = new URLSearchParams(uri)
+  console.log(uri)
+  return {
+    url: uriParams.get('/api/tab?q'),
+    width: uriParams.get('width'),
+    height: uriParams.get('height'),
   }
-
-  return output
 }
 
 export function encodeParam(key: string, value: any[]): string {
@@ -139,13 +139,18 @@ export function formatTabResult(tab: TabScrapped): Tab {
 }
 
 //Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
-export async function getPuppeteerConf() {
-  return puppeteer.launch({
+export async function getPuppeteerConf(options : {widthBrowser? : string, heightBrowser? : string, isMobile? : boolean } = {}): Promise<{page : Page, browser : any}> {
+  const browser =  await puppeteer.launch({
     args: Chromium.args,
-    defaultViewport: Chromium.defaultViewport,
+    defaultViewport :
+       (options.widthBrowser && options.heightBrowser) ? { width : parseInt(options.widthBrowser)-30, height : parseInt(options.heightBrowser) } : Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
       : await Chromium.executablePath,
     headless: true,
   })
+
+  const page: Page = await browser.newPage()
+  options.isMobile && page.setUserAgent((await browser.userAgent()) + ' Mobile Safari iPhone')
+  return { page, browser }
 }

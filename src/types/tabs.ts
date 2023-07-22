@@ -20,6 +20,8 @@ export interface ApiResponseSearch {
 
 export interface ApiRequestTab {
   url: string
+  width : string
+  height : string
 }
 
 export interface ApiResponseTab {

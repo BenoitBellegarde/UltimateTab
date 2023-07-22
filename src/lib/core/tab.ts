@@ -23,15 +23,15 @@ export function validateType(type: string): string {
 }
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
-  const browser = await getPuppeteerConf()
-  const page: Page = await browser.newPage()
+  const { page, browser } = await getPuppeteerConf()
   await page.goto(url)
 
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
+    console.log(data)
     let results: TabScrapped[] = [
-      ...(data.other_tabs || []),
-      ...(data.results || []),
+      ...(data?.other_tabs || []),
+      ...(data?.results || []),
     ]
 
     const pagination: Pagination = {
@@ -66,9 +66,13 @@ export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   return tabsParsed
 }
 
-export async function getTab(url: string): Promise<ApiResponseTab> {
-  const browser = await getPuppeteerConf()
-  const page: Page = await browser.newPage()
+export async function getTab(
+  url: string,
+  width?: string,
+  height?: string,
+): Promise<ApiResponseTab> {
+  const { page, browser } = await getPuppeteerConf({widthBrowser : width,heightBrowser : height, isMobile : true})
+
   await page.goto(url)
 
   const tabParsed: Tab = await page.evaluate(() => {
