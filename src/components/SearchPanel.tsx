@@ -109,7 +109,12 @@ export default function SearchPanel({
                 </Text>
                 <br /> {tab.name}
               </LinkOverlay>
-              <Box display={'flex'} alignItems={'center'} whiteSpace={'pre'} ml={2}>
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                whiteSpace={'pre'}
+                ml={2}
+              >
                 {tab.type && TAB_TYPES_COLORS[tab.type] && (
                   <Badge mr={2} colorScheme={TAB_TYPES_COLORS[tab.type]}>
                     {tab.type}

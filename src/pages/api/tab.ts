@@ -9,7 +9,11 @@ export default async function handlerTab(
 ) {
   let formattedReq: ApiRequestTab = formatRequestTab(req.url)
   if (formattedReq.url) {
-    let tabs = await getTab(formattedReq.url,formattedReq.width,formattedReq.height)
+    let tabs = await getTab(
+      formattedReq.url,
+      formattedReq.width,
+      formattedReq.height,
+    )
     if (tabs) {
       res.status(200).json(tabs)
     } else {

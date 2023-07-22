@@ -7,6 +7,7 @@ import type {
   ApiRequestTab,
   Tab,
   TabScrapped,
+  PuppeteerOptions,
 } from '../../types/tabs'
 import puppeteer, { Page } from 'puppeteer-core'
 import Chromium from 'chrome-aws-lambda'
@@ -51,7 +52,6 @@ export function formatRequestSearch(uri: string): ApiRequestSearch {
 
 export function formatRequestTab(uri: string): ApiRequestTab {
   const uriParams = new URLSearchParams(uri)
-  console.log(uri)
   return {
     url: uriParams.get('/api/tab?q'),
     width: uriParams.get('width'),
@@ -116,7 +116,7 @@ export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
       params.type = validateType(params.type)
     }
   }
-  // Rename `q` => `value`
+  // Rename `q` to `value`
   params.value = params.q
 
   return params
@@ -139,11 +139,18 @@ export function formatTabResult(tab: TabScrapped): Tab {
 }
 
 //Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
-export async function getPuppeteerConf(options : {widthBrowser? : string, heightBrowser? : string, isMobile? : boolean } = {}): Promise<{page : Page, browser : any}> {
-  const browser =  await puppeteer.launch({
+export async function getPuppeteerConf(
+  options: PuppeteerOptions = {},
+): Promise<{ page: Page; browser: any }> {
+  const browser = await puppeteer.launch({
     args: Chromium.args,
-    defaultViewport :
-       (options.widthBrowser && options.heightBrowser) ? { width : parseInt(options.widthBrowser)-30, height : parseInt(options.heightBrowser) } : Chromium.defaultViewport,
+    defaultViewport:
+      options.widthBrowser && options.heightBrowser
+        ? {
+            width: parseInt(options.widthBrowser) - 40,
+            height: parseInt(options.heightBrowser),
+          }
+        : Chromium.defaultViewport,
     executablePath: process.env.IS_LOCAL
       ? process.env.CHROME_EXECUTABLE_PATH
       : await Chromium.executablePath,
@@ -151,6 +158,7 @@ export async function getPuppeteerConf(options : {widthBrowser? : string, height
   })
 
   const page: Page = await browser.newPage()
-  options.isMobile && page.setUserAgent((await browser.userAgent()) + ' Mobile Safari iPhone')
+  options.isMobile &&
+    page.setUserAgent((await browser.userAgent()) + ' Mobile Safari iPhone')
   return { page, browser }
 }

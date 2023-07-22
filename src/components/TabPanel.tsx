@@ -3,20 +3,19 @@ import {
   Box,
   Button,
   Flex,
-  FlexboxProps,
-  FlexProps,
   Icon,
   IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  ResponsiveValue,
   Skeleton,
   Text,
+  ToastId,
   Tooltip,
   useBreakpointValue,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 import HTMLReactParser from 'html-react-parser'
 import { GiGuitarHead } from 'react-icons/gi'
@@ -24,8 +23,9 @@ import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
 import { Tab } from '../types/tabs'
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler, useEffect, useLayoutEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
+import useDebounce from '../hooks/useDebounce'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -33,6 +33,7 @@ interface TabPanelProps {
   selectedTabContent: Tab
   isLoading: boolean
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
+  refetchTab: Function
 }
 
 export default function TabPanel({
@@ -40,8 +41,15 @@ export default function TabPanel({
   selectedTabContent,
   isLoading,
   handleClickFavorite,
+  refetchTab,
 }: TabPanelProps) {
   const router = useRouter()
+  const widthBrowser = useDebounce<number>(
+    typeof window !== 'undefined' ? document.documentElement.clientWidth : 0,
+    300,
+  )
+  const firstUpdate = useRef<boolean>(true)
+
   const flexSongNameDirection = useBreakpointValue({
     base:
       selectedTabContent &&
@@ -50,7 +58,29 @@ export default function TabPanel({
         : 'row',
     sm: 'row',
   })
+  const toast = useToast()
+  const refToastId = useRef<ToastId>()
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
+
+  // Refetch tab when resizing browser or changing orientation to get the updated responsive tab from UG  
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
+    if (refToastId.current) {
+      toast.close(refToastId.current)
+    }
+    refToastId.current = toast({
+      description: 'Adapting tab to your browser dimensions...',
+      status: 'info',
+      duration: null,
+      isClosable: true,
+    })
+    refetchTab().then(() => {
+      toast.close(refToastId.current)
+    })
+  }, [widthBrowser, refetchTab, toast])
   return (
     <>
       <Box
