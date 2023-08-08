@@ -180,7 +180,10 @@ export async function getPuppeteerConf(
   })
 
   const page: Page = await browser.newPage()
-  options.isMobile &&
-    page.setUserAgent((await browser.userAgent()) + ' Mobile Safari iPhone')
+  if(options.isMobile){
+    //Scrapping as a mobile to get responsive tab
+    //Issue with UG when having a Linux userAgent, returning an error page
+    page.setUserAgent(((await browser.userAgent()).replace('Linux','Windows')) + ' Mobile Safari iPhone')
+  }   
   return { page, browser }
 }
