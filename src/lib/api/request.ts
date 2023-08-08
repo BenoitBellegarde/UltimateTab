@@ -4,13 +4,11 @@ import type {
   ApiRequestSearch,
   ApiArgsSearch,
   ApiResponseSearch,
-  ApiRequestTab,
   Tab,
   TabScrapped,
   PuppeteerOptions,
 } from '../../types/tabs'
-import puppeteer, { Page } from 'puppeteer-core'
-import Chromium from 'chrome-aws-lambda'
+import puppeteer, { Page } from 'puppeteer'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -134,18 +132,14 @@ export async function getPuppeteerConf(
   options: PuppeteerOptions = {},
 ): Promise<{ page: Page; browser: any }> {
   const browser = await puppeteer.launch({
-    args: Chromium.args,
     defaultViewport:
       options.widthBrowser && options.heightBrowser
         ? {
             width: parseInt(options.widthBrowser) - 50,
             height: parseInt(options.heightBrowser),
           }
-        : Chromium.defaultViewport,
-    executablePath: process.env.IS_LOCAL
-      ? process.env.CHROME_EXECUTABLE_PATH
-      : await Chromium.executablePath,
-    headless: true,
+        : null,
+        headless: "new"
   })
 
   const page: Page = await browser.newPage()
