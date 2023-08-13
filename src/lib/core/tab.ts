@@ -23,7 +23,7 @@ export function validateType(type: string): string {
 
 export async function getTabsList(url: string): Promise<ApiResponseSearch> {
   const { page, browser } = await getPuppeteerConf()
-  await page.goto(url)
+  await page.goto(url, { waitUntil: 'load' })
 
   const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
     const data = window.UGAPP.store.page.data
@@ -74,7 +74,7 @@ export async function getTab(
       widthBrowser: width,
       heightBrowser: height,
     })
-    await page.goto(url)
+    await page.goto(url, { waitUntil: 'load' })
 
     const tabParsed: Tab = await page.evaluate(() => {
       const { tab_view } = window.UGAPP.store.page.data
@@ -152,7 +152,7 @@ export async function getTab(
       (await browser.userAgent()).replace('Linux', 'Windows') +
         ' Mobile Safari iPhone',
     )
-    await page.goto(url)
+    await page.goto(url, { waitUntil: 'load' })
 
     const tabResponsive: string = await page.evaluate(() => {
       return document.querySelector('pre')?.outerHTML || ''

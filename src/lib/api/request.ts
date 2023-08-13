@@ -9,6 +9,10 @@ import type {
   PuppeteerOptions,
 } from '../../types/tabs'
 import puppeteer, { Page } from 'puppeteer'
+import {
+  PUPPETEER_BLOCK_RESSOURCE_NAME,
+  PUPPETEER_BLOCK_RESSOURCE_TYPE,
+} from '../../constants'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -180,6 +184,21 @@ export async function getPuppeteerConf(
   })
 
   const page: Page = await browser.newPage()
+  // Block every ressources that we don't need to load
+  await page.setRequestInterception(true)
+  page.on('request', (request) => {
+    const requestUrl = request.url().split('?')[0]
+    if (
+      PUPPETEER_BLOCK_RESSOURCE_TYPE.includes(request.resourceType()) ||
+      PUPPETEER_BLOCK_RESSOURCE_NAME.some((resource) =>
+        requestUrl.includes(resource),
+      )
+    ) {
+      request.abort()
+    } else {
+      request.continue()
+    }
+  })
 
   return { page, browser }
 }
