@@ -176,7 +176,7 @@ export async function getPuppeteerConf(
             height: parseInt(options.heightBrowser),
           }
         : null,
-    headless: 'new',
+    headless: false,
   })
 
   const page: Page = await browser.newPage()
