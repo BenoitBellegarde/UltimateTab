@@ -36,7 +36,7 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
     }
     chordDiagramRef.current.innerHTML = ''
     document
-      .querySelectorAll('span[data-name]')
+      .querySelectorAll('span.text-chord')
       ?.forEach((el: HTMLSpanElement) => (el.onclick = () => showChords(el)))
   }, [dep, toast])
 

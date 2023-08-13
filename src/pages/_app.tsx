@@ -11,7 +11,16 @@ import '@fontsource/poppins/400.css'
 import Head from 'next/head'
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  )
 
   return (
     <QueryClientProvider client={queryClient}>
