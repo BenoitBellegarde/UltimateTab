@@ -1,3 +1,43 @@
+// Puppeteer : Block useless ressources type like fonts, images etc.
+export const PUPPETEER_BLOCK_RESSOURCE_TYPE = [
+  'beacon',
+  'csp_report',
+  'font',
+  'image',
+  'imageset',
+  'manifest',
+  'xhr',
+  'fetch',
+  'other',
+  'ping',
+  'media',
+  'object',
+  'texttrack',
+  'stylesheet',
+]
+// Puppeteer : Block useless ressources by domains, like google-analytics etc.
+export const PUPPETEER_BLOCK_RESSOURCE_NAME = [
+  'adition',
+  'adzerk',
+  'analytics',
+  'cdn.api.twitter',
+  'clicksor',
+  'clicktale',
+  'doubleclick',
+  'exelator',
+  'facebook',
+  'fontawesome',
+  'google',
+  'google-analytics',
+  'googletagmanager',
+  'mixpanel',
+  'optimizely',
+  'quantserve',
+  'sharethrough',
+  'tiqcdn',
+  'zedo',
+]
+
 export const TAB_TYPES = {
   All: 'All',
   Tab: 'Tabs',

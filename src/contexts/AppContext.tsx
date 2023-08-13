@@ -34,7 +34,7 @@ export const AppStateContext = createContext<AppState | null>(null)
 
 export function AppStateProvider({ children }) {
   const [searchValue, setSearchValue] = useState<string>('')
-  const debounedSearchValue = useDebounce<string>(searchValue, 500)
+  const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])

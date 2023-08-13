@@ -79,6 +79,7 @@ export default function SearchPanel({
               key={index}
               onClick={() => {
                 router.push(`/tab/${tab.slug}`)
+                window.scrollTo(0, 0)
               }}
               as="div"
               p="5"
