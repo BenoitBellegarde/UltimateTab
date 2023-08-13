@@ -4,13 +4,11 @@ import type {
   ApiRequestSearch,
   ApiArgsSearch,
   ApiResponseSearch,
-  ApiRequestTab,
   Tab,
   TabScrapped,
   PuppeteerOptions,
 } from '../../types/tabs'
-import puppeteer, { Page } from 'puppeteer-core'
-import Chromium from 'chrome-aws-lambda'
+import puppeteer, { Page } from 'puppeteer'
 
 export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
@@ -134,22 +132,54 @@ export async function getPuppeteerConf(
   options: PuppeteerOptions = {},
 ): Promise<{ page: Page; browser: any }> {
   const browser = await puppeteer.launch({
-    args: Chromium.args,
+    args: [
+      '--autoplay-policy=user-gesture-required',
+      '--disable-background-networking',
+      '--disable-background-timer-throttling',
+      '--disable-backgrounding-occluded-windows',
+      '--disable-breakpad',
+      '--disable-client-side-phishing-detection',
+      '--disable-component-update',
+      '--disable-default-apps',
+      '--disable-dev-shm-usage',
+      '--disable-domain-reliability',
+      '--disable-extensions',
+      '--disable-features=AudioServiceOutOfProcess',
+      '--disable-hang-monitor',
+      '--disable-ipc-flooding-protection',
+      '--disable-notifications',
+      '--disable-offer-store-unmasked-wallet-cards',
+      '--disable-popup-blocking',
+      '--disable-print-preview',
+      '--disable-prompt-on-repost',
+      '--disable-renderer-backgrounding',
+      '--disable-setuid-sandbox',
+      '--disable-speech-api',
+      '--disable-sync',
+      '--hide-scrollbars',
+      '--ignore-gpu-blacklist',
+      '--metrics-recording-only',
+      '--mute-audio',
+      '--no-default-browser-check',
+      '--no-first-run',
+      '--no-pings',
+      '--no-sandbox',
+      '--no-zygote',
+      '--password-store=basic',
+      '--use-gl=swiftshader',
+      '--use-mock-keychain',
+    ],
     defaultViewport:
       options.widthBrowser && options.heightBrowser
         ? {
             width: parseInt(options.widthBrowser) - 50,
             height: parseInt(options.heightBrowser),
           }
-        : Chromium.defaultViewport,
-    executablePath: process.env.IS_LOCAL
-      ? process.env.CHROME_EXECUTABLE_PATH
-      : await Chromium.executablePath,
-    headless: true,
+        : null,
+    headless: 'new',
   })
 
   const page: Page = await browser.newPage()
-  options.isMobile &&
-    page.setUserAgent((await browser.userAgent()) + ' Mobile Safari iPhone')
+
   return { page, browser }
 }

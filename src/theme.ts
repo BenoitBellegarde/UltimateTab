@@ -7,7 +7,7 @@ export const extendedTheme = extendTheme({
   },
   styles: {
     global: (props: StyleFunctionProps) => ({
-      'span[data-name]': {
+      'span.text-chord': {
         cursor: 'pointer',
         color: 'twitter.600 !important',
         fontWeight: 'bold',

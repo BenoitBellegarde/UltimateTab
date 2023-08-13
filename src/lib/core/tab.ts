@@ -72,7 +72,6 @@ export async function getTab(
   const { page, browser } = await getPuppeteerConf({
     widthBrowser: width,
     heightBrowser: height,
-    isMobile: true,
   })
 
   await page.goto(url)
@@ -97,7 +96,6 @@ export async function getTab(
     ]
     const difficulty: string = tab_view?.ug_difficulty || 'unknown'
     const raw_tabs: string = tab_view?.wiki_tab?.content || ''
-    const htmlTab: string = document.querySelector('code')?.outerHTML || ''
     const versions: TabScrapped[] =
       tab_view?.versions.filter(
         (tab: TabScrapped) => tab.type !== 'Official',
@@ -130,13 +128,23 @@ export async function getTab(
       difficulty,
       tuning,
       raw_tabs,
-      htmlTab,
       numberRates: votes,
       type: type,
       slug: tab_url.split('/').splice(-2).join('/'),
       rating: parseFloat(rating.toFixed(2)),
       versions: versionsFormatted,
     }
+  })
+  //Scrapping as a mobile to get responsive tab content
+  //Issue with UG when having a Linux userAgent, returning an error page
+  await page.setUserAgent(
+    (await browser.userAgent()).replace('Linux', 'Windows') +
+      ' Mobile Safari iPhone',
+  )
+  await page.reload()
+
+  tabParsed.htmlTab = await page.evaluate(() => {
+    return document.querySelector('pre')?.outerHTML || ''
   })
   await browser.close()
   const { access_token } = await getSpotifyAccessToken()
