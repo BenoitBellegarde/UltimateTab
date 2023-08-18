@@ -26,6 +26,14 @@ export default function Document(): JSX.Element {
         />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="author" content="Benoit Bellegarde" />
+        <meta
+          name="keywords"
+          content="Ultimate, Tab, scrapped, guitar, ads, free"
+        />
+        <meta
+          name="description"
+          content="Browse every guitar tabs from Ultimate Guitar with an ads-free, enhanced and responsive interface."
+        ></meta>
       </Head>
       <body>
         <ColorModeScript initialColorMode={extendedTheme.initialColorMode} />

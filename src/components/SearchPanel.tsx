@@ -120,7 +120,7 @@ export default function SearchPanel({
               >
                 {tab.type && TAB_TYPES_COLORS[tab.type] && (
                   <Badge mr={2} colorScheme={TAB_TYPES_COLORS[tab.type]}>
-                    {tab.type}
+                    {tab.type.replace('Tabs', 'Tab')}
                   </Badge>
                 )}
                 <StarIcon color={'yellow.400'} mr={'5px'} /> {tab.rating} (

@@ -13,11 +13,12 @@ const getDatas = async (
   return await response.json()
 }
 export default function useTabsList(value: string, type: string, page: number) {
+  const valueLowered = value.toLowerCase()
   return useQuery(
-    ['searchTab', value, type, page],
-    async ({ signal }) => getDatas(value, type, page, signal),
+    ['searchTab', valueLowered, type, page],
+    async ({ signal }) => getDatas(valueLowered, type, page, signal),
     {
-      enabled: value.length > 0 && type.length > 0,
+      enabled: valueLowered.length > 0 && type.length > 0,
     },
   )
 }

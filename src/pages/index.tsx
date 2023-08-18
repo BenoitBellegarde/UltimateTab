@@ -17,7 +17,10 @@ export default function Home(): JSX.Element {
   return (
     <>
       <Head>
-        <title>Ultimate Tab</title>
+        <title>
+          Ultimate Tab - Browse every guitar tabs from Ultimate Guitar with an
+          ads-free, enhanced and responsive interface.
+        </title>
       </Head>
       <Fade style={{ display: 'flex', flexGrow: '1' }} in={true}>
         <Flex w={'100%'} direction={{ base: 'column', md: 'row' }}>
@@ -65,8 +68,8 @@ export default function Home(): JSX.Element {
                 </Text>{' '}
               </Heading>
               <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-                Browse every guitar tabs scraped from Ultimate Guitar with an
-                ads-free, enhanced and responsive interface.
+                Browse every guitar tabs from Ultimate Guitar with an ads-free,
+                enhanced and responsive interface.
               </Text>
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
                 <Button
