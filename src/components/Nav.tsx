@@ -24,9 +24,12 @@ export default function Nav({
 }: {
   refBackdrop: MutableRefObject<HTMLDivElement>
 }): JSX.Element {
+  const [valueAC, setValueAC] = useState<string>('')
   const { colorMode, toggleColorMode } = useColorMode()
-  const { searchValue, setSearchValue } = useAppStateContext()
-  const { data: dataAC } = useAutocomplete(searchValue)
+  const { setSearchValue } = useAppStateContext()
+  const { data: dataAC } = useAutocomplete(valueAC)
+  const suggestions =
+    (!dataAC || dataAC.length === 0) && valueAC ? [valueAC] : dataAC
   const router = useRouter()
   const refInput = useRef<HTMLInputElement>(null)
   const titleHeader = useBreakpointValue({ base: 'Ut', md: 'Ultimate tab' })
@@ -34,6 +37,7 @@ export default function Nav({
   const fontSizeSuggestions = useBreakpointValue({ base: 'sm', md: 'md' })
   const marginIconSearch = useBreakpointValue({ base: 2, md: 4 })
   const [inputFocus, setInputFocus] = useState<boolean>(false)
+
   return (
     <>
       <Box px={4}>
@@ -71,10 +75,7 @@ export default function Nav({
               <Input
                 ref={refInput}
                 onChange={(e) => {
-                  if (router.pathname !== '/search') {
-                    router.push('/search')
-                  }
-                  setSearchValue(e.target.value)
+                  setValueAC(e.target.value)
                 }}
                 onFocus={() => {
                   setInputFocus(true)
@@ -86,6 +87,12 @@ export default function Nav({
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
+                    if (router.pathname !== '/search') {
+                      router.push('/search')
+                    }
+                    setSearchValue(
+                      valueAC.charAt(0).toUpperCase() + valueAC.slice(1),
+                    )
                     refInput.current.blur()
                     setInputFocus(false)
                     refBackdrop.current.style.display = 'none'
@@ -94,20 +101,20 @@ export default function Nav({
                 placeholder="Search a song or an artist..."
                 borderRadius={!inputFocus && 'full'}
                 bg={'var(--chakra-colors-chakra-body-bg)'}
-                value={searchValue}
+                value={valueAC}
               />
               <Box
                 position={'absolute'}
                 top="100%"
                 left={0}
                 right={0}
-                borderWidth={dataAC ? 2 : 0}
+                borderWidth={suggestions ? 2 : 0}
                 borderColor={borderColor}
                 shadow={'md'}
                 display={inputFocus ? 'block' : 'none'}
                 bg={'var(--chakra-colors-chakra-body-bg)'}
               >
-                {dataAC?.map((result, index) => (
+                {suggestions?.map((result, index) => (
                   <LinkBox
                     className="tab-result"
                     key={index}
@@ -115,10 +122,13 @@ export default function Nav({
                       if (router.pathname !== '/search') {
                         router.push('/search')
                       }
-                      setSearchValue(
+                      setValueAC(
                         result.charAt(0).toUpperCase() + result.slice(1),
                       )
-                      refInput.current.blur()
+                      setSearchValue(
+                        result.charAt(0).toUpperCase() + result.slice(1),
+                      ),
+                        refInput.current.blur()
                     }}
                     // Disable blur when clicking on suggestion, manually blur the input onClick event to setSearchValue before dismissing suggestions box
                     // https://stackoverflow.com/a/57630197

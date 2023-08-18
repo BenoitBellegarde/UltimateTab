@@ -4,7 +4,10 @@ export const getAutocomplete = async (
   signal: AbortSignal,
 ): Promise<string[]> => {
   const firstWord: string = value.split(' ')[0]
-  const response = await fetch(`api/autocomplete?q=${value}`, { signal })
+  const response = await fetch(
+    `${window.location.origin}/api/autocomplete?q=${value}`,
+    { signal },
+  )
   return await response.json()
 }
 export default function useAutocomplete(value: string) {

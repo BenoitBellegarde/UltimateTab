@@ -11,7 +11,6 @@ import {
   Fade,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import useTabsList from '../hooks/useTabsList'
 import SearchPanel from '../components/SearchPanel'
 import Head from 'next/head'
 import useAppStateContext from '../hooks/useAppStateContext'
@@ -24,16 +23,17 @@ export default function Search(): JSX.Element {
   const {
     searchValue,
     setSearchValue,
-    debounedSearchValue,
     searchType,
     setSearchType,
-    currentPage,
     setCurrentPage,
     selectedTab,
     setSelectedTab,
     favorites,
     favoriteActive,
     setFavoriteActive,
+    isLoadingTabList,
+    isErrorTabList,
+    dataTabList,
   } = useAppStateContext()
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const sizeImg = useBreakpointValue({
@@ -43,15 +43,9 @@ export default function Search(): JSX.Element {
     lg: '30%',
   })
 
-  const { isLoading, isError, data } = useTabsList(
-    debounedSearchValue,
-    searchType,
-    currentPage,
-  )
-
   const { data: dataFavorites } = useFavoriteTabs(
     favorites,
-    debounedSearchValue,
+    searchValue,
     searchType,
   )
 
@@ -65,7 +59,7 @@ export default function Search(): JSX.Element {
 
   useEffect(() => {
     setCurrentPage(1)
-  }, [debounedSearchValue, searchType, setCurrentPage])
+  }, [searchValue, searchType, setCurrentPage])
 
   return (
     <>
@@ -133,9 +127,9 @@ export default function Search(): JSX.Element {
             type={searchType}
             handleChangeValue={setSearchValue}
             handleClickTab={setSelectedTab}
-            isLoading={isLoading}
-            isError={isError}
-            data={favoriteActive ? dataFavorites : data}
+            isLoading={isLoadingTabList}
+            isError={isErrorTabList}
+            data={favoriteActive ? dataFavorites : dataTabList}
             selectedTab={selectedTab}
             handleChangePage={setCurrentPage}
             favoriteActive={favoriteActive}

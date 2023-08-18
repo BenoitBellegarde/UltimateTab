@@ -9,12 +9,12 @@ import {
 import useDebounce from '../hooks/useDebounce'
 import useLocalStorage from '../hooks/useLocalStorage'
 import useTabs from '../hooks/useTabs'
-import { Tab } from '../types/tabs'
+import useTabsList from '../hooks/useTabsList'
+import { ApiResponseSearch, Tab } from '../types/tabs'
 
 interface AppState {
   searchValue: string
   setSearchValue: Dispatch<SetStateAction<string>>
-  debounedSearchValue: string
   searchType: string
   setSearchType: Dispatch<SetStateAction<string>>
   currentPage: number
@@ -29,12 +29,14 @@ interface AppState {
   favoriteActive: boolean
   setFavoriteActive: Dispatch<SetStateAction<boolean>>
   refetchTab: Function
+  isLoadingTabList: boolean
+  isErrorTabList: boolean
+  dataTabList: ApiResponseSearch
 }
 export const AppStateContext = createContext<AppState | null>(null)
 
 export function AppStateProvider({ children }) {
   const [searchValue, setSearchValue] = useState<string>('')
-  const debounedSearchValue = useDebounce<string>(searchValue, 300)
   const [searchType, setSearchType] = useState<string>('All')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])
@@ -50,12 +52,17 @@ export function AppStateProvider({ children }) {
   })
 
   const toast = useToast()
-
   const {
     isLoading: isLoadingTab,
     data: selectedTabContent,
     refetch: refetchTab,
   } = useTabs(selectedTab.url)
+
+  const {
+    isLoading: isLoadingTabList,
+    isError: isErrorTabList,
+    data: dataTabList,
+  } = useTabsList(searchValue, searchType, currentPage)
 
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
@@ -83,7 +90,6 @@ export function AppStateProvider({ children }) {
       value={{
         searchValue,
         setSearchValue,
-        debounedSearchValue,
         searchType,
         setSearchType,
         currentPage,
@@ -98,6 +104,9 @@ export function AppStateProvider({ children }) {
         favoriteActive,
         setFavoriteActive,
         refetchTab,
+        isLoadingTabList,
+        isErrorTabList,
+        dataTabList,
       }}
     >
       {children}

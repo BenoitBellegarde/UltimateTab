@@ -13,13 +13,17 @@ export default async function handlerAC(
         firstWord[0]
       }/${firstWord.substring(0, 5)}.js`,
     )
-    const resultAc: AutocompleteScrapped = await scrapAc.json()
-    if (resultAc.suggestions) {
-      const filteredSuggestions = resultAc.suggestions.filter((value) =>
-        value.includes(searchValue.toLowerCase()),
-      )
-      res.status(200).json(filteredSuggestions.splice(0, 5))
-    } else {
+    try {
+      const resultAc: AutocompleteScrapped = await scrapAc.json()
+      if (resultAc.suggestions) {
+        const filteredSuggestions = resultAc.suggestions.filter((value) =>
+          value.includes(searchValue.toLowerCase()),
+        )
+        res.status(200).json(filteredSuggestions.splice(0, 5))
+      } else {
+        res.status(200).json([])
+      }
+    } catch (e) {
       res.status(200).json([])
     }
   } else {
