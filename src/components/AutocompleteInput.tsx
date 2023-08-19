@@ -99,7 +99,12 @@ export default function AutocompleteInput({
             setIdSuggestionHighlighted((prevVal) =>
               prevVal === -1 ? prevVal : prevVal - 1,
             )
+          } else if (e.key === 'Escape') {
+            refInput.current.blur()
+            setInputFocus(false)
+            showBackdrop(false)
           }
+          
         }}
         placeholder="Search a song or an artist..."
         borderRadius={!inputFocus && 'full'}
@@ -152,6 +157,7 @@ export default function AutocompleteInput({
             alignItems="center"
             boxShadow="xs"
             bg={index === idSuggestionHighlighted && 'twitter.400'}
+            color={index === idSuggestionHighlighted && 'white'}
             fontSize={fontSizeSuggestions}
             transition="background-color 0.2s ease 0s"
           >
