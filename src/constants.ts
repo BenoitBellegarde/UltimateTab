@@ -40,7 +40,7 @@ export const PUPPETEER_BLOCK_RESSOURCE_NAME = [
 
 export const TAB_TYPES = {
   All: 'All',
-  Tab: 'Tabs',
+  Tab: 'Tab',
   Chords: 'Chords',
   Bass: 'Bass',
   Ukulele: 'Ukulele',

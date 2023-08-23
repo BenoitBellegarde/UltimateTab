@@ -5,20 +5,19 @@ import {
   Stack,
   useColorMode,
   Text,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Link,
   useBreakpointValue,
 } from '@chakra-ui/react'
-import { MoonIcon, SearchIcon, SunIcon } from '@chakra-ui/icons'
-import { useRouter } from 'next/router'
-import useAppStateContext from '../hooks/useAppStateContext'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import NextLink from 'next/link'
-export default function Nav(): JSX.Element {
+import { MutableRefObject } from 'react'
+import AutocompleteInput from './AutocompleteInput'
+export default function Nav({
+  refBackdrop,
+}: {
+  refBackdrop: MutableRefObject<HTMLDivElement>
+}): JSX.Element {
   const { colorMode, toggleColorMode } = useColorMode()
-  const { setSearchValue } = useAppStateContext()
-  const router = useRouter()
   const titleHeader = useBreakpointValue({ base: 'Ut', md: 'Ultimate tab' })
   return (
     <>
@@ -39,31 +38,8 @@ export default function Nav(): JSX.Element {
             </Link>
           </Flex>
           <Flex alignItems={'center'} width={'100%'}>
-            <InputGroup mr={5}>
-              <InputLeftElement
-                h={'100%'}
-                cursor={'pointer'}
-                onClick={() =>
-                  router.pathname !== '/search' && router.push('/search')
-                }
-              >
-                <SearchIcon color="gray.300" />
-              </InputLeftElement>
-
-              <Input
-                onChange={(e) => {
-                  if (router.pathname !== '/search') {
-                    router.push('/search')
-                  }
-                  setSearchValue(e.target.value)
-                }}
-                placeholder="Search a song or an artist..."
-                size={useBreakpointValue({ base: 'sm', md: 'md' })}
-                borderRadius="full"
-              />
-            </InputGroup>
+            <AutocompleteInput refBackdrop={refBackdrop} />
           </Flex>
-
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
               <Button

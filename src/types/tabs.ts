@@ -63,6 +63,10 @@ export interface TabScrapped {
   htmlTab?: string
 }
 
+export interface AutocompleteScrapped {
+  suggestions: string[]
+}
+
 export interface PuppeteerOptions {
   widthBrowser?: string
   heightBrowser?: string
