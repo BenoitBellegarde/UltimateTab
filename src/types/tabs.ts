@@ -47,6 +47,7 @@ export interface Tab {
   raw_tabs?: string
   htmlTab?: string
   versions?: Tab[]
+  chordsDiagrams?: UGChordDiagram[]
 }
 
 export interface TabScrapped {
@@ -61,6 +62,20 @@ export interface TabScrapped {
   tuning?: string[]
   raw_tabs?: string
   htmlTab?: string
+}
+
+export interface UGChordDiagram {
+  chordName: Array<{
+    fingers: number[]
+    frets: number[]
+    fret: number
+    listCapos: Array<{
+      finger: number
+      fret: number
+      lastString: number
+      startString: number
+    }>
+  }>
 }
 
 export interface AutocompleteScrapped {

@@ -4,6 +4,7 @@ import {
   Pagination,
   ApiResponseTab,
   TabScrapped,
+  UGChordDiagram,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import { ApiResponseSearch } from '../../types/tabs'
@@ -97,6 +98,7 @@ export async function getTab(
       ]
       const difficulty: string = tab_view?.ug_difficulty || 'unknown'
       const raw_tabs: string = tab_view?.wiki_tab?.content || ''
+      const chordsDiagrams: UGChordDiagram[] = tab_view?.applicature || []
       const versions: TabScrapped[] =
         tab_view?.versions.filter(
           (tab: TabScrapped) => tab.type !== 'Official',
@@ -134,6 +136,7 @@ export async function getTab(
         slug: tab_url.split('/').splice(-2).join('/'),
         rating: parseFloat(rating.toFixed(2)),
         versions: versionsFormatted,
+        chordsDiagrams,
       }
     })
     await browser.close()
