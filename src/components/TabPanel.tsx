@@ -242,7 +242,7 @@ export default function TabPanel({
           </Flex>
         </Skeleton>
       </Flex>
-      <ChordDiagram dep={selectedTabContent} />
+      <ChordDiagram />
     </>
   )
 }
