@@ -29,6 +29,9 @@ export const extendedTheme = extendTheme({
       '._ContentWrapperRSWP path': {
         fill: props.colorMode === 'dark' && 'gray.300  !important',
       },
+      '.chord--diagram circle[fill="#ffffff"]': {
+        fill: 'transparent !important',
+      },
       '.chord--diagram circle, .chord--diagram rect': {
         fill: props.colorMode === 'dark' && 'twitter.600 !important',
         stroke: props.colorMode === 'dark' && 'twitter.600 !important',

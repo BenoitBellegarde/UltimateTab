@@ -5,89 +5,113 @@ import {
   Text,
   Flex,
 } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import useAppStateContext from '../hooks/useAppStateContext'
 import ChordBox from '../../node_modules/vexchords/chordbox'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import { UGChord, VexchordsChord, VexchordsOptions } from '../types/tabs'
 
-interface ChordDiagramProps {
-  dep: any
+interface ChordDiagramState {
+  [key: string]: number
 }
 
-export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
+export default function ChordDiagram(): JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-  const chordDiagramRef = useRef(null)
+  const chordDiagramRef = useRef<HTMLDivElement>(null)
   const toast = useToast()
   const { selectedTabContent } = useAppStateContext()
-  const [chordDiagramIndex, setChordDiagramIndex] = useState<any>({})
+  const [chordDiagramIndex, setChordDiagramIndex] = useState<ChordDiagramState>(
+    {},
+  )
   const [chordSelected, setChordSelected] = useState<string>('')
-  console.log(chordDiagramIndex)
+  const chordsDiagrams = useMemo(
+    () => selectedTabContent?.chordsDiagrams || [],
+    [selectedTabContent?.chordsDiagrams],
+  )
   useEffect(() => {
-    chordDiagramRef.current.innerHTML = ''
     document.querySelectorAll('span.text-chord')?.forEach(
       (el: HTMLSpanElement) =>
         (el.onclick = () => {
           setChordSelected(el.innerText.trim())
         }),
     )
-  }, [dep, toast])
-  console.log(chordSelected)
-  const chordsDiagrams = selectedTabContent?.chordsDiagrams || []
-  if (chordSelected && chordDiagramRef !== null) {
-    if (chordsDiagrams[chordSelected] === undefined) {
-      chordDiagramRef.current.innerHTML = ''
-      toast({
-        description: 'No diagram found for this chord 😥',
-        status: 'info',
-        duration: 2000,
-      })
+  }, [selectedTabContent?.htmlTab])
+
+  // Remove diagram when changing tab
+  useEffect(() => setChordSelected(''), [selectedTabContent?.url])
+
+  // Toggling diagram
+  useEffect(() => {
+    if (!chordSelected || !chordDiagramRef) {
       return
     }
+
+    const chordDiagram = chordsDiagrams[chordSelected]
+    if (!chordDiagram) {
+      return
+    }
+
     chordDiagramRef.current.innerHTML = ''
-    const chord = new ChordBox(chordDiagramRef.current, {
+
+    const chordBoxOptions = {
       width: 110,
-      height: 120,
-    })
-    const chordName = chordSelected
-    // Format UG chord to vexchord
-    if (chordDiagramIndex[chordName] === undefined) {
+      height: 110,
+    }
+    const chordBoxReference = new ChordBox(
+      chordDiagramRef.current,
+      chordBoxOptions,
+    )
+    if (chordDiagramIndex[chordSelected] === undefined) {
       setChordDiagramIndex((prevValue) => {
         return {
           ...prevValue,
-          [chordName]: 0,
+          [chordSelected]: 0,
         }
       })
     }
-    const chordIndex = chordDiagramIndex[chordSelected]
+    const diagramSelectedIndex = chordDiagramIndex[chordSelected]
       ? chordDiagramIndex[chordSelected]
       : 0
-    const chordIndexDiagram = chordsDiagrams[chordSelected][chordIndex]
-    const formattedChordArray = chordIndexDiagram.frets.map(
+    const chordDiagramSelected: UGChord =
+      chordsDiagrams[chordSelected][diagramSelectedIndex]
+    const position = chordDiagramSelected.fret
+    const fretValues = chordDiagramSelected.frets
+    const barChordConfiguration = chordDiagramSelected.listCapos[0]
+    /* 
+    Format UG chords to vexchord
+      Vexchords difference with UG :
+        First string (E) is index 1 (UG is 0)
+        Mute string value is 'x' (UG is -1)
+        When using position > 0 : Need to substract position value to all fret values because Vexchords fret index is starting at the position set
+        (ex: position is set to 3, i need to set fret value to 1 to get the note on 4th fret => otherwise UG fret values are not referring to position, it will use the value "4" directly )
+    */
+    const formattedChordsArray: VexchordsChord = fretValues.map(
       (stringElement, index) => {
-        const listCapoAdaptation =
-          chordIndexDiagram.fret > 0 ? chordIndexDiagram.fret - 1 : 0
-        const valueFret =
-          stringElement === -1 ? 'x' : stringElement - listCapoAdaptation
-        return [index + 1, valueFret, chordIndexDiagram.fingers[index]]
+        const positionValueAjustment = position > 0 ? position - 1 : 0
+        const fretValue =
+          stringElement === -1 ? 'x' : stringElement - positionValueAjustment
+        return [index + 1, fretValue, chordDiagramSelected.fingers[index]]
       },
     )
-    const formattedVexchord = {
+    const formattedVexchord: VexchordsOptions = {
       name: chordSelected,
-      chord: formattedChordArray,
-      position: chordIndexDiagram.fret,
-      barres: chordIndexDiagram.listCapos.length > 0 && [
+      chord: formattedChordsArray,
+      position: position,
+      barres: barChordConfiguration && [
         {
-          toString: chordIndexDiagram.listCapos[0].startString + 1,
-          fromString: chordIndexDiagram.listCapos[0].lastString + 1,
+          toString: barChordConfiguration.startString + 1,
+          fromString: barChordConfiguration.lastString + 1,
           fret:
-            chordIndexDiagram.listCapos[0].fret - chordIndexDiagram.fret + 1,
+            position > 0
+              ? barChordConfiguration.fret - position + 1
+              : barChordConfiguration.fret,
         },
       ],
     }
-    console.log(formattedVexchord)
-    chord.draw(formattedVexchord)
-  }
+
+    chordBoxReference.draw(formattedVexchord)
+  }, [chordDiagramIndex, chordsDiagrams, chordSelected, toast])
 
   return (
     <Flex
@@ -154,7 +178,10 @@ export default function ChordDiagram({ dep }: ChordDiagramProps): JSX.Element {
         />
       </Flex>
       <Box ref={chordDiagramRef}></Box>
-      <Text as={'b'}> {chordSelected}</Text>
+      <Text py={1} as={'b'}>
+        {' '}
+        {chordSelected}
+      </Text>
     </Flex>
   )
 }

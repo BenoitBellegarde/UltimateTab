@@ -47,7 +47,7 @@ export interface Tab {
   raw_tabs?: string
   htmlTab?: string
   versions?: Tab[]
-  chordsDiagrams?: UGChordDiagram[]
+  chordsDiagrams?: UGChordCollection[]
 }
 
 export interface TabScrapped {
@@ -64,18 +64,33 @@ export interface TabScrapped {
   htmlTab?: string
 }
 
-export interface UGChordDiagram {
-  chordName: Array<{
-    fingers: number[]
-    frets: number[]
+export interface UGChordCollection {
+  [key: string]: UGChord[]
+}
+
+export interface UGCapo {
+  fret: number
+  startString: number
+  lastString: number
+  finger: number
+}
+
+export interface UGChord {
+  listCapos: UGCapo[]
+  frets: number[]
+  fingers: number[]
+  fret: number
+}
+
+export interface VexchordsOptions {
+  name: string
+  chord: VexchordsChord
+  position: number
+  barres: {
+    toString: number
+    fromString: number
     fret: number
-    listCapos: Array<{
-      finger: number
-      fret: number
-      lastString: number
-      startString: number
-    }>
-  }>
+  }[]
 }
 
 export interface AutocompleteScrapped {
@@ -87,6 +102,8 @@ export interface PuppeteerOptions {
   heightBrowser?: string
   isMobile?: boolean
 }
+
+export type VexchordsChord = ('x' | number)[][]
 
 export type TabTypes = 'All' | 'Video' | 'Tab' | 'Chords' | 'Bass' | 'Ukulele'
 
