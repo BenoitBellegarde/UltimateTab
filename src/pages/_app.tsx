@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-import { Analytics } from '@vercel/analytics/react'
+import { GoogleAnalytics } from 'nextjs-google-analytics'
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -34,8 +34,8 @@ export default function App({ Component, pageProps }: AppProps): JSX.Element {
                 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
               />
             </Head>
+            <GoogleAnalytics trackPageViews strategy="lazyOnload" />
             <Component {...pageProps} />
-            <Analytics />
           </Layout>
         </AppStateProvider>
         <ReactQueryDevtools initialIsOpen={false} />
