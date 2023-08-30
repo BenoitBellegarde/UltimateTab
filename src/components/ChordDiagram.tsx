@@ -126,6 +126,7 @@ export default function ChordDiagram(): JSX.Element {
       flexDirection={'column'}
       alignItems={'center'}
       onClick={() => setChordSelected('')}
+      zIndex={1}
     >
       <Flex
         p={2}
