@@ -1,4 +1,4 @@
-import { AttachmentIcon, ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, StarIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -32,10 +32,10 @@ import {
 } from 'react'
 import { useRouter } from 'next/router'
 import useDebounce from '../hooks/useDebounce'
-import Draggable from 'react-draggable'
 import useBackingtrack from '../hooks/useBackingtrack'
 import ReactPlayer from 'react-player/youtube'
 import { FaPlayCircle, FaPauseCircle, FaVolumeDown } from 'react-icons/fa'
+import PlayerDuration from './PlayerDuration'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -60,8 +60,10 @@ export default function TabPanel({
   )
   const [showBackingTrack, setShowBackingTrack] = useState<boolean>(false)
   const [playBackingTrack, setPlayBackingTrack] = useState<boolean>(false)
-  const [volumeBackingTrack, setVolumeBackingTrack] = useState<number>(0.5)
+  const [volumeBackingTrack, setVolumeBackingTrack] = useState<number>(0.25)
   const [durationBackingTrack, setDurationBackingTrack] = useState<number>(0)
+  const [totalDurationBackingTrack, setTotalDurationBackingTrack] =
+    useState<number>(0)
   const [seekingBackingTrack, setSeekingBackingTrack] = useState<boolean>(false)
   const { data: urlBackingTrack } = useBackingtrack(
     `${selectedTabContent?.artist} ${selectedTabContent?.name} backing track guitar`,
@@ -81,7 +83,7 @@ export default function TabPanel({
   })
   const widthToolsBar = useBreakpointValue({
     base: '100%',
-    sm: '50%'
+    sm: '50%',
   })
   const borderColor = useColorModeValue('gray.200', 'gray.600')
   const toast = useToast()
@@ -254,6 +256,37 @@ export default function TabPanel({
               {selectedTabContent?.tuning.join(' ')}
             </Flex>{' '}
           </Flex>
+          <Flex
+            justifyContent={'start'}
+            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
+            py={2}
+          >
+            <Button
+              variant="outline"
+              _hover={{
+                bg: 'twitter.400',
+                color: 'white',
+                opacity: showBackingTrack ? 0.8 : 1,
+              }}
+              _active={{
+                bg: 'fadebp',
+                color: 'white',
+              }}
+              isActive={showBackingTrack}
+              onClick={() => {
+                setShowBackingTrack((prevState) => !prevState)
+                setPlayBackingTrack((prevValue) => !prevValue)
+              }}
+              size={'sm'}
+              boxShadow="md"
+              fontWeight={'normal'}
+              px="3"
+              py="4"
+              leftIcon={<Icon as={FaPlayCircle} />}
+            >
+              Backing track
+            </Button>
+          </Flex>
         </Skeleton>
       </Box>
 
@@ -273,87 +306,104 @@ export default function TabPanel({
         </Skeleton>
       </Flex>
       <ChordDiagram />
-      <Flex
-        position={'fixed'}
-        width={widthToolsBar}
-        left={'50%'}
-        transform={'translate(-50%, 0)'}
-        height={'60px'}
-        bg={'whiteAlpha.50'}
-        border={'1px'}
-        borderColor={borderColor}
-        backdropFilter={'blur(6px)'}
-        shadow={'lg'}
-        rounded={'full'}
-        bottom={'17px'}
-        justifyContent={'space-between'}
-        alignItems={'center'}
-        px={3}
-        display={isLoading ? 'none' : 'flex'}
-      >
-        <Text fontSize="xs"> Backing track</Text>
-        <Flex flexDirection={'column'} alignItems={'center'}>
-          <IconButton
-            aria-label="Play/Pause"
-            variant="outline"
-            icon={playBackingTrack ? <FaPauseCircle /> : <FaPlayCircle />}
-            _hover={{
-              bg: 'twitter.300',
-              color: 'white',
-            }}
-            _active={{
-              bg: 'twitter.600',
-              color: 'white',
-            }}
-            onClick={() => {
-              setShowBackingTrack(true)
-              setPlayBackingTrack((prevValue) => !prevValue)
-            }}
-            size={'sm'}
-            width={'40px'}
-            boxShadow="md"
-            rounded={'full'}
-            fontWeight={'normal'}
-          />
-          <input
-            type="range"
-            min={0}
-            max={0.999999}
-            step="any"
-            style={{
-              width: '100%',
-            }}
-            value={durationBackingTrack}
-            onMouseDown={() => setSeekingBackingTrack(true)}
-            onChange={(e) =>
-              setDurationBackingTrack(parseFloat(e.target.value))
-            }
-            onMouseUp={(e) => {
-              setSeekingBackingTrack(false)
-              refPlayer.current.seekTo(parseFloat(e.currentTarget.value))
-            }}
-            onTouchStart={(e) => {
-              setSeekingBackingTrack(false)
-              refPlayer.current.seekTo(parseFloat(e.currentTarget.value))
-            }}
-          />
+      {showBackingTrack && (
+        <Flex
+          position={'fixed'}
+          width={widthToolsBar}
+          left={'50%'}
+          transform={'translate(-50%, 0)'}
+          height={'60px'}
+          bg={'whiteAlpha.50'}
+          border={'1px'}
+          borderColor={borderColor}
+          backdropFilter={'blur(6px)'}
+          shadow={'lg'}
+          rounded={'full'}
+          bottom={'17px'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          px={3}
+          display={isLoading ? 'none' : 'flex'}
+        >
+          <Text px={1} fontSize="xs">
+            {' '}
+            Backing track
+          </Text>
+          <Flex flexDirection={'column'} alignItems={'center'}>
+            <IconButton
+              aria-label="Play/Pause"
+              variant="outline"
+              icon={playBackingTrack ? <FaPauseCircle /> : <FaPlayCircle />}
+              _hover={{
+                bg: 'twitter.300',
+                color: 'white',
+              }}
+              _active={{
+                bg: 'twitter.600',
+                color: 'white',
+              }}
+              onClick={() => {
+                setShowBackingTrack(true)
+                setPlayBackingTrack((prevValue) => !prevValue)
+              }}
+              size={'sm'}
+              width={'40px'}
+              boxShadow="md"
+              rounded={'full'}
+              fontWeight={'normal'}
+            />
+            <Flex fontSize={'xs'}>
+              <PlayerDuration
+                seconds={totalDurationBackingTrack * durationBackingTrack}
+              />
+              <input
+                type="range"
+                min={0}
+                max={0.999999}
+                step="any"
+                style={{
+                  width: '100%',
+                  margin: '0 var(--chakra-space-1)',
+                }}
+                value={durationBackingTrack}
+                onMouseDown={() => setSeekingBackingTrack(true)}
+                onTouchStart={() => setSeekingBackingTrack(true)}
+                onChange={(e) => {
+                  setDurationBackingTrack(parseFloat(e.target.value))
+                }}
+                onMouseUp={(e) => {
+                  setSeekingBackingTrack(false)
+                  refPlayer.current.seekTo(parseFloat(e.currentTarget.value))
+                }}
+                onTouchEnd={(e) => {
+                  setSeekingBackingTrack(false)
+                  refPlayer.current.seekTo(parseFloat(e.currentTarget.value))
+                }}
+              />
+              <PlayerDuration
+                seconds={totalDurationBackingTrack * (1 - durationBackingTrack)}
+              />
+            </Flex>
+          </Flex>
+          <Flex>
+            <Icon boxSize={4} mr={1} as={FaVolumeDown} />
+            <input
+              type={'range'}
+              min={0}
+              max={1}
+              style={{
+                maxWidth: '80px',
+                width: '100%',
+              }}
+              step="any"
+              value={volumeBackingTrack}
+              onChange={(e) =>
+                setVolumeBackingTrack(parseFloat(e.target.value))
+              }
+            />
+          </Flex>
         </Flex>
-        <Flex>
-        <Icon boxSize={4} mr={1} as={FaVolumeDown}/>
-        <input
-          type={'range'}
-          min={0}
-          max={1}
-          style={{
-            maxWidth: '80px',
-            width: '100%',
-          }}
-          step="any"
-          value={volumeBackingTrack}
-          onChange={(e) => setVolumeBackingTrack(parseFloat(e.target.value))}
-        />
-        </Flex>
-      </Flex>
+      )}
 
       {urlBackingTrack && showBackingTrack && (
         <ReactPlayer
@@ -365,6 +415,7 @@ export default function TabPanel({
           onProgress={(e) =>
             !seekingBackingTrack && setDurationBackingTrack(e.played)
           }
+          onDuration={(duration) => setTotalDurationBackingTrack(duration)}
         />
       )}
     </>

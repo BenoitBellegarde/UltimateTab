@@ -9,7 +9,7 @@ export const getBackingtrack = async (
   )
   return await response.json()
 }
-export default function useBackingtrack(searchValue: string,show : boolean) {
+export default function useBackingtrack(searchValue: string, show: boolean) {
   return useQuery(
     ['getBackingtrack', searchValue],
     async ({ signal }) => getBackingtrack(searchValue, signal),

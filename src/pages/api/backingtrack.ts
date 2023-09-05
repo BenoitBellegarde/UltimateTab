@@ -1,7 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { ApiRequestTab } from '../../types/tabs'
-import { getTab } from '../../lib/core/tab'
-import { getPuppeteerConf } from '../../lib/api/request'
 
 export default async function handlerTab(
   req: NextApiRequest,
@@ -9,7 +6,7 @@ export default async function handlerTab(
 ) {
   const keywords = req.query.q as string
   if (keywords) {
-    const apiKey = process.env.YOUTUBE_API_KEY; // Replace with your actual API key
+    const apiKey = process.env.YOUTUBE_API_KEY;
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${encodeURIComponent(keywords)}&type=video&part=id&maxResults=1`;
 
     try {
@@ -21,6 +18,8 @@ export default async function handlerTab(
 
             if (videoId) {
                 res.status(200).json(`https://www.youtube.com/watch?v=${videoId}`)
+                res.status(200).json(`https://www.youtube.com/watch?v=adV8-_hgL4g&ab`)
+
             } else {
                 res.status(500).json({ error: 'error fetching youtube backing track' })
             }
