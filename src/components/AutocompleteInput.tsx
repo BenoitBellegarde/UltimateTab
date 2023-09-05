@@ -76,7 +76,6 @@ export default function AutocompleteInput({
             if (router.pathname !== '/search') {
               router.push('/search')
             }
-            console.log(idSuggestionHighlighted)
             let valueToSearch = formatSuggestion(valueAC)
             if (
               idSuggestionHighlighted !== -1 &&
