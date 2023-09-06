@@ -36,6 +36,7 @@ import useBackingtrack from '../hooks/useBackingtrack'
 import ReactPlayer from 'react-player/youtube'
 import { FaPlayCircle, FaPauseCircle, FaVolumeDown } from 'react-icons/fa'
 import PlayerDuration from './PlayerDuration'
+import ChordTransposer from './ChordTransposer'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -286,6 +287,7 @@ export default function TabPanel({
             >
               Backing track
             </Button>
+            {selectedTabContent?.chordsDiagrams && <ChordTransposer chords={selectedTabContent?.chordsDiagrams}/>}
           </Flex>
         </Skeleton>
       </Box>
