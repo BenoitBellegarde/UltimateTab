@@ -47,6 +47,8 @@ export default function SearchPanel({
   )
   const router = useRouter()
   const widthResult = useBreakpointValue({ base: '100%', md: 'sm' })
+  const fontSizeHeading = useBreakpointValue({ base: 'md', md: 'lg' })
+  const fontSizeContent = useBreakpointValue({ base: 'sm', md: 'md' })
   return (
     <Box px="2" py={3} overflowY={'auto'}>
       <Flex wrap={'wrap'} justifyContent="center">
@@ -90,6 +92,7 @@ export default function SearchPanel({
               rounded="md"
               display={'flex'}
               flexGrow={'1'}
+              fontSize={fontSizeContent}
               justifyContent={'space-between'}
               alignItems="center"
               boxShadow="md"
@@ -107,7 +110,7 @@ export default function SearchPanel({
               transition="background-color 0.2s ease 0s"
             >
               <LinkOverlay>
-                <Text fontSize={'lg'} as="b">
+                <Text fontSize={fontSizeHeading} as="b">
                   {tab.artist}
                 </Text>
                 <br /> {tab.name}
