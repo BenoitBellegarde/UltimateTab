@@ -10,6 +10,7 @@ import {
   MenuItem,
   MenuList,
   Skeleton,
+  Spinner,
   Text,
   ToastId,
   Tooltip,
@@ -62,6 +63,8 @@ export default function TabPanel({
   const [chordsDiagrams, setChordsDiagrams] = useState<UGChordCollection[]>(
     selectedTabContent?.chordsDiagrams,
   )
+  const [isLoadingBackingTrack, setIsLoadingBackingTrack] =
+    useState<boolean>(true)
   const [showBackingTrack, setShowBackingTrack] = useState<boolean>(false)
   const [playBackingTrack, setPlayBackingTrack] = useState<boolean>(false)
   const [volumeBackingTrack, setVolumeBackingTrack] = useState<number>(0.25)
@@ -295,7 +298,6 @@ export default function TabPanel({
                 isActive={showBackingTrack}
                 onClick={() => {
                   setShowBackingTrack((prevState) => !prevState)
-                  setPlayBackingTrack((prevValue) => !prevValue)
                 }}
                 size={'sm'}
                 boxShadow="md"
@@ -327,7 +329,7 @@ export default function TabPanel({
         </Skeleton>
       </Flex>
       <ChordDiagram chords={chordsDiagrams} />
-      {showBackingTrack && (
+      {showBackingTrack  && (
         <Flex
           position={'fixed'}
           width={widthToolsBar}
@@ -341,11 +343,13 @@ export default function TabPanel({
           shadow={'lg'}
           rounded={'full'}
           bottom={'17px'}
-          justifyContent={'space-between'}
+          justifyContent={isLoadingBackingTrack ? 'center' : 'space-between'}
           alignItems={'center'}
           px={3}
           display={isLoading ? 'none' : 'flex'}
         >
+          {isLoadingBackingTrack ? (<Spinner color='twitter.200'/>) : (
+            <>
           <Text px={1} fontSize="xs">
             {' '}
             Backing track
@@ -423,9 +427,10 @@ export default function TabPanel({
               }
             />
           </Flex>
+          </>
+          )}
         </Flex>
       )}
-
       {urlBackingTrack && showBackingTrack && (
         <ReactPlayer
           style={{ visibility: 'hidden', position: 'absolute' }}
@@ -437,6 +442,7 @@ export default function TabPanel({
             !seekingBackingTrack && setDurationBackingTrack(e.played)
           }
           onDuration={(duration) => setTotalDurationBackingTrack(duration)}
+          onReady={() => setIsLoadingBackingTrack(false)}
         />
       )}
     </>
