@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query'
 import { UGChordCollection } from '../types/tabs'
 export const getChordTransposer = async (
-  chords: UGChordCollection[],
+  keyChords: string[],
   signal: AbortSignal,
 ): Promise<string[]> => {
   const urlParams = new URLSearchParams()
-  Object.keys(chords).forEach((chord) => {
+  keyChords.forEach((chord) => {
     urlParams.set(chord, chord)
   })
   const response = await fetch(
@@ -14,14 +14,12 @@ export const getChordTransposer = async (
   )
   return await response.json()
 }
-export default function useChordTransposer(
-  chords: UGChordCollection[],
-) {
+export default function useChordTransposer(keyChords: string[]) {
   return useQuery(
-    ['getChordTransposer', chords],
-    async ({ signal }) => getChordTransposer(chords, signal),
+    ['getChordTransposer', keyChords],
+    async ({ signal }) => getChordTransposer(keyChords, signal),
     {
-      enabled: chords && Object.keys(chords).length > 0,
+      enabled: keyChords && keyChords.length > 0,
     },
   )
 }

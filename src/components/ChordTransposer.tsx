@@ -1,18 +1,19 @@
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
-import { Button, IconButton } from '@chakra-ui/react'
+import { Badge, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import useChordTransposer from '../hooks/useChordTransposer'
+import { GiMusicalScore } from 'react-icons/gi'
 import { UGChordCollection } from '../types/tabs'
 interface ChordTransposerProps {
   chords: UGChordCollection[]
+  setChords: Function
 }
-
 export default function ChordTransposer({
-  chords
+  chords,
+  setChords,
 }: ChordTransposerProps): JSX.Element {
   const [amount, setAmount] = useState<number>(0)
-  const [chordsModified, setChordsModified] = useState<UGChordCollection[]>(chords)
-  const {data : chordsTransposed} = useChordTransposer(chordsModified)
+  const { data: chordsTransposed } = useChordTransposer(Object.keys(chords))
   const transposeChord = (chord: string, amount: number) => {
     var scale = [
       'C',
@@ -33,28 +34,42 @@ export default function ChordTransposer({
       return scale[i < 0 ? i + scale.length : i]
     })
   }
+  const handleClickTranspose = (amount: number) => {
+    setAmount((prevVal) => prevVal + amount)
+    document
+      .querySelectorAll('span.text-chord')
+      ?.forEach(
+        (el: HTMLSpanElement) =>
+          (el.innerText = transposeChord(el.innerText.trim(), amount)),
+      )
+
+    setChords((prevVal: UGChordCollection) => {
+      let newVal = {}
+      Object.keys(prevVal).forEach((key) => {
+        const newKey = transposeChord(key, amount)
+        newVal[newKey] = prevVal[key]
+      })
+      return newVal
+    })
+  }
 
   useEffect(() => {
-    console.log(amount)
-    document.querySelectorAll('span.text-chord')?.forEach(
-      (el: HTMLSpanElement) =>
-        // (el.onclick = () => {
-        (el.innerText = transposeChord(el.innerText.trim(), amount)),
-      // }),
-    )
-  }, [amount])
+    if (chordsTransposed) {
+      setChords(chordsTransposed)
+    }
+  }, [chordsTransposed, setChords])
+
   return (
-    <>
+    <Flex display={'flex'} fontSize={'sm'} alignItems={'center'}>
+      <Text color={'gray.500'} as="b" mr={1}>
+        {' '}
+        Transpose{' '}
+      </Text>
+      <Icon boxSize={5} as={GiMusicalScore} mr={1} />
       <IconButton
-        onClick={() => setAmount((prevVal) => prevVal - 1)}
-        size={'sm'}
-        aria-label="Transpose down"
-        icon={<MinusIcon />}
-      />
-      <Button
         variant="outline"
-        _active={{
-          bg: 'fadebp',
+        _hover={{
+          bg: 'twitter.400',
           color: 'white',
         }}
         size={'sm'}
@@ -62,20 +77,28 @@ export default function ChordTransposer({
         fontWeight={'normal'}
         px="3"
         py="4"
-      >
-        Transpose ({amount})
-      </Button>
+        onClick={() => handleClickTranspose(-1)}
+        aria-label="Transpose down"
+        icon={<MinusIcon />}
+      />
+      <Badge mx={2} variant="subtle" fontSize={'sm'} color={'twitter.600'}>
+        {amount}
+      </Badge>
       <IconButton
-        onClick={() => setChordsModified((prevVal) => {
-          return {
-            ...prevVal,
-            
-          }
-        })}
+        variant="outline"
+        _hover={{
+          bg: 'twitter.400',
+          color: 'white',
+        }}
         size={'sm'}
+        boxShadow="md"
+        fontWeight={'normal'}
+        px="3"
+        py="4"
+        onClick={() => handleClickTranspose(1)}
         aria-label="Transpose up"
         icon={<AddIcon />}
       />
-    </>
+    </Flex>
   )
 }

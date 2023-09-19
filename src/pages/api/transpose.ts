@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AutocompleteScrapped, UGChordCollection } from '../../types/tabs'
 
 export default async function handlerTranspose(
   req: NextApiRequest,
@@ -25,11 +24,15 @@ export default async function handlerTranspose(
       },
     )
     try {
-      console.log(`
-      https://tabs.ultimate-guitar.com/tab/applicature/transpose?${queryTransposeUG.toString()}`)
       const resultTransposedChords = await transposedChords.json()
       if (Object.keys(resultTransposedChords?.info?.applicature).length > 0) {
-        res.status(200).json(resultTransposedChords.info.applicature)
+        let objStructModified = {}
+        Object.keys(resultTransposedChords.info.applicature).forEach((key) => {
+          objStructModified[key] = Object.values(
+            resultTransposedChords.info.applicature[key],
+          )
+        })
+        res.status(200).json(objStructModified)
       } else {
         res.status(200).json([])
       }
