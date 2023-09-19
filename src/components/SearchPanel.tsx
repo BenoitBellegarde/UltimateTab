@@ -119,7 +119,6 @@ export default function SearchPanel({
                 display={'flex'}
                 alignItems={'center'}
                 whiteSpace={'pre'}
-                
                 ml={2}
               >
                 {tab.type && TAB_TYPES_COLORS[tab.type] && (

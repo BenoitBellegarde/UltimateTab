@@ -329,7 +329,7 @@ export default function TabPanel({
         </Skeleton>
       </Flex>
       <ChordDiagram chords={chordsDiagrams} />
-      {showBackingTrack  && (
+      {showBackingTrack && (
         <Flex
           position={'fixed'}
           width={widthToolsBar}
@@ -348,86 +348,94 @@ export default function TabPanel({
           px={3}
           display={isLoading ? 'none' : 'flex'}
         >
-          {isLoadingBackingTrack ? (<Spinner color='twitter.200'/>) : (
+          {isLoadingBackingTrack ? (
+            <Spinner color="twitter.200" />
+          ) : (
             <>
-          <Text px={1} fontSize="xs">
-            {' '}
-            Backing track
-          </Text>
-          <Flex flexDirection={'column'} alignItems={'center'}>
-            <IconButton
-              aria-label="Play/Pause"
-              variant="outline"
-              icon={playBackingTrack ? <FaPauseCircle /> : <FaPlayCircle />}
-              _hover={{
-                bg: 'twitter.300',
-                color: 'white',
-              }}
-              _active={{
-                bg: 'twitter.600',
-                color: 'white',
-              }}
-              onClick={() => {
-                setShowBackingTrack(true)
-                setPlayBackingTrack((prevValue) => !prevValue)
-              }}
-              size={'sm'}
-              width={'40px'}
-              boxShadow="md"
-              rounded={'full'}
-              fontWeight={'normal'}
-            />
-            <Flex fontSize={'xs'}>
-              <PlayerDuration
-                seconds={totalDurationBackingTrack * durationBackingTrack}
-              />
-              <input
-                type="range"
-                min={0}
-                max={0.999999}
-                step="any"
-                style={{
-                  width: '100%',
-                  margin: '0 var(--chakra-space-1)',
-                }}
-                value={durationBackingTrack}
-                onMouseDown={() => setSeekingBackingTrack(true)}
-                onTouchStart={() => setSeekingBackingTrack(true)}
-                onChange={(e) => {
-                  setDurationBackingTrack(parseFloat(e.target.value))
-                }}
-                onMouseUp={(e) => {
-                  setSeekingBackingTrack(false)
-                  refPlayer.current.seekTo(parseFloat(e.currentTarget.value))
-                }}
-                onTouchEnd={(e) => {
-                  setSeekingBackingTrack(false)
-                  refPlayer.current.seekTo(parseFloat(e.currentTarget.value))
-                }}
-              />
-              <PlayerDuration
-                seconds={totalDurationBackingTrack * (1 - durationBackingTrack)}
-              />
-            </Flex>
-          </Flex>
-          <Flex>
-            <Icon boxSize={4} mr={1} as={FaVolumeDown} />
-            <input
-              type={'range'}
-              min={0}
-              max={1}
-              style={{
-                maxWidth: '80px',
-                width: '100%',
-              }}
-              step="any"
-              value={volumeBackingTrack}
-              onChange={(e) =>
-                setVolumeBackingTrack(parseFloat(e.target.value))
-              }
-            />
-          </Flex>
-          </>
+              <Text px={1} fontSize="xs">
+                {' '}
+                Backing track
+              </Text>
+              <Flex flexDirection={'column'} alignItems={'center'}>
+                <IconButton
+                  aria-label="Play/Pause"
+                  variant="outline"
+                  icon={playBackingTrack ? <FaPauseCircle /> : <FaPlayCircle />}
+                  _hover={{
+                    bg: 'twitter.300',
+                    color: 'white',
+                  }}
+                  _active={{
+                    bg: 'twitter.600',
+                    color: 'white',
+                  }}
+                  onClick={() => {
+                    setShowBackingTrack(true)
+                    setPlayBackingTrack((prevValue) => !prevValue)
+                  }}
+                  size={'sm'}
+                  width={'40px'}
+                  boxShadow="md"
+                  rounded={'full'}
+                  fontWeight={'normal'}
+                />
+                <Flex fontSize={'xs'}>
+                  <PlayerDuration
+                    seconds={totalDurationBackingTrack * durationBackingTrack}
+                  />
+                  <input
+                    type="range"
+                    min={0}
+                    max={0.999999}
+                    step="any"
+                    style={{
+                      width: '100%',
+                      margin: '0 var(--chakra-space-1)',
+                    }}
+                    value={durationBackingTrack}
+                    onMouseDown={() => setSeekingBackingTrack(true)}
+                    onTouchStart={() => setSeekingBackingTrack(true)}
+                    onChange={(e) => {
+                      setDurationBackingTrack(parseFloat(e.target.value))
+                    }}
+                    onMouseUp={(e) => {
+                      setSeekingBackingTrack(false)
+                      refPlayer.current.seekTo(
+                        parseFloat(e.currentTarget.value),
+                      )
+                    }}
+                    onTouchEnd={(e) => {
+                      setSeekingBackingTrack(false)
+                      refPlayer.current.seekTo(
+                        parseFloat(e.currentTarget.value),
+                      )
+                    }}
+                  />
+                  <PlayerDuration
+                    seconds={
+                      totalDurationBackingTrack * (1 - durationBackingTrack)
+                    }
+                  />
+                </Flex>
+              </Flex>
+              <Flex>
+                <Icon boxSize={4} mr={1} as={FaVolumeDown} />
+                <input
+                  type={'range'}
+                  min={0}
+                  max={1}
+                  style={{
+                    maxWidth: '80px',
+                    width: '100%',
+                  }}
+                  step="any"
+                  value={volumeBackingTrack}
+                  onChange={(e) =>
+                    setVolumeBackingTrack(parseFloat(e.target.value))
+                  }
+                />
+              </Flex>
+            </>
           )}
         </Flex>
       )}
