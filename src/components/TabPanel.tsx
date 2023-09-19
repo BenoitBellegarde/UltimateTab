@@ -22,7 +22,7 @@ import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
-import { Tab } from '../types/tabs'
+import { Tab, UGChordCollection } from '../types/tabs'
 import {
   MouseEventHandler,
   useEffect,
@@ -36,6 +36,7 @@ import useBackingtrack from '../hooks/useBackingtrack'
 import ReactPlayer from 'react-player/youtube'
 import { FaPlayCircle, FaPauseCircle, FaVolumeDown } from 'react-icons/fa'
 import PlayerDuration from './PlayerDuration'
+import ChordTransposer from './ChordTransposer'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -58,6 +59,9 @@ export default function TabPanel({
     typeof document !== 'undefined' ? document.documentElement.clientWidth : 0,
     500,
   )
+  const [chordsDiagrams, setChordsDiagrams] = useState<UGChordCollection[]>(
+    selectedTabContent?.chordsDiagrams,
+  )
   const [showBackingTrack, setShowBackingTrack] = useState<boolean>(false)
   const [playBackingTrack, setPlayBackingTrack] = useState<boolean>(false)
   const [volumeBackingTrack, setVolumeBackingTrack] = useState<number>(0.25)
@@ -70,7 +74,6 @@ export default function TabPanel({
     showBackingTrack,
   )
   const firstUpdate = useRef<boolean>(true)
-  const refIframe = useRef<HTMLIFrameElement>(null)
   const refPlayer = useRef<ReactPlayer>(null)
 
   const flexSongNameDirection = useBreakpointValue({
@@ -89,10 +92,12 @@ export default function TabPanel({
   const toast = useToast()
   const refToastId = useRef<ToastId>()
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
+  const paddingThirdRow = useBreakpointValue({ base: 2, sm: 1 })
+  const widthThirdRow = useBreakpointValue({ base: '100%', sm: 'initial' })
 
   useEffect(() => {
-    refIframe
-  }, [refIframe])
+    setChordsDiagrams(selectedTabContent?.chordsDiagrams)
+  }, [selectedTabContent])
 
   // Refetch tab when resizing browser or changing orientation to get the updated responsive tab from UG
   if (typeof document !== 'undefined') {
@@ -104,19 +109,20 @@ export default function TabPanel({
         return
       }
       if (!selectedTabContent) return
-      if (refToastId.current) {
-        toast.close(refToastId.current)
-      }
+      // if (refToastId.current) {
+      //   toast.close(refToastId.current)
+      // }
 
-      refToastId.current = toast({
-        description: 'Adapting tab to your browser dimensions...',
-        status: 'info',
-        duration: null,
-        isClosable: true,
-      })
-      refetchTab().then(() => {
-        toast.close(refToastId.current)
-      })
+      // refToastId.current = toast({
+      //   description: 'Adapting tab to your browser dimensions...',
+      //   status: 'info',
+      //   duration: null,
+      //   isClosable: true,
+      // })
+      // refetchTab().then(() => {
+      //   toast.close(refToastId.current)
+      // })
+      refetchTab()
       // Disabling this effect on the first load of the tab to prevent triggering the toast only because of scrollbar appearing/disappearing
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [widthBrowser, refetchTab])
@@ -257,35 +263,50 @@ export default function TabPanel({
             </Flex>{' '}
           </Flex>
           <Flex
-            justifyContent={'start'}
+            justifyContent={'space-between'}
             flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
-            py={2}
+            alignItems={'center'}
           >
-            <Button
-              variant="outline"
-              _hover={{
-                bg: 'twitter.400',
-                color: 'white',
-                opacity: showBackingTrack ? 0.8 : 1,
-              }}
-              _active={{
-                bg: 'fadebp',
-                color: 'white',
-              }}
-              isActive={showBackingTrack}
-              onClick={() => {
-                setShowBackingTrack((prevState) => !prevState)
-                setPlayBackingTrack((prevValue) => !prevValue)
-              }}
-              size={'sm'}
-              boxShadow="md"
-              fontWeight={'normal'}
-              px="3"
-              py="4"
-              leftIcon={<Icon as={FaPlayCircle} />}
-            >
-              Backing track
-            </Button>
+            {chordsDiagrams && selectedTabContent?.type === 'Chords' && (
+              <Flex
+                py={paddingThirdRow}
+                justifyContent={'start'}
+                w={widthThirdRow}
+              >
+                <ChordTransposer
+                  chords={chordsDiagrams}
+                  setChords={setChordsDiagrams}
+                />
+              </Flex>
+            )}
+
+            <Flex py={paddingThirdRow} w={widthThirdRow}>
+              <Button
+                variant="outline"
+                _hover={{
+                  bg: 'twitter.400',
+                  color: 'white',
+                  opacity: showBackingTrack ? 0.8 : 1,
+                }}
+                _active={{
+                  bg: 'fadebp',
+                  color: 'white',
+                }}
+                isActive={showBackingTrack}
+                onClick={() => {
+                  setShowBackingTrack((prevState) => !prevState)
+                  setPlayBackingTrack((prevValue) => !prevValue)
+                }}
+                size={'sm'}
+                boxShadow="md"
+                fontWeight={'normal'}
+                px="3"
+                py="4"
+                leftIcon={<Icon as={FaPlayCircle} />}
+              >
+                Backing track
+              </Button>
+            </Flex>
           </Flex>
         </Skeleton>
       </Box>
@@ -305,7 +326,7 @@ export default function TabPanel({
           </Flex>
         </Skeleton>
       </Flex>
-      <ChordDiagram />
+      <ChordDiagram chords={chordsDiagrams} />
       {showBackingTrack && (
         <Flex
           position={'fixed'}
@@ -407,7 +428,7 @@ export default function TabPanel({
 
       {urlBackingTrack && showBackingTrack && (
         <ReactPlayer
-          style={{ display: 'none' }}
+          style={{ visibility: 'hidden', position: 'absolute' }}
           ref={refPlayer}
           playing={playBackingTrack}
           url={urlBackingTrack}

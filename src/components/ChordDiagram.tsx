@@ -10,13 +10,22 @@ import { useToast } from '@chakra-ui/react'
 import useAppStateContext from '../hooks/useAppStateContext'
 import ChordBox from '../../node_modules/vexchords/chordbox'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
-import { UGChord, VexchordsChord, VexchordsOptions } from '../types/tabs'
+import {
+  UGChord,
+  UGChordCollection,
+  VexchordsChord,
+  VexchordsOptions,
+} from '../types/tabs'
 
 interface ChordDiagramState {
   [key: string]: number
 }
 
-export default function ChordDiagram(): JSX.Element {
+export default function ChordDiagram({
+  chords,
+}: {
+  chords: UGChordCollection[]
+}): JSX.Element {
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const chordDiagramRef = useRef<HTMLDivElement>(null)
   const toast = useToast()
@@ -25,10 +34,8 @@ export default function ChordDiagram(): JSX.Element {
     {},
   )
   const [chordSelected, setChordSelected] = useState<string>('')
-  const chordsDiagrams = useMemo(
-    () => selectedTabContent?.chordsDiagrams || [],
-    [selectedTabContent?.chordsDiagrams],
-  )
+  const chordsDiagrams = useMemo(() => chords || [], [chords])
+
   useEffect(() => {
     document.querySelectorAll('span.text-chord')?.forEach(
       (el: HTMLSpanElement) =>
@@ -36,10 +43,10 @@ export default function ChordDiagram(): JSX.Element {
           setChordSelected(el.innerText.trim())
         }),
     )
-  }, [selectedTabContent?.htmlTab])
+  }, [selectedTabContent?.htmlTab, chords])
 
   // Remove diagram when changing tab
-  useEffect(() => setChordSelected(''), [selectedTabContent?.url])
+  useEffect(() => setChordSelected(''), [selectedTabContent?.url, chords])
 
   // Toggling diagram
   useEffect(() => {

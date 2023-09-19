@@ -11,6 +11,9 @@ export const extendedTheme = extendTheme({
         cursor: 'pointer',
         color: 'twitter.600 !important',
         fontWeight: 'bold',
+        background:
+          props.colorMode === 'dark' ? 'rgba(226, 232, 240, 0.16)' : '#EDF2F7',
+        padding: '0.01rem 0.15rem',
       },
       'pre, code': {
         fontFamily: `'Poppins Mono', monospace !important`,
