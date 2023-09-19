@@ -109,19 +109,20 @@ export default function TabPanel({
         return
       }
       if (!selectedTabContent) return
-      if (refToastId.current) {
-        toast.close(refToastId.current)
-      }
+      // if (refToastId.current) {
+      //   toast.close(refToastId.current)
+      // }
 
-      refToastId.current = toast({
-        description: 'Adapting tab to your browser dimensions...',
-        status: 'info',
-        duration: null,
-        isClosable: true,
-      })
-      refetchTab().then(() => {
-        toast.close(refToastId.current)
-      })
+      // refToastId.current = toast({
+      //   description: 'Adapting tab to your browser dimensions...',
+      //   status: 'info',
+      //   duration: null,
+      //   isClosable: true,
+      // })
+      // refetchTab().then(() => {
+      //   toast.close(refToastId.current)
+      // })
+      refetchTab()
       // Disabling this effect on the first load of the tab to prevent triggering the toast only because of scrollbar appearing/disappearing
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [widthBrowser, refetchTab])
@@ -427,7 +428,7 @@ export default function TabPanel({
 
       {urlBackingTrack && showBackingTrack && (
         <ReactPlayer
-          style={{ display: 'none' }}
+          style={{ visibility: 'hidden', position: 'absolute' }}
           ref={refPlayer}
           playing={playBackingTrack}
           url={urlBackingTrack}
