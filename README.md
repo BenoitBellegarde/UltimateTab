@@ -1,14 +1,24 @@
 # Ultimate Tab
 
+**Link** : [https://ultimate-tab.com](https://ultimate-tab.com)
+
 A web application that delivers an enhanced, ads-free and fast responsive interface to browse guitar tabs scraped from Ultimate Guitar.
 
-![Ultimate Tab Screenshot](https://i.ibb.co/y57Zr7r/screenzy-1682151757031.png)
+![Ultimate Tab Screenshot](https://i.ibb.co/RYLXkNc/586shots-so.png)
+![Ultimate Tab Screenshot](https://i.ibb.co/THdSmPK/673shots-so.png)
 
-## Description
+## Features
 
-This app enhances the user experience by being able to link your Spotify account to listen to the track while learning the tab. Moreover, you can also import your Spotify playlists directly into Ultimate Tab to have all the tabs of your favorite songs at your fingertips.
+- Browse responsive guitar tabs scraped in real time from Ultimate Guitar.
+- Chords visualizer with official diagrams from Ultimate Guitar.
+- Chords transposer.
+- Backing track player (using YouTube API).
+- Add tabs to favorites without the need for an account (stored in local storage).
 
-The interface of Ultimate Guitar can be messy, old and with a ton of ads, which can make it challenging to browse tabs. With Ultimate Tab, you can enjoy an ads-free and modern interface to browse tabs, add your favorite ones to your playlist, and listen to the track while learning the tab.
+## Features in Development
+
+- Autoscroll tab.
+- Export tab as PDF.
 
 ## Technologies
 
@@ -16,7 +26,10 @@ Ultimate Tab has been built with a modern stack, including:
 
 - [NextJS](https://nextjs.org/) - React Framework
 - [Puppeteer](https://pptr.dev/) - Headless browser used for web scraping
+- [React Query](https://tanstack.com/query/v3/) - Server state management
+- [React Context API](https://react.dev/reference/react#context-hooks) - Client state management
 - [ChakraUI](https://chakra-ui.com/) - UI Component Library
+- [Vexchords](https://github.com/0xfe/vexchords) - Chords renderer library
 
 ## Installation
 
@@ -26,17 +39,8 @@ To run Ultimate Tab locally, you must have Node.js and NPM or Yarn installed on 
 2. Navigate to the project directory using the terminal or command prompt.
 3. Run `npm install` or `yarn install` to install the dependencies.
 4. Run `npm run dev` or `yarn dev` to start the development server.
-5. Open http://localhost:3000 in your web browser to see Ultimate Tab running.
-
-## Features
-
-- Browse guitar tabs scraped from Ultimate Guitar
-- Chords visualizer
-- Add tabs to your favorites playlist
-- Link your Spotify account to listen to the track while learning the tab (_in development_)
-- Import your Spotify playlists directly into Ultimate Tab (_in development_)
-- Enjoy an ads-free, modern, and responsive interface
-- Dark mode support
+5. Create `.env.local` file and add a variable `YOUTUBE_API_KEY` with a YouTube API key as value to get backing tracks
+6. Open http://localhost:3000 in your web browser to see Ultimate Tab running.
 
 ## Contributing
 
