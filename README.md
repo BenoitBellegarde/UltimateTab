@@ -1,4 +1,4 @@
-# Ultimate Tab
+# Ultimate Tab - Ads-free Ultimate Guitar tabs
 
 **Link** : [https://ultimate-tab.com](https://ultimate-tab.com)
 
