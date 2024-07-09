@@ -1,5 +1,8 @@
 # Ultimate Tab - Ads-free Ultimate Guitar tabs
 
+> [!NOTE]
+> The project is currently no longer hosted on https://ultimate-tab.com. If you would like to know the reasons and see the project evolve and be hosted again, please give me feedback here 🙂 : https://github.com/BenoitBellegarde/UltimateTab/issues/18#issuecomment-2216635075
+
 **Link** : [https://ultimate-tab.com](https://ultimate-tab.com)
 
 A web application that delivers an enhanced, ads-free and fast responsive interface to browse guitar tabs scraped from Ultimate Guitar.
