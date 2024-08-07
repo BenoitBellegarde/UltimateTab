@@ -37,7 +37,7 @@ export default function ChordDiagram({
   const chordsDiagrams = useMemo(() => chords || [], [chords])
 
   useEffect(() => {
-    document.querySelectorAll('span.text-chord')?.forEach(
+    document.querySelectorAll('span.js-chord-chord')?.forEach(
       (el: HTMLSpanElement) =>
         (el.onclick = () => {
           setChordSelected(el.innerText.trim())

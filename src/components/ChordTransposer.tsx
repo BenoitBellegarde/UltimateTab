@@ -37,7 +37,7 @@ export default function ChordTransposer({
   const handleClickTranspose = (amount: number) => {
     setAmount((prevVal) => prevVal + amount)
     document
-      .querySelectorAll('span.text-chord')
+      .querySelectorAll('span.js-chord-chord')
       ?.forEach(
         (el: HTMLSpanElement) =>
           (el.innerText = transposeChord(el.innerText.trim(), amount)),
