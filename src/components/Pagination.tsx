@@ -25,12 +25,12 @@ const Pagination = (props) => {
   }
 
   const onNext = () => {
-    onPageChange((prevPage: number) => prevPage + 1)
+    onPageChange(currentPage + 1)
     window.scrollTo(0, 0)
   }
 
   const onPrevious = () => {
-    onPageChange((prevPage: number) => prevPage - 1)
+    onPageChange(currentPage - 1)
     window.scrollTo(0, 0)
   }
 
@@ -61,6 +61,7 @@ const Pagination = (props) => {
           }}
           variant={pageNumber === '...' ? 'ghost' : 'solid'}
           disabled={pageNumber === '...' ? true : false}
+          pointerEvents={pageNumber === '...' ? 'none' : 'auto'}
         >
           {pageNumber}
         </Button>
