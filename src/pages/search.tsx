@@ -18,6 +18,9 @@ import { TAB_TYPES } from '../constants'
 import RadioCard from '../components/RadioCard'
 import { RiHeartFill } from 'react-icons/ri'
 import useFavoriteTabs from '../hooks/useTabsFavorites'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router'
+import { getSearchObjectParameters } from '../lib/utils/params'
 
 export default function Search(): JSX.Element {
   const {
@@ -35,6 +38,10 @@ export default function Search(): JSX.Element {
     isErrorTabList,
     dataTabList,
   } = useAppStateContext()
+
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const sizeImg = useBreakpointValue({
     base: '100%',
@@ -52,14 +59,35 @@ export default function Search(): JSX.Element {
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'tabType',
     defaultValue: searchType,
-    onChange: (value) => setSearchType(value),
+    onChange: (value) =>
+      router.push({
+        pathname: `/search`,
+        query: getSearchObjectParameters(searchParams, {
+          type: value,
+          page: 1,
+        }),
+      }),
   })
 
   const group = getRootProps()
 
   useEffect(() => {
-    setCurrentPage(1)
-  }, [searchValue, searchType, setCurrentPage])
+    if (searchParams) {
+      searchParams.forEach((value, key) => {
+        switch (key) {
+          case 'q':
+            setSearchValue(value)
+            break
+          case 'type':
+            setSearchType(value)
+            break
+          case 'page':
+            setCurrentPage(parseInt(value))
+            break
+        }
+      })
+    }
+  }, [searchParams, setSearchValue, setSearchType, setCurrentPage])
 
   return (
     <>
@@ -85,6 +113,7 @@ export default function Search(): JSX.Element {
             <HStack>
               {Object.keys(TAB_TYPES).map((value) => {
                 const radio = getRadioProps({ value })
+                radio.isChecked = searchType == value ? true : false
                 return (
                   <RadioCard key={value} {...radio}>
                     {value}
@@ -131,7 +160,12 @@ export default function Search(): JSX.Element {
             isError={isErrorTabList}
             data={favoriteActive ? dataFavorites : dataTabList}
             selectedTab={selectedTab}
-            handleChangePage={setCurrentPage}
+            handleChangePage={(page: number) =>
+              router.push({
+                pathname: `/search`,
+                query: getSearchObjectParameters(searchParams, { page: page }),
+              })
+            }
             favoriteActive={favoriteActive}
           />
         ) : (

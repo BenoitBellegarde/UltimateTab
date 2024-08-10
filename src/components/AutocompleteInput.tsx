@@ -8,10 +8,12 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { MutableRefObject, useRef, useState } from 'react'
 import useAppStateContext from '../hooks/useAppStateContext'
 import useAutocomplete from '../hooks/useAutocomplete'
+import { getSearchObjectParameters } from '../lib/utils/params'
 
 export default function AutocompleteInput({
   refBackdrop,
@@ -19,6 +21,7 @@ export default function AutocompleteInput({
   refBackdrop: MutableRefObject<HTMLDivElement>
 }): JSX.Element {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const refInput = useRef<HTMLInputElement>(null)
 
   const [valueAC, setValueAC] = useState<string>('')
@@ -73,9 +76,6 @@ export default function AutocompleteInput({
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            if (router.pathname !== '/search') {
-              router.push('/search')
-            }
             let valueToSearch = formatSuggestion(valueAC)
             if (
               idSuggestionHighlighted !== -1 &&
@@ -86,7 +86,12 @@ export default function AutocompleteInput({
               )
               setValueAC(valueToSearch)
             }
-            setSearchValue(valueToSearch)
+            router.push({
+              pathname: `/search`,
+              query: getSearchObjectParameters(searchParams, {
+                q: valueToSearch,
+              }),
+            })
             refInput.current.blur()
             setInputFocus(false)
             showBackdrop(false)
@@ -126,12 +131,15 @@ export default function AutocompleteInput({
             className="tab-result"
             key={index}
             onClick={(e) => {
-              if (router.pathname !== '/search') {
-                router.push('/search')
-              }
               const suggestion = formatSuggestion(result)
               setValueAC(suggestion)
-              setSearchValue(suggestion), setIdSuggestionHighlighted(-1)
+              router.push({
+                pathname: `/search`,
+                query: getSearchObjectParameters(searchParams, {
+                  q: suggestion,
+                }),
+              })
+              setIdSuggestionHighlighted(-1)
               refInput.current.blur()
             }}
             // Disable blur when clicking on suggestion, manually blur the input onClick event to setSearchValue before dismissing suggestions box

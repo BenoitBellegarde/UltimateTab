@@ -52,9 +52,7 @@ export default function SearchPanel({
   return (
     <Box px="2" py={3} overflowY={'auto'}>
       <Flex wrap={'wrap'} justifyContent="center">
-        {isError && (
-          <Box color={'red'}>Erreur lors de la récupération des données</Box>
-        )}
+        {isError && <Box color={'red'}>Fetching data error</Box>}
         {((!favoriteActive && searchValue && showSearchInput) ||
           favoriteActive) &&
           ((!isLoading && !favoriteActive) || favoriteActive) &&
@@ -138,7 +136,7 @@ export default function SearchPanel({
           <Pagination
             currentPage={data.pagination?.current}
             totalPageCount={data.pagination?.total}
-            onPageChange={(page) => handleChangePage(page)}
+            onPageChange={(page: number) => handleChangePage(page)}
           />
         </Flex>
       )}
