@@ -5,6 +5,7 @@ export function getSearchObjectParameters(
   newValues: { [key: string]: string | number },
 ): { [key: string]: string | number } {
   const object = { ...Object.fromEntries(searchParams.entries()), ...newValues }
+  delete object['slug']
   const defaultVals = {
     q: '',
     type: 'All',
