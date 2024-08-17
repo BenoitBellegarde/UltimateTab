@@ -185,6 +185,7 @@ export async function getPuppeteerConf(
 
   const page: Page = await browser.newPage()
   // Block every ressources that we don't need to load
+  page.setDefaultNavigationTimeout(4000)
   await page.setRequestInterception(true)
   page.on('request', (request) => {
     const requestUrl = request.url().split('?')[0]
