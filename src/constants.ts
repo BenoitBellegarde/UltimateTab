@@ -60,3 +60,8 @@ export const TAB_TYPES_COLORS = {
   Bass: 'red',
   Ukulele: 'orange',
 }
+
+export const TAB_SOURCES = {
+  Artist: 'artist_name',
+  Song: 'song_name',
+}

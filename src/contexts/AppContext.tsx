@@ -6,6 +6,7 @@ import {
   SetStateAction,
   Dispatch,
 } from 'react'
+import { TAB_SOURCES } from '../constants'
 import useDebounce from '../hooks/useDebounce'
 import useLocalStorage from '../hooks/useLocalStorage'
 import useTabs from '../hooks/useTabs'
@@ -17,6 +18,8 @@ interface AppState {
   setSearchValue: Dispatch<SetStateAction<string>>
   searchType: string
   setSearchType: Dispatch<SetStateAction<string>>
+  searchSource: string
+  setSearchSource: Dispatch<SetStateAction<string>>
   currentPage: number
   setCurrentPage: Dispatch<SetStateAction<number>>
   favorites: Tab[]
@@ -38,6 +41,9 @@ export const AppStateContext = createContext<AppState | null>(null)
 export function AppStateProvider({ children }) {
   const [searchValue, setSearchValue] = useState<string>('')
   const [searchType, setSearchType] = useState<string>('All')
+  const [searchSource, setSearchSource] = useState<string>(
+    Object.values(TAB_SOURCES).join(','),
+  )
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [favorites, setFavorites] = useLocalStorage<Tab[]>('favoriteTabs', [])
   const [favoriteActive, setFavoriteActive] = useState<boolean>(false)
@@ -62,7 +68,7 @@ export function AppStateProvider({ children }) {
     isLoading: isLoadingTabList,
     isError: isErrorTabList,
     data: dataTabList,
-  } = useTabsList(searchValue, searchType, currentPage)
+  } = useTabsList(searchValue, searchType, currentPage, searchSource)
 
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
@@ -92,6 +98,8 @@ export function AppStateProvider({ children }) {
         setSearchValue,
         searchType,
         setSearchType,
+        searchSource,
+        setSearchSource,
         currentPage,
         setCurrentPage,
         favorites,

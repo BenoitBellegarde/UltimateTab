@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
-import { MutableRefObject, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import useAppStateContext from '../hooks/useAppStateContext'
 import useAutocomplete from '../hooks/useAutocomplete'
 import { getSearchObjectParameters } from '../lib/utils/params'
@@ -23,13 +23,11 @@ export default function AutocompleteInput({
   const router = useRouter()
   const searchParams = useSearchParams()
   const refInput = useRef<HTMLInputElement>(null)
-
   const [valueAC, setValueAC] = useState<string>('')
   const [inputFocus, setInputFocus] = useState<boolean>(false)
   const [idSuggestionHighlighted, setIdSuggestionHighlighted] =
     useState<number>(-1)
 
-  const { setSearchValue } = useAppStateContext()
   const { data: dataAC } = useAutocomplete(valueAC)
   const suggestions =
     (!dataAC || dataAC.length === 0) && valueAC ? [valueAC] : dataAC
@@ -46,6 +44,11 @@ export default function AutocompleteInput({
   const formatSuggestion = (suggestion: string) =>
     suggestion.charAt(0).toUpperCase() + suggestion.slice(1)
 
+  useEffect(() => {
+    if (searchParams.get('q')) {
+      setValueAC(searchParams.get('q'))
+    }
+  }, [searchParams])
   return (
     <InputGroup
       size={useBreakpointValue({ base: 'sm', md: 'md' })}
@@ -90,6 +93,7 @@ export default function AutocompleteInput({
               pathname: `/search`,
               query: getSearchObjectParameters(searchParams, {
                 q: valueToSearch,
+                page: 1,
               }),
             })
             refInput.current.blur()
@@ -137,6 +141,7 @@ export default function AutocompleteInput({
                 pathname: `/search`,
                 query: getSearchObjectParameters(searchParams, {
                   q: suggestion,
+                  page: 1,
                 }),
               })
               setIdSuggestionHighlighted(-1)

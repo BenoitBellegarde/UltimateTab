@@ -5,6 +5,7 @@ import {
   ApiResponseTab,
   TabScrapped,
   UGChordCollection,
+  ApiArgsSearch,
 } from './../../types/tabs'
 import { TAB_TYPES_VALUES } from '../../constants'
 import { ApiResponseSearch } from '../../types/tabs'
@@ -22,48 +23,71 @@ export function validateType(type: string): string {
   }
 }
 
-export async function getTabsList(url: string): Promise<ApiResponseSearch> {
+export async function getTabsList(
+  url: string,
+  args: ApiArgsSearch,
+): Promise<ApiResponseSearch> {
   const { page, browser } = await getPuppeteerConf()
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded' })
+    const source = args.source
+    const q = args.q
+    const tabsParsed: ApiResponseSearch = await page.evaluate(
+      ({ source, q }) => {
+        const data = window.UGAPP.store.page.data
+        let results: TabScrapped[] = [
+          ...(data?.other_tabs || []),
+          ...(data?.results || []),
+        ]
 
-    const tabsParsed: ApiResponseSearch = await page.evaluate(() => {
-      const data = window.UGAPP.store.page.data
-      let results: TabScrapped[] = [
-        ...(data?.other_tabs || []),
-        ...(data?.results || []),
-      ]
+        const pagination: Pagination = {
+          current: data.pagination.current,
+          total: data.pagination.total,
+        }
+        const tabs: Tab[] = results
+          .filter((result) => {
+            const isTypeExcluded =
+              !result.marketing_type &&
+              !['Pro', 'Power', 'Official', 'Drums', 'Video'].includes(
+                result.type,
+              )
 
-      const pagination: Pagination = {
-        current: data.pagination.current,
-        total: data.pagination.total,
-      }
-      const tabs: Tab[] = results
-        .filter(
-          (result) =>
-            !result.marketing_type &&
-            !['Pro', 'Power', 'Official', 'Drums', 'Video'].includes(
-              result.type,
-            ),
-        )
-        .map((result) => ({
-          artist: result.artist_name,
-          name: result.song_name,
-          url: result.tab_url,
-          slug: result.tab_url.split('/').splice(-2).join('/'),
-          rating: parseFloat(result.rating.toFixed(2)),
-          numberRates: result.votes,
-          type:
-            result.type === 'Ukulele Chords'
-              ? 'Ukulele'
-              : result.type === 'Bass Tabs'
-              ? 'Bass'
-              : result.type,
-        }))
+            if (source === 'artist_name') {
+              return (
+                isTypeExcluded &&
+                result.artist_name &&
+                result.artist_name.toLowerCase().includes(q.toLowerCase())
+              )
+            } else if (source === 'song_name') {
+              return (
+                isTypeExcluded &&
+                result.song_name &&
+                result.song_name.toLowerCase().includes(q.toLowerCase())
+              )
+            } else {
+              return isTypeExcluded
+            }
+          })
+          .map((result) => ({
+            artist: result.artist_name,
+            name: result.song_name,
+            url: result.tab_url,
+            slug: result.tab_url.split('/').splice(-2).join('/'),
+            rating: parseFloat(result.rating.toFixed(2)),
+            numberRates: result.votes,
+            type:
+              result.type === 'Ukulele Chords'
+                ? 'Ukulele'
+                : result.type === 'Bass Tabs'
+                ? 'Bass'
+                : result.type,
+          }))
 
-      const response: ApiResponseSearch = { results: tabs, pagination }
-      return response
-    })
+        const response: ApiResponseSearch = { results: tabs, pagination }
+        return response
+      },
+      { source, q },
+    )
     await browser.close()
     return tabsParsed
   } catch (error) {

@@ -5,6 +5,7 @@ export interface ApiArgsSearch {
   value?: string
   search_type?: string
   order?: string
+  source?: string
 }
 
 export interface ApiRequestSearch {
