@@ -1,4 +1,5 @@
 import { ReadonlyURLSearchParams } from 'next/navigation'
+import { TAB_SOURCES } from '../../constants'
 
 export function getSearchObjectParameters(
   searchParams: ReadonlyURLSearchParams,
@@ -10,6 +11,7 @@ export function getSearchObjectParameters(
     q: '',
     type: 'All',
     page: 1,
+    source: Object.values(TAB_SOURCES).join(','),
   }
   return {
     ...defaultVals,

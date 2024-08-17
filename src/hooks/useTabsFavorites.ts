@@ -6,6 +6,7 @@ const getFavoritesTabs = (
   favorites: Tab[],
   value: string,
   type: string,
+  source: string,
 ): ApiResponseSearch => {
   let data: Tab[] | null = null
   if (favorites.length > 0) {
@@ -13,11 +14,18 @@ const getFavoritesTabs = (
       type === 'All'
         ? favorites
         : favorites.filter((el) => el.type === TAB_TYPES[type])
-    data = data.filter(
-      (el) =>
-        el.artist.toLowerCase().includes(value.toLowerCase()) ||
-        el.name.toLowerCase().includes(value.toLowerCase()),
-    )
+    data = data.filter((el) => {
+      if (source == 'artist_name') {
+        return el.artist.toLowerCase().includes(value.toLowerCase())
+      } else if (source == 'song_name') {
+        return el.name.toLowerCase().includes(value.toLowerCase())
+      } else {
+        return (
+          el.artist.toLowerCase().includes(value.toLowerCase()) ||
+          el.name.toLowerCase().includes(value.toLowerCase())
+        )
+      }
+    })
   }
 
   const pagination: Pagination = { current: 1, total: 1 }
@@ -27,10 +35,11 @@ export default function useFavoriteTabs(
   favorites: Tab[],
   value: string,
   type: string,
+  source: string,
 ) {
   return useQuery(
-    ['favoritesTab', favorites, value, type],
-    () => getFavoritesTabs(favorites, value, type),
+    ['favoritesTab', favorites, value, type, source],
+    () => getFavoritesTabs(favorites, value, type, source),
     {
       enabled: true,
     },

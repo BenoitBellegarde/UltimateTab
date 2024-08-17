@@ -18,7 +18,7 @@ export async function search(args: ApiArgsSearch): Promise<ApiResponseSearch> {
   args = formatSearchQuery(args)
   const url = 'http://www.ultimate-guitar.com/search.php?' + encodeParams(args)
   console.log(url)
-  const tabs = await getTabsList(url)
+  const tabs = await getTabsList(url, args)
   return tabs
 }
 
@@ -70,8 +70,8 @@ export function encodeParams(params: Record<string, any>): string {
     .replace(/%20/g, '+')
 }
 
-export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
-  let acceptedParams = ['q', 'type', 'page']
+export function formatSearchQuery(args: ApiArgsSearch): ApiArgsSearch {
+  let acceptedParams = ['q', 'type', 'page', 'source']
   let requiredParams = ['q']
   let params: ApiArgsSearch = {
     type: '',
@@ -81,15 +81,16 @@ export function formatSearchQuery(q: ApiArgsSearch): ApiArgsSearch {
     search_type: 'title',
     order: '',
     q: '',
+    source: 'artist_name,song_name',
   }
 
   // accepted params only
-  for (let param in q) {
+  for (let param in args) {
     let underscored = underscore(param)
     if (acceptedParams.indexOf(underscored) !== -1) {
-      params[underscored] = q[param]
+      params[underscored] = args[param]
     } else {
-      delete q[param]
+      delete args[param]
     }
   }
   // required params

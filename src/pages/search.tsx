@@ -9,18 +9,25 @@ import {
   useColorModeValue,
   useRadioGroup,
   Fade,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import SearchPanel from '../components/SearchPanel'
 import Head from 'next/head'
 import useAppStateContext from '../hooks/useAppStateContext'
-import { TAB_TYPES } from '../constants'
+import { TAB_SOURCES, TAB_TYPES } from '../constants'
 import RadioCard from '../components/RadioCard'
 import { RiHeartFill } from 'react-icons/ri'
+import { MdFilterList } from 'react-icons/md'
 import useFavoriteTabs from '../hooks/useTabsFavorites'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { getSearchObjectParameters } from '../lib/utils/params'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 
 export default function Search(): JSX.Element {
   const {
@@ -28,6 +35,8 @@ export default function Search(): JSX.Element {
     setSearchValue,
     searchType,
     setSearchType,
+    searchSource,
+    setSearchSource,
     setCurrentPage,
     selectedTab,
     setSelectedTab,
@@ -54,6 +63,7 @@ export default function Search(): JSX.Element {
     favorites,
     searchValue,
     searchType,
+    searchSource,
   )
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -84,10 +94,19 @@ export default function Search(): JSX.Element {
           case 'page':
             setCurrentPage(parseInt(value))
             break
+          case 'source':
+            setSearchSource(value)
+            break
         }
       })
     }
-  }, [searchParams, setSearchValue, setSearchType, setCurrentPage])
+  }, [
+    searchParams,
+    setSearchValue,
+    setSearchType,
+    setCurrentPage,
+    setSearchSource,
+  ])
 
   return (
     <>
@@ -122,6 +141,67 @@ export default function Search(): JSX.Element {
               })}
             </HStack>
             <HStack marginInlineStart={'0 !important'} py={3}>
+              <Menu closeOnSelect={false}>
+                <MenuButton
+                  as={Button}
+                  variant="outline"
+                  _hover={{
+                    bg: 'twitter.400',
+                    color: 'white',
+                  }}
+                  _active={{
+                    bg: 'twitter.600',
+                    color: 'white',
+                  }}
+                  size={'sm'}
+                  boxShadow="md"
+                  fontWeight={'normal'}
+                  px="3"
+                  py="4"
+                  rightIcon={<ChevronDownIcon />}
+                  leftIcon={
+                    <Icon
+                      fontSize={'sm'}
+                      color={useColorModeValue('gray.700', 'gray.200')}
+                      position="relative"
+                      top="-0.05rem"
+                      as={MdFilterList}
+                    />
+                  }
+                >
+                  Filters
+                </MenuButton>
+                <MenuList minWidth="240px">
+                  <MenuOptionGroup
+                    title="Search by"
+                    type="checkbox"
+                    onChange={(searchSourceValues: string[]) => {
+                      router.push({
+                        pathname: `/search`,
+                        query: getSearchObjectParameters(searchParams, {
+                          page: 1,
+                          source:
+                            searchSourceValues.length > 0
+                              ? searchSourceValues.join(',')
+                              : Object.values(TAB_SOURCES)
+                                  .filter((value) => value !== searchSource)
+                                  .join(','),
+                        }),
+                      })
+                    }}
+                    value={searchSource.split(',')}
+                  >
+                    {Object.keys(TAB_SOURCES).map((key) => (
+                      <MenuItemOption
+                        key={TAB_SOURCES[key]}
+                        value={TAB_SOURCES[key]}
+                      >
+                        {key}
+                      </MenuItemOption>
+                    ))}
+                  </MenuOptionGroup>
+                </MenuList>
+              </Menu>
               <Button
                 variant="outline"
                 _hover={{
