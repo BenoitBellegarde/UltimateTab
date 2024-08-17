@@ -10,6 +10,7 @@ import {
 import { TAB_TYPES_VALUES } from '../../constants'
 import { ApiResponseSearch } from '../../types/tabs'
 import { getPuppeteerConf } from '../api/request'
+import sanitizeHtml from 'sanitize-html'
 
 export function validateType(type: string): string {
   if (type in TAB_TYPES_VALUES) {
@@ -200,7 +201,11 @@ export async function getTab(
         return document.querySelector('pre')?.outerHTML || ''
       })
       await browser.close()
-      return tabResponsive
+      return sanitizeHtml(tabResponsive, {
+        allowedAttributes: {
+          span: ['class'],
+        },
+      })
     } catch (error) {
       console.log(error)
     } finally {

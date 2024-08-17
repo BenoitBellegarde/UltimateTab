@@ -27,6 +27,7 @@
     "react-player": "^2.12.0",
     "react-query": "^3.39.3",
     "react-spotify-web-playback": "^0.13.4",
+    "sanitize-html": "^2.13.0",
     "sass": "^1.59.3",
     "superagent": "^8.0.9",
     "vexchords": "^1.2.0"
