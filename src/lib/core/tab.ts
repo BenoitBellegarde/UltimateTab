@@ -32,7 +32,7 @@ export async function getTabsList(
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded' })
     // wait for selector if Cloudflare bot detection page need to be bypass first
-    await page.waitForSelector('.js-page', { timeout: 5000 })
+    await page.waitForSelector('.js-page', { timeout: 10000 })
     const source = args.source
     const q = args.q
     const tabsParsed: ApiResponseSearch = await page.evaluate(
@@ -113,7 +113,7 @@ export async function getTab(
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded' })
       // wait for selector if Cloudflare bot detection page need to be bypass first
-      await page.waitForSelector('.js-page', { timeout: 5000 })
+      await page.waitForSelector('.js-page', { timeout: 10000 })
       const tabParsed: Tab = await page.evaluate(() => {
         const { tab_view } = window.UGAPP.store.page.data
         const {
@@ -199,7 +199,7 @@ export async function getTab(
       )
       await page.goto(url, { waitUntil: 'domcontentloaded' })
       // wait for selector if Cloudflare bot detection page need to be bypass first
-      await page.waitForSelector('.js-page', { timeout: 5000 })
+      await page.waitForSelector('.js-page', { timeout: 10000 })
 
       const tabResponsive: string = await page.evaluate(() => {
         return document.querySelector('pre')?.outerHTML || ''
