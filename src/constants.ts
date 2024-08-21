@@ -6,7 +6,6 @@ export const PUPPETEER_BLOCK_RESSOURCE_TYPE = [
   'image',
   'imageset',
   'manifest',
-  'xhr',
   'fetch',
   'other',
   'ping',

@@ -8,7 +8,8 @@ import type {
   TabScrapped,
   PuppeteerOptions,
 } from '../../types/tabs'
-import puppeteer, { Page } from 'puppeteer'
+import { Page, Browser } from 'puppeteer'
+import { connect } from '../../../node_modules/puppeteer-real-browser/src/index.js'
 import {
   PUPPETEER_BLOCK_RESSOURCE_NAME,
   PUPPETEER_BLOCK_RESSOURCE_TYPE,
@@ -136,7 +137,8 @@ export function formatTabResult(tab: TabScrapped): Tab {
 export async function getPuppeteerConf(
   options: PuppeteerOptions = {},
 ): Promise<{ page: Page; browser: any }> {
-  const browser = await puppeteer.launch({
+  const { browser, page }: { browser: Browser; page: Page } = await connect({
+    headless: 'auto',
     args: [
       '--autoplay-policy=user-gesture-required',
       '--disable-background-networking',
@@ -174,17 +176,18 @@ export async function getPuppeteerConf(
       '--use-gl=swiftshader',
       '--use-mock-keychain',
     ],
-    defaultViewport:
-      options.widthBrowser && options.heightBrowser
-        ? {
-            width: parseInt(options.widthBrowser) - 50,
-            height: parseInt(options.heightBrowser),
-          }
-        : null,
-    headless: 'new',
+    fingerprint: false,
+    turnstile: true,
   })
 
-  const page: Page = await browser.newPage()
+  page.setViewport(
+    options.widthBrowser && options.heightBrowser
+      ? {
+          width: parseInt(options.widthBrowser) - 50,
+          height: parseInt(options.heightBrowser),
+        }
+      : null,
+  )
   // Block every ressources that we don't need to load
   page.setDefaultNavigationTimeout(4000)
   await page.setRequestInterception(true)

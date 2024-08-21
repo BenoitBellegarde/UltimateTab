@@ -31,6 +31,8 @@ export async function getTabsList(
   const { page, browser } = await getPuppeteerConf()
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded' })
+    // wait for selector if Cloudflare bot detection page need to be bypass first
+    await page.waitForSelector('.js-page', { timeout: 5000 })
     const source = args.source
     const q = args.q
     const tabsParsed: ApiResponseSearch = await page.evaluate(
@@ -110,7 +112,8 @@ export async function getTab(
     })
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded' })
-
+      // wait for selector if Cloudflare bot detection page need to be bypass first
+      await page.waitForSelector('.js-page', { timeout: 5000 })
       const tabParsed: Tab = await page.evaluate(() => {
         const { tab_view } = window.UGAPP.store.page.data
         const {
@@ -173,11 +176,10 @@ export async function getTab(
           chordsDiagrams,
         }
       })
-      await browser.close()
-      return tabParsed
+      // await browser.close()
+      return { tabInfos: tabParsed, browser: browser }
     } catch (error) {
       console.log(error)
-    } finally {
       await browser.close()
     }
   }
@@ -196,27 +198,36 @@ export async function getTab(
           ' Mobile Safari iPhone',
       )
       await page.goto(url, { waitUntil: 'domcontentloaded' })
+      // wait for selector if Cloudflare bot detection page need to be bypass first
+      await page.waitForSelector('.js-page', { timeout: 5000 })
 
       const tabResponsive: string = await page.evaluate(() => {
         return document.querySelector('pre')?.outerHTML || ''
       })
-      await browser.close()
-      return sanitizeHtml(tabResponsive, {
-        allowedAttributes: {
-          span: ['class'],
-        },
-      })
+      // await browser.close()
+      return {
+        htmlTab: sanitizeHtml(tabResponsive, {
+          allowedAttributes: {
+            span: ['class'],
+          },
+        }),
+        browser: browser,
+      }
     } catch (error) {
-      console.log(error)
-    } finally {
       await browser.close()
+      console.log(error)
     }
   }
   const [tabParsed, tabResponsive] = await Promise.all([
     getTabinfo(),
     getResponsiveTab(),
   ])
-  tabParsed.htmlTab = tabResponsive
+
+  // Close browsers when both requests completed to prevent an issue with "puppeteer-real-browser" on Linux
+  await tabParsed.browser.close()
+  await tabResponsive.browser.close()
+
+  tabParsed.tabInfos.htmlTab = tabResponsive?.htmlTab
   const { access_token } = await getSpotifyAccessToken()
-  return { tab: tabParsed, spotify_access_token: access_token }
+  return { tab: tabParsed.tabInfos, spotify_access_token: access_token }
 }
