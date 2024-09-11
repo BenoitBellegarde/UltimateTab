@@ -75,7 +75,11 @@ export async function getTabsList(
             artist: result.artist_name,
             name: result.song_name,
             url: result.tab_url,
-            slug: result.tab_url.split('/').splice(-2).join('/'),
+            // Manage URL formatted like '/tab/[ID]'
+            slug:
+              result.tab_url.split('/').length === 5
+                ? result.tab_url.split('/').splice(-1).join('/')
+                : result.tab_url.split('/').splice(-2).join('/'),
             rating: parseFloat(result.rating.toFixed(2)),
             numberRates: result.votes,
             type:
