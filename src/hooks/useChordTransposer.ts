@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query'
-import { UGChordCollection } from '../types/tabs'
 export const getChordTransposer = async (
   keyChords: string[],
   signal: AbortSignal,
@@ -12,7 +11,15 @@ export const getChordTransposer = async (
     `${window.location.origin}/api/transpose?${urlParams.toString()}`,
     { signal },
   )
-  return await response.json()
+  let data = await response.json()
+  // Loop through each chords in the object and get rid of the last key
+  // For some reasons UG add a last key with the chord name only on the "transpose" endpoint
+  for (let key in data) {
+    if (Array.isArray(data[key])) {
+      data[key].pop()
+    }
+  }
+  return data
 }
 export default function useChordTransposer(keyChords: string[]) {
   return useQuery(
