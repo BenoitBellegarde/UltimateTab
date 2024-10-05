@@ -18,13 +18,14 @@ export default function useTabsList(
   type: string,
   page: number,
   source: string,
+  favoriteActive: boolean,
 ) {
   const valueLowered = value.toLowerCase()
   return useQuery(
-    ['searchTab', valueLowered, type, page, source],
+    ['searchTab', valueLowered, type, page, source, favoriteActive],
     async ({ signal }) => getDatas(valueLowered, type, page, source, signal),
     {
-      enabled: valueLowered.length > 0 && type.length > 0,
+      enabled: valueLowered.length > 0 && type.length > 0 && !favoriteActive,
     },
   )
 }

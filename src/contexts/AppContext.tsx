@@ -68,7 +68,13 @@ export function AppStateProvider({ children }) {
     isLoading: isLoadingTabList,
     isError: isErrorTabList,
     data: dataTabList,
-  } = useTabsList(searchValue, searchType, currentPage, searchSource)
+  } = useTabsList(
+    searchValue,
+    searchType,
+    currentPage,
+    searchSource,
+    favoriteActive,
+  )
 
   const handleClickFavorite: MouseEventHandler<HTMLButtonElement> = () => {
     const indexEntry = favorites.findIndex((el) => el.url === selectedTab.url)
