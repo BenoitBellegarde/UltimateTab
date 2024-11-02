@@ -15,12 +15,12 @@ A web application that delivers an enhanced, ads-free and fast responsive interf
 - Browse responsive guitar tabs scraped in real time from Ultimate Guitar.
 - Chords visualizer with official diagrams from Ultimate Guitar.
 - Chords transposer.
+- Autoscroll tab.
 - Backing track player (using YouTube API).
 - Add tabs to favorites without the need for an account (stored in local storage).
 
 ## Features in Development
 
-- Autoscroll tab.
 - Export tab as PDF.
 
 ## Technologies
