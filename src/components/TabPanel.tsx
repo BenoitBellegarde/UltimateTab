@@ -10,17 +10,15 @@ import {
   MenuItem,
   MenuList,
   Skeleton,
-  Spinner,
   Text,
-  ToastId,
   Tooltip,
   useBreakpointValue,
   useColorModeValue,
-  useToast,
 } from '@chakra-ui/react'
 import HTMLReactParser from 'html-react-parser'
 import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
+import { FaCircleArrowDown } from 'react-icons/fa6'
 import { GiMusicalScore } from 'react-icons/gi'
 import { GiCrowbar } from 'react-icons/gi'
 import Difficulty from './Difficulty'
@@ -35,11 +33,10 @@ import {
 } from 'react'
 import { useRouter } from 'next/router'
 import useDebounce from '../hooks/useDebounce'
-import useBackingtrack from '../hooks/useBackingtrack'
-import ReactPlayer from 'react-player/youtube'
-import { FaPlayCircle, FaPauseCircle, FaVolumeDown } from 'react-icons/fa'
-import PlayerDuration from './PlayerDuration'
+import { FaPlayCircle } from 'react-icons/fa'
 import ChordTransposer from './ChordTransposer'
+import BackingtrackPlayer from './BackingtrackPlayer'
+import Autoscroller from './Autoscroller'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -65,21 +62,10 @@ export default function TabPanel({
   const [chordsDiagrams, setChordsDiagrams] = useState<UGChordCollection[]>(
     selectedTabContent?.chordsDiagrams,
   )
-  const [isLoadingBackingTrack, setIsLoadingBackingTrack] =
-    useState<boolean>(true)
+  const [showAutoscroll, setShowAutoscroll] = useState<boolean>(false)
+
   const [showBackingTrack, setShowBackingTrack] = useState<boolean>(false)
-  const [playBackingTrack, setPlayBackingTrack] = useState<boolean>(false)
-  const [volumeBackingTrack, setVolumeBackingTrack] = useState<number>(0.25)
-  const [durationBackingTrack, setDurationBackingTrack] = useState<number>(0)
-  const [totalDurationBackingTrack, setTotalDurationBackingTrack] =
-    useState<number>(0)
-  const [seekingBackingTrack, setSeekingBackingTrack] = useState<boolean>(false)
-  const { data: urlBackingTrack } = useBackingtrack(
-    `${selectedTabContent?.artist} ${selectedTabContent?.name} backing track guitar`,
-    showBackingTrack,
-  )
   const firstUpdate = useRef<boolean>(true)
-  const refPlayer = useRef<ReactPlayer>(null)
 
   const flexSongNameDirection = useBreakpointValue({
     base:
@@ -89,13 +75,6 @@ export default function TabPanel({
         : 'row',
     sm: 'row',
   })
-  const widthToolsBar = useBreakpointValue({
-    base: '100%',
-    sm: '50%',
-  })
-  const borderColor = useColorModeValue('gray.200', 'gray.600')
-  const toast = useToast()
-  const refToastId = useRef<ToastId>()
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
   const paddingThirdRow = useBreakpointValue({ base: 2, sm: 1 })
   const widthThirdRow = useBreakpointValue({ base: '100%', sm: 'initial' })
@@ -114,19 +93,7 @@ export default function TabPanel({
         return
       }
       if (!selectedTabContent) return
-      // if (refToastId.current) {
-      //   toast.close(refToastId.current)
-      // }
 
-      // refToastId.current = toast({
-      //   description: 'Adapting tab to your browser dimensions...',
-      //   status: 'info',
-      //   duration: null,
-      //   isClosable: true,
-      // })
-      // refetchTab().then(() => {
-      //   toast.close(refToastId.current)
-      // })
       refetchTab()
       // Disabling this effect on the first load of the tab to prevent triggering the toast only because of scrollbar appearing/disappearing
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -325,9 +292,34 @@ export default function TabPanel({
                 fontWeight={'normal'}
                 px="3"
                 py="4"
+                mr={2}
                 leftIcon={<Icon as={FaPlayCircle} />}
               >
                 Backing track
+              </Button>
+              <Button
+                variant="outline"
+                _hover={{
+                  bg: 'twitter.400',
+                  color: 'white',
+                  opacity: showAutoscroll ? 0.8 : 1,
+                }}
+                _active={{
+                  bg: 'fadebp',
+                  color: 'white',
+                }}
+                isActive={showAutoscroll}
+                onClick={() => {
+                  setShowAutoscroll((prevState) => !prevState)
+                }}
+                size={'sm'}
+                boxShadow="md"
+                fontWeight={'normal'}
+                px="3"
+                py="4"
+                leftIcon={<Icon as={FaCircleArrowDown} />}
+              >
+                Autoscroll
               </Button>
             </Flex>
           </Flex>
@@ -350,130 +342,18 @@ export default function TabPanel({
         </Skeleton>
       </Flex>
       <ChordDiagram chords={chordsDiagrams} />
-      {showBackingTrack && (
-        <Flex
-          position={'fixed'}
-          width={widthToolsBar}
-          left={'50%'}
-          transform={'translate(-50%, 0)'}
-          height={'60px'}
-          bg={'whiteAlpha.50'}
-          border={'1px'}
-          borderColor={borderColor}
-          backdropFilter={'blur(6px)'}
-          shadow={'lg'}
-          rounded={'full'}
-          bottom={'17px'}
-          justifyContent={isLoadingBackingTrack ? 'center' : 'space-between'}
-          alignItems={'center'}
-          px={3}
-          display={isLoading ? 'none' : 'flex'}
-        >
-          {isLoadingBackingTrack ? (
-            <Spinner color="twitter.200" />
-          ) : (
-            <>
-              <Text px={1} fontSize="xs">
-                {' '}
-                Backing track
-              </Text>
-              <Flex flexDirection={'column'} alignItems={'center'}>
-                <IconButton
-                  aria-label="Play/Pause"
-                  variant="outline"
-                  icon={playBackingTrack ? <FaPauseCircle /> : <FaPlayCircle />}
-                  _hover={{
-                    bg: 'twitter.300',
-                    color: 'white',
-                  }}
-                  _active={{
-                    bg: 'twitter.600',
-                    color: 'white',
-                  }}
-                  onClick={() => {
-                    setShowBackingTrack(true)
-                    setPlayBackingTrack((prevValue) => !prevValue)
-                  }}
-                  size={'sm'}
-                  width={'40px'}
-                  boxShadow="md"
-                  rounded={'full'}
-                  fontWeight={'normal'}
-                />
-                <Flex fontSize={'xs'}>
-                  <PlayerDuration
-                    seconds={totalDurationBackingTrack * durationBackingTrack}
-                  />
-                  <input
-                    type="range"
-                    min={0}
-                    max={0.999999}
-                    step="any"
-                    style={{
-                      width: '100%',
-                      margin: '0 var(--chakra-space-1)',
-                    }}
-                    value={durationBackingTrack}
-                    onMouseDown={() => setSeekingBackingTrack(true)}
-                    onTouchStart={() => setSeekingBackingTrack(true)}
-                    onChange={(e) => {
-                      setDurationBackingTrack(parseFloat(e.target.value))
-                    }}
-                    onMouseUp={(e) => {
-                      setSeekingBackingTrack(false)
-                      refPlayer.current.seekTo(
-                        parseFloat(e.currentTarget.value),
-                      )
-                    }}
-                    onTouchEnd={(e) => {
-                      setSeekingBackingTrack(false)
-                      refPlayer.current.seekTo(
-                        parseFloat(e.currentTarget.value),
-                      )
-                    }}
-                  />
-                  <PlayerDuration
-                    seconds={
-                      totalDurationBackingTrack * (1 - durationBackingTrack)
-                    }
-                  />
-                </Flex>
-              </Flex>
-              <Flex>
-                <Icon boxSize={4} mr={1} as={FaVolumeDown} />
-                <input
-                  type={'range'}
-                  min={0}
-                  max={1}
-                  style={{
-                    maxWidth: '80px',
-                    width: '100%',
-                  }}
-                  step="any"
-                  value={volumeBackingTrack}
-                  onChange={(e) =>
-                    setVolumeBackingTrack(parseFloat(e.target.value))
-                  }
-                />
-              </Flex>
-            </>
-          )}
-        </Flex>
-      )}
-      {urlBackingTrack && showBackingTrack && (
-        <ReactPlayer
-          style={{ visibility: 'hidden', position: 'absolute' }}
-          ref={refPlayer}
-          playing={playBackingTrack}
-          url={urlBackingTrack}
-          volume={volumeBackingTrack}
-          onProgress={(e) =>
-            !seekingBackingTrack && setDurationBackingTrack(e.played)
-          }
-          onDuration={(duration) => setTotalDurationBackingTrack(duration)}
-          onReady={() => setIsLoadingBackingTrack(false)}
-        />
-      )}
+      <BackingtrackPlayer
+        showBackingTrack={showBackingTrack}
+        setShowBackingTrack={setShowBackingTrack}
+        isLoading={isLoading}
+        artist={selectedTabContent?.artist}
+        songName={selectedTabContent?.name}
+      />
+      <Autoscroller
+        showAutoscroll={showAutoscroll}
+        isLoading={isLoading}
+        bottomCSS={showBackingTrack ? '87px' : '17px'}
+      />
     </>
   )
 }
