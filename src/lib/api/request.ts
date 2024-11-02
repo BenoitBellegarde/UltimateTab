@@ -117,22 +117,6 @@ export function formatSearchQuery(args: ApiArgsSearch): ApiArgsSearch {
   return params
 }
 
-export function formatTabResult(tab: TabScrapped): Tab {
-  return {
-    artist: tab.artist_name,
-    name: tab.song_name,
-    url: tab.tab_url,
-    difficulty: tab.difficulty,
-    tuning: tab.tuning,
-    raw_tabs: tab.raw_tabs,
-    htmlTab: tab.htmlTab,
-    numberRates: tab.votes,
-    type: tab.type,
-    slug: tab.tab_url.split('/').splice(-2).join('/'),
-    rating: parseFloat(tab.rating.toFixed(2)),
-  }
-}
-
 //Using puppeteer@6.0 and chrome-aws-lambda@6.0 to not exceed the AWS 50mb limit for the serverless functions
 export async function getPuppeteerConf(
   options: PuppeteerOptions = {},

@@ -137,6 +137,8 @@ export async function getTab(
           'E',
         ]
         const difficulty: string = tab_view?.ug_difficulty || 'unknown'
+        const tonality: string = tab_view?.meta?.tonality || 'unknown'
+        const capo: string = tab_view?.meta?.capo || 'no capo'
         const raw_tabs: string = tab_view?.wiki_tab?.content || ''
         const chordsDiagrams: UGChordCollection[] = tab_view?.applicature || []
         const versions: TabScrapped[] =
@@ -171,6 +173,8 @@ export async function getTab(
           url: tab_url,
           difficulty,
           tuning,
+          tonality,
+          capo,
           raw_tabs,
           numberRates: votes,
           type: type,

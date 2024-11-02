@@ -2,7 +2,7 @@ import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import { Badge, Flex, Icon, IconButton, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import useChordTransposer from '../hooks/useChordTransposer'
-import { GiMusicalScore } from 'react-icons/gi'
+import { HiArrowsUpDown } from 'react-icons/hi2'
 import { UGChordCollection } from '../types/tabs'
 interface ChordTransposerProps {
   chords: UGChordCollection[]
@@ -65,7 +65,7 @@ export default function ChordTransposer({
         {' '}
         Transpose{' '}
       </Text>
-      <Icon boxSize={5} as={GiMusicalScore} mr={1} />
+      <Icon boxSize={5} as={HiArrowsUpDown} mr={1} />
       <IconButton
         variant="outline"
         _hover={{

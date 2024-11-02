@@ -44,6 +44,8 @@ export interface Tab {
   rating: number
   type: string
   difficulty?: string
+  tonality?: string
+  capo?: string
   tuning?: string[]
   raw_tabs?: string
   htmlTab?: string
@@ -61,6 +63,8 @@ export interface TabScrapped {
   type: string
   difficulty?: string
   tuning?: string[]
+  tonality?: string
+  capo?: string
   raw_tabs?: string
   htmlTab?: string
 }

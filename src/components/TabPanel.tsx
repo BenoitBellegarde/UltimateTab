@@ -21,6 +21,8 @@ import {
 import HTMLReactParser from 'html-react-parser'
 import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
+import { GiMusicalScore } from 'react-icons/gi'
+import { GiCrowbar } from 'react-icons/gi'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
 import { Tab, UGChordCollection } from '../types/tabs'
@@ -263,6 +265,25 @@ export default function TabPanel({
               </Text>{' '}
               <Icon boxSize={5} as={GiGuitarHead} mr={1} />
               {selectedTabContent?.tuning.join(' ')}
+            </Flex>{' '}
+          </Flex>
+          <Flex
+            justifyContent={'space-between'}
+            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
+          >
+            <Flex fontSize={'sm'} py={2}>
+              <Text color={'gray.500'} as="b" mr={1}>
+                Key
+              </Text>{' '}
+              <Icon boxSize={5} as={GiMusicalScore} mr={1} />
+              {selectedTabContent?.tonality}
+            </Flex>{' '}
+            <Flex fontSize={'sm'} py={2}>
+              <Text color={'gray.500'} as="b" mr={1}>
+                Capo
+              </Text>{' '}
+              <Icon boxSize={5} as={GiCrowbar} mr={1} />
+              {selectedTabContent?.capo}
             </Flex>{' '}
           </Flex>
           <Flex
