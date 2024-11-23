@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import TabPanel from '../../components/TabPanel'
 import Head from 'next/head'
 import useAppStateContext from '../../hooks/useAppStateContext'
 import { Tab } from '../../types/tabs'
 import { useRouter } from 'next/router'
-import { Fade } from '@chakra-ui/react'
+import { Fade, useToast } from '@chakra-ui/react'
 
 export default function TabPage(): JSX.Element {
   const router = useRouter()
@@ -20,11 +20,18 @@ export default function TabPage(): JSX.Element {
     selectedTabContent,
     handleClickFavorite,
     refetchTab,
+    isLoadingTabBackground,
+    selectedTabContentBackground,
   } = useAppStateContext()
+
+  const toast = useToast()
 
   const title = selectedTabContent
     ? `${selectedTabContent.name} by ${selectedTabContent.artist} - Ultimate Tab`
     : 'Tab - Ultimate Tab'
+
+  const [updatedResponsiveTab, setUpdatedResponsiveTab] =
+    useState<Tab>(selectedTabContent)
 
   useEffect(() => {
     if (slug) {
@@ -34,6 +41,33 @@ export default function TabPage(): JSX.Element {
       }))
     }
   }, [slug, setSelectedTab])
+
+  useEffect(() => {
+    if (!isLoadingTab) {
+      if (!isLoadingTabBackground) {
+        if (typeof selectedTabContentBackground !== 'undefined') {
+          setUpdatedResponsiveTab(selectedTabContentBackground)
+        }
+      } else {
+        toast.closeAll()
+        toast({
+          description: 'Adapting tab for your browser...🛠️',
+          status: 'info',
+          position: 'top-right',
+          duration: 3000,
+        })
+      }
+    }
+  }, [
+    selectedTabContentBackground,
+    isLoadingTabBackground,
+    toast,
+    isLoadingTab,
+  ])
+
+  useEffect(() => {
+    setUpdatedResponsiveTab(selectedTabContent)
+  }, [selectedTabContent])
 
   return (
     <>
@@ -45,9 +79,9 @@ export default function TabPage(): JSX.Element {
         in={true}
       >
         <TabPanel
-          isLoading={isLoadingTab}
+          isLoading={isLoadingTab || selectedTab.url == '' ? true : false}
           selectedTab={selectedTab}
-          selectedTabContent={selectedTabContent}
+          selectedTabContent={updatedResponsiveTab}
           isFavorite={
             typeof favorites.find((el: Tab) => el.url === selectedTab.url) !==
             'undefined'

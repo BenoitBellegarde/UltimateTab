@@ -16,6 +16,7 @@ A web application that delivers an enhanced, ads-free and fast responsive interf
 - Chords visualizer with official diagrams from Ultimate Guitar.
 - Chords transposer.
 - Autoscroll tab.
+- Font size management
 - Backing track player (using YouTube API).
 - Add tabs to favorites without the need for an account (stored in local storage).
 

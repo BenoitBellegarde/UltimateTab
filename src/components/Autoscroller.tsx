@@ -36,10 +36,19 @@ export default function Autoscroller({
   const requestAnimationFrameRef = useRef<number>(0)
   const manualScrollintervalRef = useRef<NodeJS.Timeout>(null)
 
+  if (typeof document !== 'undefined') {
+    var isTouch = 'ontouchstart' in document.documentElement
+  }
+
   const formatSpeed = (scrollSpeed: number) => {
     const base100 = 200000
     const percent = base100 / scrollSpeed
     return Math.round(percent * 100)
+  }
+
+  const handlePlayButton = () => {
+    setIsScrolling((isScrolling) => !isScrolling)
+    setIsEnabled((isEnabled) => !isEnabled)
   }
 
   const resetRequestAnimationFrame = () => {
@@ -157,10 +166,8 @@ export default function Autoscroller({
               color: 'white',
             }}
             isActive={isEnabled}
-            onClick={() => {
-              setIsScrolling((isScrolling) => !isScrolling)
-              setIsEnabled((isEnabled) => !isEnabled)
-            }}
+            onTouchStart={handlePlayButton}
+            onMouseDown={!isTouch ? handlePlayButton : undefined}
             size={'sm'}
             boxShadow="md"
             fontWeight={'normal'}

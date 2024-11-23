@@ -17,7 +17,6 @@ export const extendedTheme = extendTheme({
       },
       'pre, code': {
         fontFamily: `'Poppins Mono', monospace !important`,
-        fontSize: 'md !important',
       },
       '.PlayerRSWP': {
         bgColor: props.colorMode === 'dark' && '#1a202c !important',
