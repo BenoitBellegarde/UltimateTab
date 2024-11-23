@@ -8,35 +8,33 @@ import {
   Menu,
   MenuButton,
   MenuItem,
+  MenuItemOption,
   MenuList,
+  MenuOptionGroup,
   Skeleton,
   Text,
   Tooltip,
   useBreakpointValue,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 import HTMLReactParser from 'html-react-parser'
 import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
+import { MdFontDownload } from 'react-icons/md'
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { GiMusicalScore } from 'react-icons/gi'
 import { GiCrowbar } from 'react-icons/gi'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
 import { Tab, UGChordCollection } from '../types/tabs'
-import {
-  MouseEventHandler,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react'
+import { MouseEventHandler, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import useDebounce from '../hooks/useDebounce'
 import { FaPlayCircle } from 'react-icons/fa'
 import ChordTransposer from './ChordTransposer'
 import BackingtrackPlayer from './BackingtrackPlayer'
 import Autoscroller from './Autoscroller'
+import useAppStateContext from '../hooks/useAppStateContext'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -55,17 +53,14 @@ export default function TabPanel({
   refetchTab,
 }: TabPanelProps) {
   const router = useRouter()
-  const widthBrowser = useDebounce<number>(
-    typeof document !== 'undefined' ? document.documentElement.clientWidth : 0,
-    500,
-  )
+  const { tabFontSize, setTabFontSize } = useAppStateContext()
+
   const [chordsDiagrams, setChordsDiagrams] = useState<UGChordCollection[]>(
     selectedTabContent?.chordsDiagrams,
   )
   const [showAutoscroll, setShowAutoscroll] = useState<boolean>(false)
 
   const [showBackingTrack, setShowBackingTrack] = useState<boolean>(false)
-  const firstUpdate = useRef<boolean>(true)
 
   const flexSongNameDirection = useBreakpointValue({
     base:
@@ -76,29 +71,16 @@ export default function TabPanel({
     sm: 'row',
   })
   const borderLightColor = useColorModeValue('gray.200', 'gray.700')
-  const paddingThirdRow = useBreakpointValue({ base: 2, sm: 1 })
-  const widthThirdRow = useBreakpointValue({ base: '100%', sm: 'initial' })
+  const widthThirdRow = useBreakpointValue({ base: '100%', md: 'initial' })
+  const marginTopThirdRow = useBreakpointValue({ base: 0, md: 2 })
+  const paddingTopThirdRow = useBreakpointValue({ base: 1, md: 0 })
+
+  const fontSizeValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 
   useEffect(() => {
     setChordsDiagrams(selectedTabContent?.chordsDiagrams)
   }, [selectedTabContent])
 
-  // Refetch tab when resizing browser or changing orientation to get the updated responsive tab from UG
-  if (typeof document !== 'undefined') {
-    // Hook executed only in browser to prevent NextJS SSR to return a warning
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useLayoutEffect(() => {
-      if (firstUpdate.current) {
-        firstUpdate.current = false
-        return
-      }
-      if (!selectedTabContent) return
-
-      refetchTab()
-      // Disabling this effect on the first load of the tab to prevent triggering the toast only because of scrollbar appearing/disappearing
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [widthBrowser, refetchTab])
-  }
   return (
     <>
       <Box
@@ -216,28 +198,7 @@ export default function TabPanel({
               </Menu>
             )}
           </Flex>
-          <Flex
-            justifyContent={'space-between'}
-            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
-          >
-            <Flex fontSize={'sm'} py={2}>
-              <Text color={'gray.500'} as="b" mr={1}>
-                Difficulty
-              </Text>{' '}
-              <Difficulty level={selectedTabContent?.difficulty} />
-            </Flex>{' '}
-            <Flex fontSize={'sm'} py={2}>
-              <Text color={'gray.500'} as="b" mr={1}>
-                Tuning
-              </Text>{' '}
-              <Icon boxSize={5} as={GiGuitarHead} mr={1} />
-              {selectedTabContent?.tuning.join(' ')}
-            </Flex>{' '}
-          </Flex>
-          <Flex
-            justifyContent={'space-between'}
-            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
-          >
+          <Flex justifyContent={'space-between'} flexDirection={'row'}>
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
                 Key
@@ -256,13 +217,34 @@ export default function TabPanel({
           <Flex
             justifyContent={'space-between'}
             flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
+          >
+            <Flex fontSize={'sm'} py={2}>
+              <Text color={'gray.500'} as="b" mr={1}>
+                Difficulty
+              </Text>{' '}
+              <Difficulty level={selectedTabContent?.difficulty} />
+            </Flex>{' '}
+            <Flex fontSize={'sm'} py={2}>
+              <Text color={'gray.500'} as="b" mr={1}>
+                Tuning
+              </Text>{' '}
+              <Icon boxSize={5} as={GiGuitarHead} mr={1} />
+              {selectedTabContent?.tuning.join(' ')}
+            </Flex>{' '}
+          </Flex>
+
+          <Flex
+            justifyContent={'space-between'}
+            flexDirection={useBreakpointValue({ base: 'column', md: 'row' })}
             alignItems={'center'}
           >
             {chordsDiagrams && selectedTabContent?.type === 'Chords' && (
               <Flex
-                py={paddingThirdRow}
+                pb={1}
                 justifyContent={'start'}
                 w={widthThirdRow}
+                mt={marginTopThirdRow}
+                pt={paddingTopThirdRow}
               >
                 <ChordTransposer
                   chords={chordsDiagrams}
@@ -271,7 +253,7 @@ export default function TabPanel({
               </Flex>
             )}
 
-            <Flex py={paddingThirdRow} w={widthThirdRow}>
+            <Flex pb={1} w={widthThirdRow} pt={0} flexWrap={'wrap'}>
               <Button
                 variant="outline"
                 _hover={{
@@ -293,6 +275,7 @@ export default function TabPanel({
                 px="3"
                 py="4"
                 mr={2}
+                mt={useBreakpointValue({ base: 3, md: 2 })}
                 leftIcon={<Icon as={FaPlayCircle} />}
               >
                 Backing track
@@ -317,10 +300,50 @@ export default function TabPanel({
                 fontWeight={'normal'}
                 px="3"
                 py="4"
+                mr={2}
+                mt={useBreakpointValue({ base: 3, md: 2 })}
                 leftIcon={<Icon as={FaCircleArrowDown} />}
               >
                 Autoscroll
               </Button>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  variant="outline"
+                  _hover={{
+                    bg: 'twitter.300',
+                    color: 'white',
+                  }}
+                  _active={{
+                    bg: 'twitter.600',
+                    color: 'white',
+                  }}
+                  size={'sm'}
+                  boxShadow="md"
+                  fontWeight={'normal'}
+                  px="3"
+                  py="4"
+                  mt={useBreakpointValue({ base: 3, md: 2 })}
+                  rightIcon={<ChevronDownIcon />}
+                  leftIcon={<Icon fontSize={'sm'} as={MdFontDownload} />}
+                >
+                  Font size
+                </MenuButton>
+                <MenuList>
+                  <MenuOptionGroup
+                    value={tabFontSize.toString()}
+                    onChange={(selectedSize: string) => {
+                      setTabFontSize(parseInt(selectedSize))
+                    }}
+                  >
+                    {fontSizeValues.map((size) => (
+                      <MenuItemOption key={size} value={size.toString()}>
+                        {size}%
+                      </MenuItemOption>
+                    ))}
+                  </MenuOptionGroup>
+                </MenuList>
+              </Menu>
             </Flex>
           </Flex>
         </Skeleton>
@@ -336,7 +359,11 @@ export default function TabPanel({
         justifyContent="center"
       >
         <Skeleton display={'flex'} w="100%" isLoaded={!isLoading}>
-          <Flex h={'100%'} w="100%">
+          <Flex
+            h={'100%'}
+            w="100%"
+            fontSize={`${tabFontSize / 100}rem !important`}
+          >
             {selectedTabContent && HTMLReactParser(selectedTabContent?.htmlTab)}
           </Flex>
         </Skeleton>

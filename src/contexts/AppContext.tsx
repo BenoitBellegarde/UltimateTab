@@ -7,7 +7,8 @@ import {
   Dispatch,
 } from 'react'
 import { TAB_SOURCES } from '../constants'
-import useDebounce from '../hooks/useDebounce'
+import useBackgroundTabs from '../hooks/useBackgroundTabs'
+import useWindowSize from '../hooks/useWindowSize'
 import useLocalStorage from '../hooks/useLocalStorage'
 import useTabs from '../hooks/useTabs'
 import useTabsList from '../hooks/useTabsList'
@@ -26,8 +27,13 @@ interface AppState {
   setFavorites: Dispatch<SetStateAction<Tab[]>>
   selectedTab: Tab
   setSelectedTab: Dispatch<SetStateAction<Tab>>
+  tabFontSize: number
+  setTabFontSize: Dispatch<SetStateAction<number>>
   isLoadingTab: boolean
+  widthBrowser: number
   selectedTabContent: Tab
+  isLoadingTabBackground: boolean
+  selectedTabContentBackground: Tab
   handleClickFavorite: MouseEventHandler<HTMLButtonElement>
   favoriteActive: boolean
   setFavoriteActive: Dispatch<SetStateAction<boolean>>
@@ -56,13 +62,20 @@ export function AppStateProvider({ children }) {
     rating: 0,
     type: 'Tab',
   })
+  const [tabFontSize, setTabFontSize] = useState<number>(100)
+  const [widthBrowser, heightBrowser] = useWindowSize()
 
   const toast = useToast()
   const {
     isLoading: isLoadingTab,
     data: selectedTabContent,
     refetch: refetchTab,
-  } = useTabs(selectedTab.url)
+  } = useTabs(selectedTab.url, tabFontSize, widthBrowser)
+
+  const {
+    isLoading: isLoadingTabBackground,
+    data: selectedTabContentBackground,
+  } = useBackgroundTabs(selectedTab.url, tabFontSize, widthBrowser)
 
   const {
     isLoading: isLoadingTabList,
@@ -93,6 +106,7 @@ export function AppStateProvider({ children }) {
         ? 'Song added to your favorites'
         : 'Song removed from your favorites',
       status: isAdded ? 'success' : 'info',
+      position: 'top-right',
       duration: 2000,
     })
   }
@@ -112,8 +126,13 @@ export function AppStateProvider({ children }) {
         setFavorites,
         selectedTab,
         setSelectedTab,
+        tabFontSize,
+        setTabFontSize,
         isLoadingTab,
         selectedTabContent,
+        isLoadingTabBackground,
+        widthBrowser,
+        selectedTabContentBackground,
         handleClickFavorite,
         favoriteActive,
         setFavoriteActive,
