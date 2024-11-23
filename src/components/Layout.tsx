@@ -2,6 +2,7 @@ import { Container, Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { ReactNode, useRef } from 'react'
 import Backdrop from './Backdrop'
+import Footer from './Footer'
 import Nav from './Nav'
 
 interface LayoutProps {
@@ -20,6 +21,7 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
           <Flex grow={1} direction={flexDirectionContent}>
             {children}
           </Flex>
+          <Footer></Footer>
         </Flex>
       </Container>
     </>

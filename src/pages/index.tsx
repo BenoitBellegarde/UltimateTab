@@ -9,6 +9,7 @@ import {
   Fade,
 } from '@chakra-ui/react'
 import Head from 'next/head'
+import { FaGithub } from 'react-icons/fa'
 import { useRouter } from 'next/router'
 
 export default function Home(): JSX.Element {
@@ -83,6 +84,22 @@ export default function Home(): JSX.Element {
                   }}
                 >
                   Get started
+                </Button>
+                <Button
+                  leftIcon={<FaGithub />}
+                  rounded={'full'}
+                  bg={'blackAlpha.800'}
+                  color={'white'}
+                  onClick={() =>
+                    window.open(
+                      'https://github.com/BenoitBellegarde/UltimateTab',
+                    )
+                  }
+                  _hover={{
+                    opacity: 0.8,
+                  }}
+                >
+                  Support on GitHub
                 </Button>
               </Stack>
             </Stack>
