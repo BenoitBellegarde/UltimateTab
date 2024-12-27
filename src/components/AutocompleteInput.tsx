@@ -1,9 +1,10 @@
-import { SearchIcon } from '@chakra-ui/icons'
+import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Box,
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   LinkBox,
   useBreakpointValue,
   useColorModeValue,
@@ -33,6 +34,7 @@ export default function AutocompleteInput({
     (!dataAC || dataAC.length === 0) && valueAC ? [valueAC] : dataAC
 
   const borderColor = useColorModeValue('gray.200', 'gray.600')
+  const clearBtnColor = useColorModeValue('gray.500', 'gray.300')
   const fontSizeSuggestions = useBreakpointValue({ base: 'sm', md: 'md' })
   const marginIconSearch = useBreakpointValue({ base: 2, md: 4 })
 
@@ -117,8 +119,21 @@ export default function AutocompleteInput({
         borderRadius={!inputFocus && 'full'}
         bg={'var(--chakra-colors-chakra-body-bg)'}
         value={valueAC}
-        type={'search'}
+        type={'text'}
       />
+      {valueAC && (
+        <InputRightElement
+          h="100%"
+          cursor="pointer"
+          fontSize={'xs'}
+          onClick={() => {
+            setValueAC('')
+            refInput.current?.focus()
+          }}
+        >
+          <CloseIcon color={clearBtnColor} />
+        </InputRightElement>
+      )}
       <Box
         position={'absolute'}
         top="100%"
