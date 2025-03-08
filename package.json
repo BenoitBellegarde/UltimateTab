@@ -16,6 +16,7 @@
     "@fontsource/poppins": "^4.5.10",
     "framer-motion": "^10.18.0",
     "html-react-parser": "^3.0.16",
+    "lz-string": "^1.5.0",
     "next": "^15.2.1",
     "nextjs-google-analytics": "^2.3.7",
     "puppeteer-real-browser": "^1.4.2",

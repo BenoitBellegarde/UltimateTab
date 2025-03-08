@@ -14,6 +14,7 @@ import {
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
+  MenuItem,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import SearchPanel from '../components/SearchPanel'
@@ -28,6 +29,9 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
 import { getSearchObjectParameters } from '../lib/utils/params'
 import { ChevronDownIcon } from '@chakra-ui/icons'
+import { BiExport } from 'react-icons/bi'
+import FavoritesImporter from '../components/FavoritesImporter'
+import FavoritesExporter from '../components/FavoritesExporter'
 
 export default function Search(): JSX.Element {
   const {
@@ -202,30 +206,63 @@ export default function Search(): JSX.Element {
                   </MenuOptionGroup>
                 </MenuList>
               </Menu>
-              <Button
-                variant="outline"
-                _hover={{
-                  bg: 'blue.400',
-                  color: 'white',
-                  opacity: favoriteActive ? 0.8 : 1,
-                }}
-                _active={{
-                  bg: 'fadebp',
-                  color: 'white',
-                }}
-                isActive={favoriteActive}
-                onClick={() =>
-                  setFavoriteActive((prevState: boolean) => !prevState)
-                }
-                size={'sm'}
-                boxShadow="md"
-                fontWeight={'normal'}
-                px="3"
-                py="4"
-                leftIcon={<Icon color="red.200" as={RiHeartFill} />}
-              >
-                Favorites
-              </Button>
+              <Flex>
+                <Button
+                  variant="outline"
+                  _hover={{
+                    bg: 'blue.400',
+                    color: 'white',
+                    opacity: favoriteActive ? 0.8 : 1,
+                  }}
+                  _active={{
+                    bg: 'fadebp',
+                    color: 'white',
+                  }}
+                  isActive={favoriteActive}
+                  onClick={() =>
+                    setFavoriteActive((prevState: boolean) => !prevState)
+                  }
+                  size={'sm'}
+                  boxShadow="md"
+                  fontWeight={'normal'}
+                  px="3"
+                  py="4"
+                  borderRightRadius={0}
+                  leftIcon={<Icon color="red.200" as={RiHeartFill} />}
+                >
+                  Favorites
+                </Button>
+                <Menu closeOnSelect={false}>
+                  <MenuButton
+                    as={Button}
+                    variant="outline"
+                    _hover={{
+                      bg: 'blue.400',
+                      color: 'white',
+                    }}
+                    _active={{
+                      bg: 'blue.600',
+                      color: 'white',
+                    }}
+                    size={'sm'}
+                    boxShadow="md"
+                    fontWeight={'normal'}
+                    px="2"
+                    py="4"
+                    borderLeftRadius={0}
+                  >
+                    <Icon
+                      fontSize={'md'}
+                      position="relative"
+                      as={ChevronDownIcon}
+                    />{' '}
+                  </MenuButton>
+                  <MenuList>
+                    <FavoritesImporter />
+                    <FavoritesExporter />
+                  </MenuList>
+                </Menu>
+              </Flex>
             </HStack>
           </HStack>
         </Flex>
