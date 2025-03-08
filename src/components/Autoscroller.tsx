@@ -198,13 +198,11 @@ export default function Autoscroller({
                 const savedIsScrolling = isScrolling
                 setIsScrolling(false)
                 resetRequestAnimationFrame()
-                setScrollSpeed((prevSpeed) =>
-                  Math.max(prevSpeed - 10000, 50000),
-                )
+                setScrollSpeed((prevSpeed) => prevSpeed + 10000)
                 setIsScrolling(savedIsScrolling)
               }}
-              aria-label="Increase speed"
-              icon={<AddIcon />}
+              aria-label="Reduce speed"
+              icon={<MinusIcon />}
             />
             <IconButton
               variant="outline"
@@ -221,11 +219,13 @@ export default function Autoscroller({
                 const savedIsScrolling = isScrolling
                 setIsScrolling(false)
                 resetRequestAnimationFrame()
-                setScrollSpeed((prevSpeed) => prevSpeed + 10000)
+                setScrollSpeed((prevSpeed) =>
+                  Math.max(prevSpeed - 10000, 50000),
+                )
                 setIsScrolling(savedIsScrolling)
               }}
-              aria-label="Reduce speed"
-              icon={<MinusIcon />}
+              aria-label="Increase speed"
+              icon={<AddIcon />}
             />
           </Flex>
         </Flex>

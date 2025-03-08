@@ -208,21 +208,24 @@ export default function TabPanel({
             </Flex>{' '}
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
-                Capo
+                Difficulty
               </Text>{' '}
-              <Icon boxSize={5} as={GiCrowbar} mr={1} />
-              {selectedTabContent?.capo}
+              <Difficulty level={selectedTabContent?.difficulty} />
             </Flex>{' '}
           </Flex>
           <Flex
             justifyContent={'space-between'}
-            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
+            flexDirection={useBreakpointValue({
+              base: 'column-reverse',
+              sm: 'row',
+            })}
           >
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
-                Difficulty
+                Capo
               </Text>{' '}
-              <Difficulty level={selectedTabContent?.difficulty} />
+              <Icon boxSize={5} as={GiCrowbar} mr={1} />
+              {selectedTabContent?.capo}
             </Flex>{' '}
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
