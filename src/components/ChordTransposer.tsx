@@ -81,7 +81,7 @@ export default function ChordTransposer({
         aria-label="Transpose down"
         icon={<MinusIcon />}
       />
-      <Badge mx={2} variant="subtle" fontSize={'sm'} color={'blue.600'}>
+      <Badge mx={2} variant="subtle" fontSize={'sm'} color={'blue.400'}>
         {amount}
       </Badge>
       <IconButton

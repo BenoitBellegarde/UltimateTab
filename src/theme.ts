@@ -9,7 +9,7 @@ export const extendedTheme = extendTheme({
     global: (props: StyleFunctionProps) => ({
       'span.js-chord-chord': {
         cursor: 'pointer',
-        color: 'blue.600 !important',
+        color: 'blue.400 !important',
         fontWeight: 'bold',
         background:
           props.colorMode === 'dark' ? 'rgba(226, 232, 240, 0.16)' : '#EDF2F7',
