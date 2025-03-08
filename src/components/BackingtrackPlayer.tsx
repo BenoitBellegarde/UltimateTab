@@ -68,7 +68,7 @@ export default function BackingtrackPlayer({
           display={isLoading ? 'none' : 'flex'}
         >
           {isLoadingBackingTrack ? (
-            <Spinner color="twitter.200" />
+            <Spinner color="blue.200" />
           ) : (
             <>
               <Text px={1} fontSize="xs">
@@ -81,11 +81,11 @@ export default function BackingtrackPlayer({
                   variant="outline"
                   icon={playBackingTrack ? <FaPauseCircle /> : <FaPlayCircle />}
                   _hover={{
-                    bg: 'twitter.300',
+                    bg: 'blue.300',
                     color: 'white',
                   }}
                   _active={{
-                    bg: 'twitter.600',
+                    bg: 'blue.600',
                     color: 'white',
                   }}
                   onClick={() => {

@@ -17,7 +17,7 @@ export default function RadioCard(props): JSX.Element {
         boxShadow="md"
         transition="background-color 0.2s ease 0s"
         _hover={{
-          bg: 'twitter.400',
+          bg: 'blue.400',
           color: 'white',
           opacity: props.isChecked ? 0.8 : 1,
         }}

@@ -151,11 +151,11 @@ export default function TabPanel({
                   as={Button}
                   variant="outline"
                   _hover={{
-                    bg: 'twitter.300',
+                    bg: 'blue.300',
                     color: 'white',
                   }}
                   _active={{
-                    bg: 'twitter.600',
+                    bg: 'blue.600',
                     color: 'white',
                   }}
                   size={'sm'}
@@ -208,21 +208,24 @@ export default function TabPanel({
             </Flex>{' '}
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
-                Capo
+                Difficulty
               </Text>{' '}
-              <Icon boxSize={5} as={GiCrowbar} mr={1} />
-              {selectedTabContent?.capo}
+              <Difficulty level={selectedTabContent?.difficulty} />
             </Flex>{' '}
           </Flex>
           <Flex
             justifyContent={'space-between'}
-            flexDirection={useBreakpointValue({ base: 'column', sm: 'row' })}
+            flexDirection={useBreakpointValue({
+              base: 'column-reverse',
+              sm: 'row',
+            })}
           >
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
-                Difficulty
+                Capo
               </Text>{' '}
-              <Difficulty level={selectedTabContent?.difficulty} />
+              <Icon boxSize={5} as={GiCrowbar} mr={1} />
+              {selectedTabContent?.capo}
             </Flex>{' '}
             <Flex fontSize={'sm'} py={2}>
               <Text color={'gray.500'} as="b" mr={1}>
@@ -257,7 +260,7 @@ export default function TabPanel({
               <Button
                 variant="outline"
                 _hover={{
-                  bg: 'twitter.400',
+                  bg: 'blue.400',
                   color: 'white',
                   opacity: showBackingTrack ? 0.8 : 1,
                 }}
@@ -283,7 +286,7 @@ export default function TabPanel({
               <Button
                 variant="outline"
                 _hover={{
-                  bg: 'twitter.400',
+                  bg: 'blue.400',
                   color: 'white',
                   opacity: showAutoscroll ? 0.8 : 1,
                 }}
@@ -311,11 +314,11 @@ export default function TabPanel({
                   as={Button}
                   variant="outline"
                   _hover={{
-                    bg: 'twitter.300',
+                    bg: 'blue.300',
                     color: 'white',
                   }}
                   _active={{
-                    bg: 'twitter.600',
+                    bg: 'blue.600',
                     color: 'white',
                   }}
                   size={'sm'}

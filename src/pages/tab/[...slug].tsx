@@ -55,6 +55,7 @@ export default function TabPage(): JSX.Element {
           status: 'info',
           position: 'top-right',
           duration: 3000,
+          isClosable: true,
         })
       }
     }

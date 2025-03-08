@@ -146,11 +146,11 @@ export default function Search(): JSX.Element {
                   as={Button}
                   variant="outline"
                   _hover={{
-                    bg: 'twitter.400',
+                    bg: 'blue.400',
                     color: 'white',
                   }}
                   _active={{
-                    bg: 'twitter.600',
+                    bg: 'blue.600',
                     color: 'white',
                   }}
                   size={'sm'}
@@ -205,7 +205,7 @@ export default function Search(): JSX.Element {
               <Button
                 variant="outline"
                 _hover={{
-                  bg: 'twitter.400',
+                  bg: 'blue.400',
                   color: 'white',
                   opacity: favoriteActive ? 0.8 : 1,
                 }}

@@ -157,7 +157,7 @@ export default function Autoscroller({
           <Button
             variant="outline"
             _hover={{
-              bg: 'twitter.400',
+              bg: 'blue.400',
               color: 'white',
               opacity: isEnabled ? 0.8 : 1,
             }}
@@ -185,7 +185,7 @@ export default function Autoscroller({
             <IconButton
               variant="outline"
               _hover={{
-                bg: 'twitter.400',
+                bg: 'blue.400',
                 color: 'white',
               }}
               size={'sm'}
@@ -198,18 +198,16 @@ export default function Autoscroller({
                 const savedIsScrolling = isScrolling
                 setIsScrolling(false)
                 resetRequestAnimationFrame()
-                setScrollSpeed((prevSpeed) =>
-                  Math.max(prevSpeed - 10000, 50000),
-                )
+                setScrollSpeed((prevSpeed) => prevSpeed + 10000)
                 setIsScrolling(savedIsScrolling)
               }}
-              aria-label="Increase speed"
-              icon={<AddIcon />}
+              aria-label="Reduce speed"
+              icon={<MinusIcon />}
             />
             <IconButton
               variant="outline"
               _hover={{
-                bg: 'twitter.400',
+                bg: 'blue.400',
                 color: 'white',
               }}
               size={'sm'}
@@ -221,11 +219,13 @@ export default function Autoscroller({
                 const savedIsScrolling = isScrolling
                 setIsScrolling(false)
                 resetRequestAnimationFrame()
-                setScrollSpeed((prevSpeed) => prevSpeed + 10000)
+                setScrollSpeed((prevSpeed) =>
+                  Math.max(prevSpeed - 10000, 50000),
+                )
                 setIsScrolling(savedIsScrolling)
               }}
-              aria-label="Reduce speed"
-              icon={<MinusIcon />}
+              aria-label="Increase speed"
+              icon={<AddIcon />}
             />
           </Flex>
         </Flex>

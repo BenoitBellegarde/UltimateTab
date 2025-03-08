@@ -5,6 +5,8 @@
 
 **Link** : [https://ultimate-tab.com](https://ultimate-tab.com)
 
+**Browser extension** : Ultimate Tab works with [LibRedirect](https://libredirect.github.io/index.html). Download and configure the extension to automatically redirect all Ultimate Guitar links to Ultimate Tab.
+
 A web application that delivers an enhanced, ads-free and fast responsive interface to browse guitar tabs scraped from Ultimate Guitar.
 
 ![Ultimate Tab Screenshot](https://i.ibb.co/RYLXkNc/586shots-so.png)
