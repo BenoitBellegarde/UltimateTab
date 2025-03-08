@@ -48,7 +48,6 @@ export default function FavoritesExporter(): JSX.Element {
                 readOnly
                 mt={4}
                 placeholder="Export code to import"
-                textOverflow={'ellipsis'}
                 value={value}
               />
               <Button
