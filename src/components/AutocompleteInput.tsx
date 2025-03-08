@@ -168,7 +168,7 @@ export default function AutocompleteInput({
               e.preventDefault()
             }}
             _hover={{
-              bg: 'twitter.400',
+              bg: 'blue.400',
               color: 'white',
               opacity: 1,
             }}
@@ -183,7 +183,7 @@ export default function AutocompleteInput({
             justifyContent={'start'}
             alignItems="center"
             boxShadow="xs"
-            bg={index === idSuggestionHighlighted && 'twitter.400'}
+            bg={index === idSuggestionHighlighted && 'blue.400'}
             color={index === idSuggestionHighlighted && 'white'}
             fontSize={fontSizeSuggestions}
             transition="background-color 0.2s ease 0s"

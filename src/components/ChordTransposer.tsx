@@ -69,7 +69,7 @@ export default function ChordTransposer({
       <IconButton
         variant="outline"
         _hover={{
-          bg: 'twitter.400',
+          bg: 'blue.400',
           color: 'white',
         }}
         size={'sm'}
@@ -81,13 +81,13 @@ export default function ChordTransposer({
         aria-label="Transpose down"
         icon={<MinusIcon />}
       />
-      <Badge mx={2} variant="subtle" fontSize={'sm'} color={'twitter.600'}>
+      <Badge mx={2} variant="subtle" fontSize={'sm'} color={'blue.600'}>
         {amount}
       </Badge>
       <IconButton
         variant="outline"
         _hover={{
-          bg: 'twitter.400',
+          bg: 'blue.400',
           color: 'white',
         }}
         size={'sm'}

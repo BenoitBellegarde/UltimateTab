@@ -8,8 +8,8 @@ import type {
   TabScrapped,
   PuppeteerOptions,
 } from '../../types/tabs'
-import { Page, Browser } from 'puppeteer'
-import { connect } from '../../../node_modules/puppeteer-real-browser/src/index.js'
+import { Page, Browser } from 'rebrowser-puppeteer-core'
+import { connect } from 'puppeteer-real-browser'
 import {
   PUPPETEER_BLOCK_RESSOURCE_NAME,
   PUPPETEER_BLOCK_RESSOURCE_TYPE,
@@ -122,7 +122,7 @@ export async function getPuppeteerConf(
   options: PuppeteerOptions = {},
 ): Promise<{ page: Page; browser: any }> {
   const { browser, page }: { browser: Browser; page: Page } = await connect({
-    headless: 'auto',
+    headless: false,
     args: [
       '--autoplay-policy=user-gesture-required',
       '--disable-background-networking',
@@ -160,7 +160,6 @@ export async function getPuppeteerConf(
       '--use-gl=swiftshader',
       '--use-mock-keychain',
     ],
-    fingerprint: false,
     turnstile: true,
   })
 

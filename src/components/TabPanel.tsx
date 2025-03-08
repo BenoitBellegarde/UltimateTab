@@ -151,11 +151,11 @@ export default function TabPanel({
                   as={Button}
                   variant="outline"
                   _hover={{
-                    bg: 'twitter.300',
+                    bg: 'blue.300',
                     color: 'white',
                   }}
                   _active={{
-                    bg: 'twitter.600',
+                    bg: 'blue.600',
                     color: 'white',
                   }}
                   size={'sm'}
@@ -260,7 +260,7 @@ export default function TabPanel({
               <Button
                 variant="outline"
                 _hover={{
-                  bg: 'twitter.400',
+                  bg: 'blue.400',
                   color: 'white',
                   opacity: showBackingTrack ? 0.8 : 1,
                 }}
@@ -286,7 +286,7 @@ export default function TabPanel({
               <Button
                 variant="outline"
                 _hover={{
-                  bg: 'twitter.400',
+                  bg: 'blue.400',
                   color: 'white',
                   opacity: showAutoscroll ? 0.8 : 1,
                 }}
@@ -314,11 +314,11 @@ export default function TabPanel({
                   as={Button}
                   variant="outline"
                   _hover={{
-                    bg: 'twitter.300',
+                    bg: 'blue.300',
                     color: 'white',
                   }}
                   _active={{
-                    bg: 'twitter.600',
+                    bg: 'blue.600',
                     color: 'white',
                   }}
                   size={'sm'}

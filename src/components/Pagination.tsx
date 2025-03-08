@@ -54,7 +54,7 @@ const Pagination = (props) => {
           size={'sm'}
           mr={2}
           key={parseInt(pageNumber.toString()) + index}
-          colorScheme={pageNumber === currentPage ? 'twitter' : 'gray'}
+          colorScheme={pageNumber === currentPage ? 'blue' : 'gray'}
           onClick={() => {
             onPageChange(pageNumber)
             window.scrollTo(0, 0)

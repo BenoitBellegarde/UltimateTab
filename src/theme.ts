@@ -9,7 +9,7 @@ export const extendedTheme = extendTheme({
     global: (props: StyleFunctionProps) => ({
       'span.js-chord-chord': {
         cursor: 'pointer',
-        color: 'twitter.600 !important',
+        color: 'blue.600 !important',
         fontWeight: 'bold',
         background:
           props.colorMode === 'dark' ? 'rgba(226, 232, 240, 0.16)' : '#EDF2F7',
@@ -22,7 +22,7 @@ export const extendedTheme = extendTheme({
         bgColor: props.colorMode === 'dark' && '#1a202c !important',
       },
       '.slider__thumb,.volume__thumb': {
-        bgColor: props.colorMode === 'dark' && 'twitter.600 !important',
+        bgColor: props.colorMode === 'dark' && 'blue.600 !important',
       },
       '.rswp_progress,.rswp_duration,._ControlsButtonsRSWP,._VolumeInlineRSWP,._DevicesRSWP button,._ContentRSWP a':
         {
@@ -35,8 +35,8 @@ export const extendedTheme = extendTheme({
         fill: 'transparent !important',
       },
       '.chord--diagram circle, .chord--diagram rect': {
-        fill: props.colorMode === 'dark' && 'twitter.600 !important',
-        stroke: props.colorMode === 'dark' && 'twitter.600 !important',
+        fill: props.colorMode === 'dark' && 'blue.600 !important',
+        stroke: props.colorMode === 'dark' && 'blue.600 !important',
       },
       '.chord--diagram text': {
         stroke: props.colorMode === 'dark' && 'gray.200 !important',

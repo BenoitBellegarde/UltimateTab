@@ -157,7 +157,7 @@ export default function Autoscroller({
           <Button
             variant="outline"
             _hover={{
-              bg: 'twitter.400',
+              bg: 'blue.400',
               color: 'white',
               opacity: isEnabled ? 0.8 : 1,
             }}
@@ -185,7 +185,7 @@ export default function Autoscroller({
             <IconButton
               variant="outline"
               _hover={{
-                bg: 'twitter.400',
+                bg: 'blue.400',
                 color: 'white',
               }}
               size={'sm'}
@@ -207,7 +207,7 @@ export default function Autoscroller({
             <IconButton
               variant="outline"
               _hover={{
-                bg: 'twitter.400',
+                bg: 'blue.400',
                 color: 'white',
               }}
               size={'sm'}
