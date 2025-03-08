@@ -1,4 +1,4 @@
-import { Flex, Icon, Text } from '@chakra-ui/react'
+import { Flex, Icon, Text, useBreakpointValue } from '@chakra-ui/react'
 import { MdOutlineSignalCellularAlt } from 'react-icons/md'
 
 interface DifficultyProps {
@@ -37,7 +37,18 @@ export default function Difficulty({
   return (
     <Flex>
       {getDifficultyIcon(level)}
-      <Text ml={1}>{level.charAt(0).toUpperCase() + level.slice(1)}</Text>
+      <Text
+        maxW={useBreakpointValue({
+          base: '6rem',
+          sm: '100%',
+        })}
+        textOverflow={'ellipsis'}
+        overflow={'hidden'}
+        whiteSpace={'pre'}
+        ml={1}
+      >
+        {level.charAt(0).toUpperCase() + level.slice(1)}
+      </Text>
     </Flex>
   )
 }

@@ -8,9 +8,7 @@ import {
   Menu,
   MenuButton,
   MenuItem,
-  MenuItemOption,
   MenuList,
-  MenuOptionGroup,
   Skeleton,
   Text,
   Tooltip,
@@ -21,20 +19,21 @@ import {
 import HTMLReactParser from 'html-react-parser'
 import { GiGuitarHead } from 'react-icons/gi'
 import { RiHeartFill, RiHeartLine } from 'react-icons/ri'
-import { MdFontDownload } from 'react-icons/md'
 import { FaCircleArrowDown } from 'react-icons/fa6'
 import { GiMusicalScore } from 'react-icons/gi'
 import { GiCrowbar } from 'react-icons/gi'
 import Difficulty from './Difficulty'
 import ChordDiagram from './ChordDiagram'
 import { Tab, UGChordCollection } from '../types/tabs'
-import { MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { FaPlayCircle } from 'react-icons/fa'
 import ChordTransposer from './ChordTransposer'
 import BackingtrackPlayer from './BackingtrackPlayer'
 import Autoscroller from './Autoscroller'
 import useAppStateContext from '../hooks/useAppStateContext'
+import FontSizeManager from './FontSizeManager'
+import TabActionButtons from './TabActionButtons'
 
 interface TabPanelProps {
   selectedTab: Tab
@@ -50,10 +49,9 @@ export default function TabPanel({
   selectedTabContent,
   isLoading,
   handleClickFavorite,
-  refetchTab,
 }: TabPanelProps) {
   const router = useRouter()
-  const { tabFontSize, setTabFontSize } = useAppStateContext()
+  const { tabFontSize } = useAppStateContext()
 
   const [chordsDiagrams, setChordsDiagrams] = useState<UGChordCollection[]>(
     selectedTabContent?.chordsDiagrams,
@@ -74,8 +72,6 @@ export default function TabPanel({
   const widthThirdRow = useBreakpointValue({ base: '100%', md: 'initial' })
   const marginTopThirdRow = useBreakpointValue({ base: 0, md: 2 })
   const paddingTopThirdRow = useBreakpointValue({ base: 1, md: 0 })
-
-  const fontSizeValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 
   useEffect(() => {
     setChordsDiagrams(selectedTabContent?.chordsDiagrams)
@@ -257,98 +253,31 @@ export default function TabPanel({
             )}
 
             <Flex pb={1} w={widthThirdRow} pt={0} flexWrap={'wrap'}>
-              <Button
-                variant="outline"
-                _hover={{
-                  bg: 'blue.400',
-                  color: 'white',
-                  opacity: showBackingTrack ? 0.8 : 1,
-                }}
-                _active={{
-                  bg: 'fadebp',
-                  color: 'white',
-                }}
-                isActive={showBackingTrack}
-                onClick={() => {
-                  setShowBackingTrack((prevState) => !prevState)
-                }}
-                size={'sm'}
-                boxShadow="md"
-                fontWeight={'normal'}
-                px="3"
-                py="4"
-                mr={2}
-                mt={useBreakpointValue({ base: 3, md: 2 })}
-                leftIcon={<Icon as={FaPlayCircle} />}
-              >
-                Backing track
-              </Button>
-              <Button
-                variant="outline"
-                _hover={{
-                  bg: 'blue.400',
-                  color: 'white',
-                  opacity: showAutoscroll ? 0.8 : 1,
-                }}
-                _active={{
-                  bg: 'fadebp',
-                  color: 'white',
-                }}
-                isActive={showAutoscroll}
-                onClick={() => {
-                  setShowAutoscroll((prevState) => !prevState)
-                }}
-                size={'sm'}
-                boxShadow="md"
-                fontWeight={'normal'}
-                px="3"
-                py="4"
-                mr={2}
-                mt={useBreakpointValue({ base: 3, md: 2 })}
-                leftIcon={<Icon as={FaCircleArrowDown} />}
-              >
-                Autoscroll
-              </Button>
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  variant="outline"
-                  _hover={{
-                    bg: 'blue.300',
-                    color: 'white',
-                  }}
-                  _active={{
-                    bg: 'blue.600',
-                    color: 'white',
-                  }}
-                  size={'sm'}
-                  boxShadow="md"
-                  fontWeight={'normal'}
-                  px="3"
-                  py="4"
-                  mt={useBreakpointValue({ base: 3, md: 2 })}
-                  rightIcon={<ChevronDownIcon />}
-                  leftIcon={<Icon fontSize={'sm'} as={MdFontDownload} />}
-                >
-                  Font size
-                </MenuButton>
-                <MenuList>
-                  <MenuOptionGroup
-                    value={tabFontSize.toString()}
-                    onChange={(selectedSize: string) => {
-                      setTabFontSize(parseInt(selectedSize))
-                    }}
-                  >
-                    {fontSizeValues.map((size) => (
-                      <MenuItemOption key={size} value={size.toString()}>
-                        {size}%
-                      </MenuItemOption>
-                    ))}
-                  </MenuOptionGroup>
-                </MenuList>
-              </Menu>
+              <FontSizeManager
+                w={widthThirdRow}
+                mt={marginTopThirdRow}
+                pt={paddingTopThirdRow}
+              />
             </Flex>
+            {selectedTabContent?.type != 'Chords' && (
+              <TabActionButtons
+                w={widthThirdRow}
+                showBackingTrack={showBackingTrack}
+                setShowBackingTrack={setShowBackingTrack}
+                showAutoscroll={showAutoscroll}
+                setShowAutoscroll={setShowAutoscroll}
+              />
+            )}
           </Flex>
+          {chordsDiagrams && selectedTabContent?.type === 'Chords' && (
+            <TabActionButtons
+              w={widthThirdRow}
+              showBackingTrack={showBackingTrack}
+              setShowBackingTrack={setShowBackingTrack}
+              showAutoscroll={showAutoscroll}
+              setShowAutoscroll={setShowAutoscroll}
+            />
+          )}
         </Skeleton>
       </Box>
 
